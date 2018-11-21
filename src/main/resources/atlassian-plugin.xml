@@ -1,0 +1,52 @@
+<atlassian-plugin key="${atlassian.plugin.key}" name="${project.name}" plugins-version="2">
+    <plugin-info>
+        <description>${project.description}</description>
+        <version>${project.version}</version>
+        <vendor name="${project.organization.name}" url="${project.organization.url}" />
+        <param name="plugin-icon">images/pluginIcon.png</param>
+        <param name="plugin-logo">images/pluginLogo.png</param>
+    </plugin-info>
+
+    <component name="Code DX Configuration Management Component" key="codedxServerConfigManager"
+               class="com.avi.codedx.bambooplugin.ServerConfigManager"/>
+
+    <web-item key="configureCodedxPlugin" name="Code DX Plugin" section="system.admin/plugins">
+        <label key="Code DX Plugin"/>
+        <link linkId="configureCodeDxServer">/admin/codeDxServerConfig.action</link>
+    </web-item>
+
+    <xwork key="codedxConfigAdmin" name="Code DX Plugin">
+        <package name="configureCodeDxServer" extends="admin">
+            <action name="codeDxServerConfig" class="com.avi.codedx.bambooplugin.ServerConfigAction" method="edit">
+                <result name="success" type="freemarker">/admin/configureCodeDxServer.ftl</result>
+                <param name="mode">edit</param>
+            </action>
+            <action name="codeDxServerSave" class="com.avi.codedx.bambooplugin.ServerConfigAction" method="save">
+                <result name="success" type="redirect">/admin/codeDxServerConfig.action</result>
+            </action>
+        </package>
+    </xwork>
+
+    <!-- add tasks -->
+    <taskType key="testTask" name="Code DX test task" class="com.avi.codedx.bambooplugin.CodeDXScanTask">
+        <description>Code DX task description! hooray.</description>
+        <configuration class="com.avi.codedx.bambooplugin.CodeDXScanTaskConfigurator"/>
+        <resource type="freemarker" name="edit" location="configureCodeDxTask.ftl"/>
+    </taskType>
+
+    <!-- add our web resources -->
+    <web-resource key="codedx-bamboo-plugin-resources" name="codedx-bamboo-plugin Web Resources">
+        <dependency>com.atlassian.auiplugin:ajs</dependency>
+        
+        <resource type="download" name="codedx-bamboo-plugin.css" location="/css/codedx-bamboo-plugin.css"/>
+        <resource type="download" name="codedx-bamboo-plugin.js" location="/js/codedx-bamboo-plugin.js"/>
+        <resource type="download" name="images/" location="/images"/>
+
+        <context>codedx-bamboo-plugin</context>
+    </web-resource>
+
+    <component-import key="taskContextHelper" interface="com.atlassian.bamboo.task.TaskContextHelperService"/>
+    <component-import key="taskConfiguratorHelper" interface="com.atlassian.bamboo.task.TaskConfiguratorHelper"/>
+    <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties"/>
+    
+</atlassian-plugin>

@@ -17,54 +17,31 @@ import java.util.Map;
 public class CodeDXScanTaskConfigurator extends AbstractTaskConfigurator {
 
     @java.lang.Override
-    public Map<String, String> generateTaskConfigMap(final ActionParametersMap params,
-                                                     final TaskDefinition previousTaskDefinition)
-    {
+    public Map<String, String> generateTaskConfigMap(final ActionParametersMap params, final TaskDefinition previousTaskDefinition) {
+
         final Map<String, String> config = super.generateTaskConfigMap(params, previousTaskDefinition);
 
-        config.put("analysisname", params.getString("analysisname"));
+        config.put("analysisName", params.getString("analysisName"));
+        config.put("selectedProjectId", params.getString("selectedProjectId"));
         return config;
     }
 
-    public void validate(final ActionParametersMap params, final ErrorCollection errorCollection)
-    {
+    public void validate(final ActionParametersMap params, final ErrorCollection errorCollection) {
+
         super.validate(params, errorCollection);
 
-        final String apiKey = params.getString("apikey");
-        if (StringUtils.isEmpty(apiKey))
-        {
-            errorCollection.addError("apikey", "Missing Code DX API key.");
-        }
-
-        final String urlString = params.getString("url");
-        if (StringUtils.isEmpty(urlString))
-        {
-            errorCollection.addError("url", "Missing Code DX API URL.");
-        }
-
-        final String analysisName = params.getString("analysisname");
+        final String analysisName = params.getString("analysisName");
         if (StringUtils.isEmpty(analysisName))
         {
-            errorCollection.addError("analysisname", "Missing Code DX Analysis Name.");
+            errorCollection.addError("analysisName", "Missing Code DX Analysis Name.");
         }
     }
 
     private static List<Project> getProjectList() {
 
-        ServerConfigManager serverConfigManager = ServerConfigManager.getInstance();
-
-        // TODO: Put this back in and remove hardcoded values after getting persistence working
-        /*
-        final String apiKey = serverConfigManager.getApikey();
-        final String apiUrl = serverConfigManager.getUrl();
-        */
-
-        final String apiKey = "f9a03424-d304-46a9-8ed6-03886ca20b85";
-        final String apiUrl = "http://localhost:8080";
-
         ApiClient cdxApiClient = new ApiClient();
-        cdxApiClient.setBasePath(apiUrl);
-        cdxApiClient.setApiKey(apiKey);
+        cdxApiClient.setBasePath(ServerConfigManager.getUrl());
+        cdxApiClient.setApiKey(ServerConfigManager.getApiKey());
 
         ProjectsApi projectsApi = new ProjectsApi();
         projectsApi.setApiClient(cdxApiClient);
@@ -80,26 +57,31 @@ public class CodeDXScanTaskConfigurator extends AbstractTaskConfigurator {
     }
 
     @Override
-    public void populateContextForCreate(final Map<String, Object> context)
-    {
+    public void populateContextForCreate(final Map<String, Object> context) {
+
         super.populateContextForCreate(context);
 
         context.put("url", "http://localhost:8080");
-        context.put("apikey", "api-key-goes-here");
-        context.put("analysisname", "Bamboo Analysis");
-        context.put("projectList", getProjectList());
+        context.put("apiKey", "api-key-goes-here");
+        context.put("analysisName", "Bamboo Analysis");
+
+        List<Project> projectList = getProjectList();
+        context.put("projectList", projectList);
+
+        if (projectList.size() > 0) {
+            context.put("selectedProjectId", projectList.get(0).getId().toString());
+        }
     }
 
     @Override
-    public void populateContextForEdit(Map<String, Object> context, TaskDefinition taskDefinition)
-    {
+    public void populateContextForEdit(Map<String, Object> context, TaskDefinition taskDefinition) {
+
         super.populateContextForEdit(context, taskDefinition);
 
         context.put("url", taskDefinition.getConfiguration().get("url"));
-        context.put("apikey", taskDefinition.getConfiguration().get("apikey"));
-        context.put("analysisname", taskDefinition.getConfiguration().get("analysisname"));
-
-        // TODO: Save and load plan config
-        //context.put("projectlist",taskDefinition.getConfiguration().get("projectlist"));
+        context.put("apiKey", taskDefinition.getConfiguration().get("apiKey"));
+        context.put("analysisName", taskDefinition.getConfiguration().get("analysisName"));
+        context.put("projectList", getProjectList());
+        context.put("selectedProjectId", taskDefinition.getConfiguration().get("selectedProjectId"));
     }
 }

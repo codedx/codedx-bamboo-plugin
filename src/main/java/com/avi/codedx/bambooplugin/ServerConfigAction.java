@@ -3,11 +3,11 @@ package com.avi.codedx.bambooplugin;
 import com.atlassian.bamboo.configuration.GlobalAdminAction;
 import com.atlassian.bamboo.ww2.aware.permissions.GlobalAdminSecurityAware;
 import com.atlassian.spring.container.ContainerManager;
-import org.springframework.beans.factory.annotation.Autowired;
 
 public class ServerConfigAction extends GlobalAdminAction implements GlobalAdminSecurityAware {
-    @Autowired
-    private transient ServerConfigManager serverConfigManager;
+
+    private String url;
+    private String apiKey;
 
     public String getUrl() {
         return url;
@@ -17,36 +17,26 @@ public class ServerConfigAction extends GlobalAdminAction implements GlobalAdmin
         this.url = url;
     }
 
-    public String getApikey() {
-        return apikey;
+    public String getApiKey() {
+        return apiKey;
     }
 
-    public void setApikey(String apikey) {
-        this.apikey = apikey;
+    public void setApiKey(String apikey) {
+        this.apiKey = apikey;
     }
 
-    private String url;
-    private String apikey;
-
-    public ServerConfigAction(ServerConfigManager serverConfigManager)
-    {
-        this.serverConfigManager = serverConfigManager;
-    }
-
-    public String edit()
-    {
-        // load config values
-        setApikey(serverConfigManager.getApikey());
-        setUrl(serverConfigManager.getUrl());
+    public String edit() {
+        // Load config values
+        setApiKey(ServerConfigManager.getApiKey());
+        setUrl(ServerConfigManager.getUrl());
         System.out.println(ContainerManager.getInstance().getContainerContext());
         return "success";
     }
 
-    public String save()
-    {
-        // save config values
-        serverConfigManager.setApikey(this.getApikey());
-        serverConfigManager.setUrl(this.getUrl());
+    public String save() {
+        // Save config values
+        ServerConfigManager.setApiKey(this.getApiKey());
+        ServerConfigManager.setUrl(this.getUrl());
         return "success";
     }
 }

@@ -6,7 +6,6 @@ import com.atlassian.bamboo.task.TaskException;
 import com.atlassian.bamboo.task.TaskResult;
 import com.atlassian.bamboo.task.TaskResultBuilder;
 import com.atlassian.bamboo.task.TaskType;
-import com.atlassian.spring.container.ContainerManager;
 import com.atlassian.util.concurrent.NotNull;
 import com.avi.codedx.bambooplugin.utils.Archiver;
 import com.avi.codedx.client.ApiClient;
@@ -28,10 +27,8 @@ public class CodeDXScanTask implements TaskType{
     {
         final BuildLogger buildLogger = taskContext.getBuildLogger();
 
-        ServerConfigManager serverConfigManager = ServerConfigManager.getInstance();
-
-        final String apiKey = serverConfigManager.getApikey();
-        final String apiUrl = serverConfigManager.getUrl();
+        final String apiKey = ServerConfigManager.getApiKey();
+        final String apiUrl = ServerConfigManager.getUrl();
         final String analysisNameString = taskContext.getConfigurationMap().get("analysisname");
         buildLogger.addBuildLogEntry("Running Code DX at " + apiUrl);
 
@@ -89,7 +86,7 @@ public class CodeDXScanTask implements TaskType{
                 buildLogger.addBuildLogEntry("No projects available in Code DX to scan.");
                 return TaskResultBuilder.newBuilder(taskContext).success().failed().build();
             }
-        } catch (ApiException|IOException|InterruptedException e) {
+        } catch (ApiException | IOException|InterruptedException e) {
             buildLogger.addBuildLogEntry("ERROR:\n" + ExceptionUtils.getFullStackTrace(e));
             return TaskResultBuilder.newBuilder(taskContext).failed().build();
         }

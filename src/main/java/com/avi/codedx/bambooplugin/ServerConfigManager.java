@@ -1,33 +1,59 @@
 package com.avi.codedx.bambooplugin;
 
-import com.atlassian.spring.container.ContainerManager;
+import com.atlassian.bamboo.bandana.PlanAwareBandanaContext;
+import com.atlassian.bandana.BandanaContext;
+import com.atlassian.bandana.BandanaManager;
 
 import java.io.Serializable;
 
 public class ServerConfigManager implements Serializable {
-    private String url;
-    private String apikey;
 
-    public String getUrl() {
-        return url;
+    // Private fields
+    private static BandanaManager bandanaManager = null;
+    private static final BandanaContext GLOBAL_CONTEXT = PlanAwareBandanaContext.GLOBAL_CONTEXT;
+    private static final String BANDANA_KEY =  "com.avi.codedx.bambooplugin:Config";
+
+    // This gets called automatically
+    public void setBandanaManager(BandanaManager bandanaManager) {
+        this.bandanaManager = bandanaManager;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
+    public static String getUrl() {
+        return getData().url;
     }
 
-    public String getApikey() {
-        return apikey;
+    public static void setUrl(String url) {
+        GlobalData data = getData();
+        data.url = url;
+        saveData(data);
     }
 
-    public void setApikey(String apikey) {
-        this.apikey = apikey;
+    public static String getApiKey() {
+        return getData().apiKey;
     }
 
-    public static ServerConfigManager getInstance() {
-        ServerConfigManager serverConfigManager = new ServerConfigManager();
-        System.out.println(ContainerManager.getInstance().getContainerContext());
-        ContainerManager.autowireComponent(serverConfigManager);
-        return serverConfigManager;
+    public static void setApiKey(String apiKey) {
+        GlobalData data = getData();
+        data.apiKey = apiKey;
+        saveData(data);
+    }
+
+    // Fields we want to save
+    private static class GlobalData implements Serializable {
+        public String url;
+        public String apiKey;
+    }
+
+    // Helpers
+    private static GlobalData getData() {
+        GlobalData data = (GlobalData) bandanaManager.getValue(GLOBAL_CONTEXT, BANDANA_KEY);
+        if (data == null) {
+            data = new GlobalData();
+        }
+        return data;
+    }
+
+    private static void saveData(GlobalData data) {
+        bandanaManager.setValue(GLOBAL_CONTEXT, BANDANA_KEY, data);
     }
 }

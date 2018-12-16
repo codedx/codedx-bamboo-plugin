@@ -13,7 +13,7 @@
     [@ui.bambooSection]
         [@ww.hidden name='serverId'/]
         [@ww.textfield label="Code DX API URL" name="url" required='true'/]
-        [@ww.textfield label="Code DX API key" name="apikey" required='true'/]
+        [@ww.textfield label="Code DX API key" name="apiKey" required='true'/]
     [/@ui.bambooSection]
 [/@ww.form]
 </body>

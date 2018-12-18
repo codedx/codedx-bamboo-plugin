@@ -10,8 +10,6 @@
 	toggle="true"
 /]
 
-[@ww.submit value="Update Projects" name="submitName" theme='simple'/]
-
 [@ww.textfield
 	label="Code DX Analysis Name"
 	name="analysisName"

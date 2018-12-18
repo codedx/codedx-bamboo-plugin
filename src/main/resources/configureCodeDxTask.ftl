@@ -15,3 +15,15 @@
 	name="analysisName"
 	required='true'
 /]
+
+[@ww.textfield
+	label="Source and binaries"
+	name="includePaths"
+	required='true'
+/]
+
+[@ww.textfield
+	label="Files to exclude"
+	name="excludePaths"
+	required='true'
+/]

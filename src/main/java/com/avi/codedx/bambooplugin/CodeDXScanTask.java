@@ -29,7 +29,10 @@ public class CodeDXScanTask implements TaskType{
 
         final String apiKey = ServerConfigManager.getApiKey();
         final String apiUrl = ServerConfigManager.getUrl();
-        final String analysisNameString = taskContext.getConfigurationMap().get("analysisname");
+        final String analysisNameString = taskContext.getConfigurationMap().get("analysisName");
+        final String includePaths = taskContext.getConfigurationMap().get("includePaths");
+        final String excludePaths = taskContext.getConfigurationMap().get("excludePaths");
+        final int projectId = Integer.parseInt(taskContext.getConfigurationMap().get("selectedProjectId"));
         buildLogger.addBuildLogEntry("Running Code DX at " + apiUrl);
 
         ApiClient cdxApiClient = new ApiClient();
@@ -42,7 +45,6 @@ public class CodeDXScanTask implements TaskType{
         FindingDataApi findingDataApi = new FindingDataApi();
         findingDataApi.setApiClient(cdxApiClient);
 
-        int projectId; // TODO: acquire project ID by interacting with the API before even running the task
         String projectName; // TODO: acquire project name by interacting with the API before running the task
         ProjectsApi projectsApi = new ProjectsApi();
         projectsApi.setApiClient(cdxApiClient);
@@ -50,13 +52,13 @@ public class CodeDXScanTask implements TaskType{
             Projects projects = projectsApi.getProjects();
             if(projects.getProjects().size() > 0)
             {
+                // TODO: Why do we need the name?  If important, get from correct project.
                 Project firstProject = projects.getProjects().get(0);
-                projectId = firstProject.getId();
                 projectName = firstProject.getName();
                 buildLogger.addBuildLogEntry("Running Code DX Scan on the project \"" + firstProject.getName() + "\"");
 
                 List<File> filesToUpload = new ArrayList<>();
-                filesToUpload.add(Archiver.archive(taskContext.getRootDirectory(), "", "", "files_to_scan"));
+                filesToUpload.add(Archiver.archive(taskContext.getRootDirectory(), includePaths, excludePaths, "files_to_scan"));
                 // TODO: add tool file outputs
 
                 String analysisPrepId = uploadFiles(filesToUpload, projectId, analysisApi, buildLogger);

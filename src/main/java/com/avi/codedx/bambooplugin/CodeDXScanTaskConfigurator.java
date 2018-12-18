@@ -23,6 +23,8 @@ public class CodeDXScanTaskConfigurator extends AbstractTaskConfigurator {
 
         config.put("analysisName", params.getString("analysisName"));
         config.put("selectedProjectId", params.getString("selectedProjectId"));
+        config.put("includePaths", params.getString("includePaths"));
+        config.put("excludePaths", params.getString("excludePaths"));
         return config;
     }
 
@@ -64,6 +66,8 @@ public class CodeDXScanTaskConfigurator extends AbstractTaskConfigurator {
         context.put("url", "http://localhost:8080");
         context.put("apiKey", "api-key-goes-here");
         context.put("analysisName", "Bamboo Analysis");
+        context.put("includePaths", "");
+        context.put("excludePaths", "");
 
         List<Project> projectList = getProjectList();
         context.put("projectList", projectList);
@@ -81,6 +85,8 @@ public class CodeDXScanTaskConfigurator extends AbstractTaskConfigurator {
         context.put("url", taskDefinition.getConfiguration().get("url"));
         context.put("apiKey", taskDefinition.getConfiguration().get("apiKey"));
         context.put("analysisName", taskDefinition.getConfiguration().get("analysisName"));
+        context.put("includePaths", taskDefinition.getConfiguration().get("includePaths"));
+        context.put("excludePaths", taskDefinition.getConfiguration().get("excludePaths"));
         context.put("projectList", getProjectList());
         context.put("selectedProjectId", taskDefinition.getConfiguration().get("selectedProjectId"));
     }

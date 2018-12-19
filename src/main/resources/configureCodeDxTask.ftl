@@ -9,6 +9,9 @@
 	required="true"
 	toggle="true"
 /]
+<div style="color:#F00000;">
+	${reachabilityMessage}
+</div>
 
 [@ww.textfield
 	label="Code DX Analysis Name"
@@ -25,5 +28,11 @@
 [@ww.textfield
 	label="Files to exclude"
 	name="excludePaths"
+	required='true'
+/]
+
+[@ww.textfield
+	label="Tool output files"
+	name="toolOutputFiles"
 	required='true'
 /]

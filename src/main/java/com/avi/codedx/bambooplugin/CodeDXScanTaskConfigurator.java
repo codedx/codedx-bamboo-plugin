@@ -10,6 +10,7 @@ import com.avi.codedx.client.api.Project;
 import com.avi.codedx.client.api.ProjectsApi;
 import org.apache.commons.lang.StringUtils;
 
+import javax.ws.rs.ProcessingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -25,6 +26,7 @@ public class CodeDXScanTaskConfigurator extends AbstractTaskConfigurator {
         config.put("selectedProjectId", params.getString("selectedProjectId"));
         config.put("includePaths", params.getString("includePaths"));
         config.put("excludePaths", params.getString("excludePaths"));
+        config.put("toolOutputFiles", params.getString("toolOutputFiles"));
         return config;
     }
 
@@ -33,25 +35,42 @@ public class CodeDXScanTaskConfigurator extends AbstractTaskConfigurator {
         super.validate(params, errorCollection);
 
         final String analysisName = params.getString("analysisName");
+        final String selectedProjectId = params.getString("selectedProjectId");
         if (StringUtils.isEmpty(analysisName))
         {
             errorCollection.addError("analysisName", "Missing Code DX Analysis Name.");
         }
+        if (StringUtils.isEmpty(selectedProjectId))
+        {
+            errorCollection.addError("selectedProjectId", "Missing Selected Project.");
+        }
     }
 
-    private static List<Project> getProjectList() {
+    private List<Project> getProjectList(Map<String, Object> context) {
+
+        String url = ServerConfigManager.getUrl();
+        String apiKey = ServerConfigManager.getApiKey();
+        if (url == null || apiKey == null || url.isEmpty() || apiKey.isEmpty()) {
+            context.put("reachabilityMessage", "CodeDx URL and API key are not configured");
+            return new ArrayList<Project>();
+        }
 
         ApiClient cdxApiClient = new ApiClient();
-        cdxApiClient.setBasePath(ServerConfigManager.getUrl());
-        cdxApiClient.setApiKey(ServerConfigManager.getApiKey());
+        cdxApiClient.setBasePath(url);
+        cdxApiClient.setApiKey(apiKey);
 
         ProjectsApi projectsApi = new ProjectsApi();
         projectsApi.setApiClient(cdxApiClient);
 
-        // TODO: Fix hang on connection refused
         try {
             return projectsApi.getProjects().getProjects();
+
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
         } catch (ApiException e) {
+            e.printStackTrace();
+        } catch (ProcessingException e) {
+            context.put("reachabilityMessage", "CodeDx is unreachable");
             e.printStackTrace();
         }
 
@@ -63,18 +82,19 @@ public class CodeDXScanTaskConfigurator extends AbstractTaskConfigurator {
 
         super.populateContextForCreate(context);
 
-        context.put("url", "http://localhost:8080");
-        context.put("apiKey", "api-key-goes-here");
         context.put("analysisName", "Bamboo Analysis");
-        context.put("includePaths", "");
-        context.put("excludePaths", "");
+        context.put("reachabilityMessage", "");
 
-        List<Project> projectList = getProjectList();
+        List<Project> projectList = getProjectList(context);
         context.put("projectList", projectList);
 
         if (projectList.size() > 0) {
             context.put("selectedProjectId", projectList.get(0).getId().toString());
         }
+
+        context.put("includePaths", "");
+        context.put("excludePaths", "");
+        context.put("toolOutputFiles", "");
     }
 
     @Override
@@ -82,12 +102,24 @@ public class CodeDXScanTaskConfigurator extends AbstractTaskConfigurator {
 
         super.populateContextForEdit(context, taskDefinition);
 
-        context.put("url", taskDefinition.getConfiguration().get("url"));
-        context.put("apiKey", taskDefinition.getConfiguration().get("apiKey"));
         context.put("analysisName", taskDefinition.getConfiguration().get("analysisName"));
+        context.put("reachabilityMessage", "");
+
+        List<Project> projects = getProjectList(context);
+        String selectedProjectId = taskDefinition.getConfiguration().get("selectedProjectId");
+        if (selectedProjectId != null && !selectedProjectId.isEmpty() && projects.size() == 0) {
+            // Case where user already selected a project, but we can't communicate with CodeDx for the name.  Just use a generic "name".
+            Project p = new Project();
+            p.setId(Integer.parseInt(selectedProjectId));
+            p.setName("Project Id: " + selectedProjectId);
+            projects.add(p);
+        }
+
+        context.put("projectList", projects);
+        context.put("selectedProjectId", selectedProjectId);
         context.put("includePaths", taskDefinition.getConfiguration().get("includePaths"));
         context.put("excludePaths", taskDefinition.getConfiguration().get("excludePaths"));
-        context.put("projectList", getProjectList());
-        context.put("selectedProjectId", taskDefinition.getConfiguration().get("selectedProjectId"));
+        context.put("toolOutputFiles", taskDefinition.getConfiguration().get("toolOutputFiles"));
+
     }
 }

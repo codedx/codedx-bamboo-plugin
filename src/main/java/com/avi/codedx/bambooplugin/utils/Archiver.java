@@ -1,5 +1,7 @@
 package com.avi.codedx.bambooplugin.utils;
 
+import org.springframework.util.AntPathMatcher;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -62,21 +64,46 @@ public class Archiver {
 	}
 
 	// TODO: implement actual file filtering (Possibly ANT style)
-	private static List<File> getFiles(File workspace, String paths, String excludePaths)
-	{
+	private static List<File> getFiles(File workspace, String paths, String excludePaths) throws IOException {
+		AntPathMatcher matcher = new AntPathMatcher();
+
 		List<File> collectedFiles = new ArrayList<>();
 		File[] files = workspace.listFiles();
 		for (File file : files)
 		{
-			collectedFiles.add(file);
+			if (matches(matcher, paths, excludePaths, file.getCanonicalPath())) {
+				collectedFiles.add(file);
 
-			//recursively add subdirectories
-			if(file.isDirectory())
-			{
-				collectedFiles.addAll(getFiles(file, paths, excludePaths));
+				// recursively add subdirectories
+				if(file.isDirectory())
+				{
+					collectedFiles.addAll(getFiles(file, paths, excludePaths));
+				}
 			}
 		}
 
 		return collectedFiles;
+	}
+
+	// Helper
+	private static boolean matches(AntPathMatcher matcher, String includePaths, String excludePaths, String filePathToTest) {
+		String[] toInclude = includePaths.split(",");
+		String[] toExclude = excludePaths.split(",");
+		for (int i = 0; i < toInclude.length; i++) {
+			if (matcher.match(toInclude[i].trim(), filePathToTest)) {
+				// Have to check against each exclude path.  Only pass if all exclude fail.
+				boolean success = true;
+				for (int j = 0; j < toExclude.length; j++) {
+					if (matcher.match(toExclude[j].trim(), filePathToTest)) {
+						success = false;
+						break;
+					}
+				}
+				if (success) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 }

@@ -63,7 +63,6 @@ public class Archiver {
 		return new String[0];
 	}
 
-	// TODO: implement actual file filtering (Possibly ANT style)
 	private static List<File> getFiles(File workspace, String paths, String excludePaths) throws IOException {
 		AntPathMatcher matcher = new AntPathMatcher();
 
@@ -85,16 +84,36 @@ public class Archiver {
 		return collectedFiles;
 	}
 
-	// Helper
+	// Helper to filter which files are uploaded
 	private static boolean matches(AntPathMatcher matcher, String includePaths, String excludePaths, String filePathToTest) {
+
+		// Paths are separated by commas.
 		String[] toInclude = includePaths.split(",");
 		String[] toExclude = excludePaths.split(",");
+
+		// For the AntPathMatcher, it is recommended to prefix paths with "/" when it makes sense to do so.
+		// Adding this is needed to match functionality with our other plug-ins (example: without it "**" won't match on some systems).
+		boolean needsStartingSlash = matcher.match("/**", filePathToTest) && !matcher.match("**", filePathToTest);
 		for (int i = 0; i < toInclude.length; i++) {
-			if (matcher.match(toInclude[i].trim(), filePathToTest)) {
-				// Have to check against each exclude path.  Only pass if all exclude fail.
+			toInclude[i] = toInclude[i].trim(); // Trim while we are here iterating
+			if (needsStartingSlash && !toInclude[i].startsWith("/")) {
+				toInclude[i] = "/" + toInclude[i];
+			}
+		}
+		for (int i = 0; i < toExclude.length; i++) {
+			toExclude[i] = toExclude[i].trim(); // Trim while we are here iterating
+			if (!toExclude[i].isEmpty() && needsStartingSlash && !toExclude[i].startsWith("/")) {
+				toExclude[i] = "/" + toExclude[i];
+			}
+		}
+
+		// Check if we match any of the "include" paths.
+		for (int i = 0; i < toInclude.length; i++) {
+			if (matcher.match(toInclude[i], filePathToTest)) {
+				// Have to check against each exclude path.  Only pass if all exclusion patterns fail to match.
 				boolean success = true;
 				for (int j = 0; j < toExclude.length; j++) {
-					if (matcher.match(toExclude[j].trim(), filePathToTest)) {
+					if (matcher.match(toExclude[j], filePathToTest)) {
 						success = false;
 						break;
 					}

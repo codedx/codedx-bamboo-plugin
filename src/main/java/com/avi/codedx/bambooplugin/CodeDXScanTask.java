@@ -16,6 +16,8 @@ import org.apache.commons.lang.exception.ExceptionUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +35,7 @@ public class CodeDXScanTask implements TaskType{
         final String includePaths = taskContext.getConfigurationMap().get("includePaths");
         final String excludePaths = taskContext.getConfigurationMap().get("excludePaths");
         final int projectId = Integer.parseInt(taskContext.getConfigurationMap().get("selectedProjectId"));
+        final String toolOutputFiles = taskContext.getConfigurationMap().get("toolOutputFiles");
         buildLogger.addBuildLogEntry("Running Code DX at " + apiUrl);
 
         ApiClient cdxApiClient = new ApiClient();
@@ -59,7 +62,20 @@ public class CodeDXScanTask implements TaskType{
 
                 List<File> filesToUpload = new ArrayList<>();
                 filesToUpload.add(Archiver.archive(taskContext.getRootDirectory(), includePaths, excludePaths, "files_to_scan"));
-                // TODO: add tool file outputs
+
+                // Add tool output files
+                if (toolOutputFiles != null) {
+                    for (String fileName : toolOutputFiles.split(",")) {
+                        fileName = fileName.trim();
+                        Path path = Paths.get(fileName);
+                        File file = path.isAbsolute() ? path.toFile() : new File(taskContext.getRootDirectory(), fileName);
+                        if (file.exists()) {
+                            filesToUpload.add(file);
+                        } else {
+                            buildLogger.addBuildLogEntry("File: " + file.getCanonicalPath() + " does not exist. Skipping...");
+                        }
+                    }
+                }
 
                 String analysisPrepId = uploadFiles(filesToUpload, projectId, analysisApi, buildLogger);
 

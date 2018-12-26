@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-07-20T12:12:25.399-04:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-11-27T11:18:43.181-05:00")
 public class UserAdministrationApi {
   private ApiClient apiClient;
 
@@ -79,6 +79,42 @@ public class UserAdministrationApi {
 
     apiClient.invokeAPI(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, null);
   }
+  /**
+   * Create External User
+   * Creates an External user. 
+   * @param user  (optional)
+   * @return User
+   * @throws ApiException if fails to make API call
+   */
+  public User createExternalUser(CreateUser user) throws ApiException {
+    Object localVarPostBody = user;
+    
+    // create path and map variables
+    String localVarPath = "/api/admin/users/external";
+
+    // query params
+    List<Pair> localVarQueryParams = new ArrayList<Pair>();
+    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+
+    
+    
+    final String[] localVarAccepts = {
+      "application/json"
+    };
+    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+
+    final String[] localVarContentTypes = {
+      "application/json"
+    };
+    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
+
+    GenericType<User> localVarReturnType = new GenericType<User>() {};
+    return apiClient.invokeAPI(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
+      }
   /**
    * Create API Key User
    * Creates a API key user 
@@ -238,7 +274,42 @@ public class UserAdministrationApi {
     Object localVarPostBody = null;
     
     // create path and map variables
-    String localVarPath = "/api/admin/users/";
+    String localVarPath = "/api/admin/users";
+
+    // query params
+    List<Pair> localVarQueryParams = new ArrayList<Pair>();
+    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+
+    
+    
+    final String[] localVarAccepts = {
+      "application/json"
+    };
+    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+
+    final String[] localVarContentTypes = {
+      
+    };
+    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
+
+    GenericType<List<User>> localVarReturnType = new GenericType<List<User>>() {};
+    return apiClient.invokeAPI(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
+      }
+  /**
+   * List External Users
+   * Returns a list of external users. 
+   * @return List&lt;User&gt;
+   * @throws ApiException if fails to make API call
+   */
+  public List<User> getExternalUsers() throws ApiException {
+    Object localVarPostBody = null;
+    
+    // create path and map variables
+    String localVarPath = "/api/admin/users/external";
 
     // query params
     List<Pair> localVarQueryParams = new ArrayList<Pair>();

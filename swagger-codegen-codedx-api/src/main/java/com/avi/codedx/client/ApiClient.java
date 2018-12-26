@@ -50,7 +50,7 @@ import com.avi.codedx.client.auth.HttpBasicAuth;
 import com.avi.codedx.client.auth.ApiKeyAuth;
 import com.avi.codedx.client.auth.OAuth;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-07-20T12:12:25.399-04:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-11-27T11:18:43.181-05:00")
 public class ApiClient {
   protected Map<String, String> defaultHeaderMap = new HashMap<String, String>();
   protected String basePath = "http://localhost/codedx";

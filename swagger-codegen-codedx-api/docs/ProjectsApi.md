@@ -13,6 +13,7 @@ Method | HTTP request | Description
 [**getStatuses**](ProjectsApi.md#getStatuses) | **GET** /api/projects/{project-id}/statuses | Project Statuses
 [**getUserRole**](ProjectsApi.md#getUserRole) | **GET** /api/projects/{project-id}/user-roles/user/{user-id} | User Role
 [**queryProjects**](ProjectsApi.md#queryProjects) | **POST** /api/projects/query | Query Projects
+[**queryProjectsCount**](ProjectsApi.md#queryProjectsCount) | **POST** /api/projects/query/count | 
 [**updateProject**](ProjectsApi.md#updateProject) | **PUT** /api/projects/{project-id} | Update Project
 [**updateUserRole**](ProjectsApi.md#updateUserRole) | **PUT** /api/projects/{project-id}/user-roles/user/{user-id} | Update User Role
 
@@ -526,7 +527,7 @@ basicAuth.setUsername("YOUR USERNAME");
 basicAuth.setPassword("YOUR PASSWORD");
 
 ProjectsApi apiInstance = new ProjectsApi();
-ProjectQuery query = new ProjectQuery(); // ProjectQuery | Should be a JSON object with a \"filter\" field, which is an object with the following fields&#58; - `name` - an optional String. If given, specifies that each matching project should contain the given text in their name (case-insensitive) - `metadata` - an optional Object. If given, specifies that each matching project's metadata should match the criteria given in the metadata object  Both `name` and `metadata` are optional in the filter object, but the filter object is mandatory. A blank `filter` object matches all projects. The `filter.metadata` Object's keys and values should be the names of Project Metadata Fields and their respective search criteria. The value for each field will be interpreted according to that field's type&#58; - **Text** and **Multiline** fields will check if the value is present in the project's value for that field (case-insensitive) - **Tags** fields will interpret the value as a set of tags, and will check if the project's tags contains at least one of them (case-insensitive) - **Dropdown** fields will check if the project's selected value is equal to the criteria value (case-insensitive)  Note that in some cases, you may need to specify the metadata field by its ID (e.g. if two different fields have the same name, or if you simply would prefer to use ID instead of name). In these cases, you can use a string in the format `id:<ID>` (e.g. `id:3`) in place of the field name as a key in the metadata criteria object. 
+ProjectQuery query = new ProjectQuery(); // ProjectQuery | Should be a JSON object with a \"filter\" field, which is an object with the following fields&#58; - `name` - an optional String. If given, specifies that each matching project should contain the given text in their name (case-insensitive) - `metadata` - an optional Object. If given, specifies that each matching project's metadata should match the criteria given in the metadata object. - `parentId` - an optional Integer or `null`. If given, specifies that each matching project should be a direct child of the parent project, or if `parentId` is `null`, each matching project should be a top-level project.  Each of the fields in the filter object are optional, but the filter object itself is mandatory. A blank `filter` object matches all projects. The `filter.metadata` Object's keys and values should be the names of Project Metadata Fields and their respective search criteria. The value for each field will be interpreted according to that field's type&#58; - **Text** and **Multiline** fields will check if the value is present in the project's value for that field (case-insensitive) - **Tags** fields will interpret the value as a set of tags, and will check if the project's tags contains at least one of them (case-insensitive) - **Dropdown** fields will check if the project's selected value is equal to the criteria value (case-insensitive)  Note that in some cases, you may need to specify the metadata field by its ID (e.g. if two different fields have the same name, or if you simply would prefer to use ID instead of name). In these cases, you can use a string in the format `id:<ID>` (e.g. `id:3`) in place of the field name as a key in the metadata criteria object.  This endpoint also supports pagination via the optional `offset` and `limit` fields, which may be specified in the body alongside the `filter`. Specifying an `offset` without also specifying a `limit` is an error. 
 try {
     List<ProjectQueryResponse> result = apiInstance.queryProjects(query);
     System.out.println(result);
@@ -540,11 +541,70 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **query** | [**ProjectQuery**](ProjectQuery.md)| Should be a JSON object with a \&quot;filter\&quot; field, which is an object with the following fields&amp;#58; - &#x60;name&#x60; - an optional String. If given, specifies that each matching project should contain the given text in their name (case-insensitive) - &#x60;metadata&#x60; - an optional Object. If given, specifies that each matching project&#39;s metadata should match the criteria given in the metadata object  Both &#x60;name&#x60; and &#x60;metadata&#x60; are optional in the filter object, but the filter object is mandatory. A blank &#x60;filter&#x60; object matches all projects. The &#x60;filter.metadata&#x60; Object&#39;s keys and values should be the names of Project Metadata Fields and their respective search criteria. The value for each field will be interpreted according to that field&#39;s type&amp;#58; - **Text** and **Multiline** fields will check if the value is present in the project&#39;s value for that field (case-insensitive) - **Tags** fields will interpret the value as a set of tags, and will check if the project&#39;s tags contains at least one of them (case-insensitive) - **Dropdown** fields will check if the project&#39;s selected value is equal to the criteria value (case-insensitive)  Note that in some cases, you may need to specify the metadata field by its ID (e.g. if two different fields have the same name, or if you simply would prefer to use ID instead of name). In these cases, you can use a string in the format &#x60;id:&lt;ID&gt;&#x60; (e.g. &#x60;id:3&#x60;) in place of the field name as a key in the metadata criteria object.  |
+ **query** | [**ProjectQuery**](ProjectQuery.md)| Should be a JSON object with a \&quot;filter\&quot; field, which is an object with the following fields&amp;#58; - &#x60;name&#x60; - an optional String. If given, specifies that each matching project should contain the given text in their name (case-insensitive) - &#x60;metadata&#x60; - an optional Object. If given, specifies that each matching project&#39;s metadata should match the criteria given in the metadata object. - &#x60;parentId&#x60; - an optional Integer or &#x60;null&#x60;. If given, specifies that each matching project should be a direct child of the parent project, or if &#x60;parentId&#x60; is &#x60;null&#x60;, each matching project should be a top-level project.  Each of the fields in the filter object are optional, but the filter object itself is mandatory. A blank &#x60;filter&#x60; object matches all projects. The &#x60;filter.metadata&#x60; Object&#39;s keys and values should be the names of Project Metadata Fields and their respective search criteria. The value for each field will be interpreted according to that field&#39;s type&amp;#58; - **Text** and **Multiline** fields will check if the value is present in the project&#39;s value for that field (case-insensitive) - **Tags** fields will interpret the value as a set of tags, and will check if the project&#39;s tags contains at least one of them (case-insensitive) - **Dropdown** fields will check if the project&#39;s selected value is equal to the criteria value (case-insensitive)  Note that in some cases, you may need to specify the metadata field by its ID (e.g. if two different fields have the same name, or if you simply would prefer to use ID instead of name). In these cases, you can use a string in the format &#x60;id:&lt;ID&gt;&#x60; (e.g. &#x60;id:3&#x60;) in place of the field name as a key in the metadata criteria object.  This endpoint also supports pagination via the optional &#x60;offset&#x60; and &#x60;limit&#x60; fields, which may be specified in the body alongside the &#x60;filter&#x60;. Specifying an &#x60;offset&#x60; without also specifying a &#x60;limit&#x60; is an error.  |
 
 ### Return type
 
 [**List&lt;ProjectQueryResponse&gt;**](ProjectQueryResponse.md)
+
+### Authorization
+
+[APIKeyHeader](../README.md#APIKeyHeader), [basicAuth](../README.md#basicAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: Not defined
+
+<a name="queryProjectsCount"></a>
+# **queryProjectsCount**
+> queryProjectsCount(query)
+
+
+
+Get the number of projects which match some filter/query criteria, and which you are allowed to view. 
+
+### Example
+```java
+// Import classes:
+//import com.avi.codedx.client.ApiClient;
+//import com.avi.codedx.client.ApiException;
+//import com.avi.codedx.client.Configuration;
+//import com.avi.codedx.client.auth.*;
+//import com.avi.codedx.client.api.ProjectsApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: APIKeyHeader
+ApiKeyAuth APIKeyHeader = (ApiKeyAuth) defaultClient.getAuthentication("APIKeyHeader");
+APIKeyHeader.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//APIKeyHeader.setApiKeyPrefix("Token");
+
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
+
+ProjectsApi apiInstance = new ProjectsApi();
+ProjectQuery query = new ProjectQuery(); // ProjectQuery | Should be a JSON object with a \"filter\" field. See the \"Query Projects\" endpoint (above) for details. Note that while the model for this request body is the same as with \"Query Projects\", the `offset` and `limit` fields will be ignored. 
+try {
+    apiInstance.queryProjectsCount(query);
+} catch (ApiException e) {
+    System.err.println("Exception when calling ProjectsApi#queryProjectsCount");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **query** | [**ProjectQuery**](ProjectQuery.md)| Should be a JSON object with a \&quot;filter\&quot; field. See the \&quot;Query Projects\&quot; endpoint (above) for details. Note that while the model for this request body is the same as with \&quot;Query Projects\&quot;, the &#x60;offset&#x60; and &#x60;limit&#x60; fields will be ignored.  |
+
+### Return type
+
+null (empty response body)
 
 ### Authorization
 

@@ -13,229 +13,101 @@
 
 package com.avi.codedx.client.api;
 
-import com.avi.codedx.client.ApiException;
-import com.avi.codedx.client.api.FileMapping;
-import com.avi.codedx.client.api.MappingsRequest;
-import com.avi.codedx.client.api.Project;
-import com.avi.codedx.client.api.ProjectFile;
-import com.avi.codedx.client.api.ProjectQuery;
-import com.avi.codedx.client.api.ProjectQueryResponse;
-import com.avi.codedx.client.api.Projects;
-import com.avi.codedx.client.api.Roles;
-import com.avi.codedx.client.api.Status;
-import com.avi.codedx.client.api.UpdateProject;
-import com.avi.codedx.client.api.UserRole;
-import org.junit.Test;
-import org.junit.Ignore;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 /**
- * API tests for ProjectsApi
+ * IssueStatus
  */
-@Ignore
-public class ProjectsApiTest {
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-11-27T11:18:43.181-05:00")
+public class IssueStatus {
+  @JsonProperty("name")
+  private String name = null;
 
-    private final ProjectsApi api = new ProjectsApi();
+  @JsonProperty("category")
+  private String category = null;
 
-    
-    /**
-     * Create Project
-     *
-     * Create a new project. 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void createProjectTest() throws ApiException {
-        Project project = null;
-        api.createProject(project);
+  public IssueStatus name(String name) {
+    this.name = name;
+    return this;
+  }
 
-        // TODO: test validations
+   /**
+   * Get name
+   * @return name
+  **/
+  @ApiModelProperty(value = "")
+  public String getName() {
+    return name;
+  }
+
+  public void setName(String name) {
+    this.name = name;
+  }
+
+  public IssueStatus category(String category) {
+    this.category = category;
+    return this;
+  }
+
+   /**
+   * Get category
+   * @return category
+  **/
+  @ApiModelProperty(value = "")
+  public String getCategory() {
+    return category;
+  }
+
+  public void setCategory(String category) {
+    this.category = category;
+  }
+
+
+  @Override
+  public boolean equals(java.lang.Object o) {
+    if (this == o) {
+      return true;
     }
-    
-    /**
-     * Delete Project
-     *
-     * Delete a project. 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void deleteProjectTest() throws ApiException {
-        Integer projectId = null;
-        api.deleteProject(projectId);
-
-        // TODO: test validations
+    if (o == null || getClass() != o.getClass()) {
+      return false;
     }
-    
-    /**
-     * User Roles
-     *
-     * Provides a list of all User roles. 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void getAllUserRolesTest() throws ApiException {
-        Integer projectId = null;
-        List<UserRole> response = api.getAllUserRoles(projectId);
+    IssueStatus issueStatus = (IssueStatus) o;
+    return Objects.equals(this.name, issueStatus.name) &&
+        Objects.equals(this.category, issueStatus.category);
+  }
 
-        // TODO: test validations
-    }
-    
-    /**
-     * File Mappings
-     *
-     * Provides source path mappings for a project. 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void getMappingsTest() throws ApiException {
-        Integer projectId = null;
-        MappingsRequest request = null;
-        Map<String, FileMapping> response = api.getMappings(projectId, request);
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, category);
+  }
 
-        // TODO: test validations
-    }
-    
-    /**
-     * Project Files
-     *
-     * Provides a list of files for a project. 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void getProjectFilesTest() throws ApiException {
-        Integer projectId = null;
-        List<ProjectFile> response = api.getProjectFiles(projectId);
 
-        // TODO: test validations
-    }
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    sb.append("class IssueStatus {\n");
     
-    /**
-     * List Projects
-     *
-     * Lists all projects. 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void getProjectsTest() throws ApiException {
-        Projects response = api.getProjects();
+    sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    category: ").append(toIndentedString(category)).append("\n");
+    sb.append("}");
+    return sb.toString();
+  }
 
-        // TODO: test validations
+  /**
+   * Convert the given object to string with each line indented by 4 spaces
+   * (except the first line).
+   */
+  private String toIndentedString(java.lang.Object o) {
+    if (o == null) {
+      return "null";
     }
-    
-    /**
-     * Project Statuses
-     *
-     * Provides information on all valid triage statuses for a project. 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void getStatusesTest() throws ApiException {
-        Integer projectId = null;
-        Map<String, Status> response = api.getStatuses(projectId);
+    return o.toString().replace("\n", "\n    ");
+  }
 
-        // TODO: test validations
-    }
-    
-    /**
-     * User Role
-     *
-     * Provides a User Role for a given user. 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void getUserRoleTest() throws ApiException {
-        Integer projectId = null;
-        Integer userId = null;
-        UserRole response = api.getUserRole(projectId, userId);
-
-        // TODO: test validations
-    }
-    
-    /**
-     * Query Projects
-     *
-     * Get a list of projects which match some filter/query criteria, and which you are allowed to view. 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void queryProjectsTest() throws ApiException {
-        ProjectQuery query = null;
-        List<ProjectQueryResponse> response = api.queryProjects(query);
-
-        // TODO: test validations
-    }
-    
-    /**
-     * 
-     *
-     * Get the number of projects which match some filter/query criteria, and which you are allowed to view. 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void queryProjectsCountTest() throws ApiException {
-        ProjectQuery query = null;
-        api.queryProjectsCount(query);
-
-        // TODO: test validations
-    }
-    
-    /**
-     * Update Project
-     *
-     * Update a project by changing its name or parent 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void updateProjectTest() throws ApiException {
-        Integer projectId = null;
-        UpdateProject body = null;
-        api.updateProject(projectId, body);
-
-        // TODO: test validations
-    }
-    
-    /**
-     * Update User Role
-     *
-     * Allows changing user roles. Note that you must specify the entire set of roles each time; if you fail to include a role when using this method, the user will lose that role. 
-     *
-     * @throws ApiException
-     *          if the Api call fails
-     */
-    @Test
-    public void updateUserRoleTest() throws ApiException {
-        Integer projectId = null;
-        Integer userId = null;
-        Roles request = null;
-        api.updateUserRole(projectId, userId, request);
-
-        // TODO: test validations
-    }
-    
 }
+

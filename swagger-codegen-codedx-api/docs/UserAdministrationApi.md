@@ -5,11 +5,13 @@ All URIs are relative to *http://localhost/codedx*
 Method | HTTP request | Description
 ------------- | ------------- | -------------
 [**changeUserPassword**](UserAdministrationApi.md#changeUserPassword) | **POST** /api/admin/users/local/{user-id}/password | Change Password
+[**createExternalUser**](UserAdministrationApi.md#createExternalUser) | **POST** /api/admin/users/external | Create External User
 [**createKeyUser**](UserAdministrationApi.md#createKeyUser) | **POST** /api/admin/users/key | Create API Key User
 [**createLdapUser**](UserAdministrationApi.md#createLdapUser) | **POST** /api/admin/users/ldap | Create LDAP User
 [**createLocalUser**](UserAdministrationApi.md#createLocalUser) | **POST** /api/admin/users/local | Create Local User
 [**deleteUser**](UserAdministrationApi.md#deleteUser) | **DELETE** /api/admin/users/{user-id} | Delete User
-[**getAllUsers**](UserAdministrationApi.md#getAllUsers) | **GET** /api/admin/users/ | List All Users
+[**getAllUsers**](UserAdministrationApi.md#getAllUsers) | **GET** /api/admin/users | List All Users
+[**getExternalUsers**](UserAdministrationApi.md#getExternalUsers) | **GET** /api/admin/users/external | List External Users
 [**getKeyUsers**](UserAdministrationApi.md#getKeyUsers) | **GET** /api/admin/users/key | List API Key Users
 [**getLdapUsers**](UserAdministrationApi.md#getLdapUsers) | **GET** /api/admin/users/ldap | List LDAP Users
 [**getLocalUsers**](UserAdministrationApi.md#getLocalUsers) | **GET** /api/admin/users/local | List Local Users
@@ -68,6 +70,66 @@ Name | Type | Description  | Notes
 ### Return type
 
 null (empty response body)
+
+### Authorization
+
+[APIKeyHeader](../README.md#APIKeyHeader), [basicAuth](../README.md#basicAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="createExternalUser"></a>
+# **createExternalUser**
+> User createExternalUser(user)
+
+Create External User
+
+Creates an External user. 
+
+### Example
+```java
+// Import classes:
+//import com.avi.codedx.client.ApiClient;
+//import com.avi.codedx.client.ApiException;
+//import com.avi.codedx.client.Configuration;
+//import com.avi.codedx.client.auth.*;
+//import com.avi.codedx.client.api.UserAdministrationApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: APIKeyHeader
+ApiKeyAuth APIKeyHeader = (ApiKeyAuth) defaultClient.getAuthentication("APIKeyHeader");
+APIKeyHeader.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//APIKeyHeader.setApiKeyPrefix("Token");
+
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
+
+UserAdministrationApi apiInstance = new UserAdministrationApi();
+CreateUser user = new CreateUser(); // CreateUser | 
+try {
+    User result = apiInstance.createExternalUser(user);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling UserAdministrationApi#createExternalUser");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **user** | [**CreateUser**](CreateUser.md)|  | [optional]
+
+### Return type
+
+[**User**](User.md)
 
 ### Authorization
 
@@ -353,6 +415,62 @@ try {
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling UserAdministrationApi#getAllUsers");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**List&lt;User&gt;**](User.md)
+
+### Authorization
+
+[APIKeyHeader](../README.md#APIKeyHeader), [basicAuth](../README.md#basicAuth)
+
+### HTTP request headers
+
+ - **Content-Type**: Not defined
+ - **Accept**: application/json
+
+<a name="getExternalUsers"></a>
+# **getExternalUsers**
+> List&lt;User&gt; getExternalUsers()
+
+List External Users
+
+Returns a list of external users. 
+
+### Example
+```java
+// Import classes:
+//import com.avi.codedx.client.ApiClient;
+//import com.avi.codedx.client.ApiException;
+//import com.avi.codedx.client.Configuration;
+//import com.avi.codedx.client.auth.*;
+//import com.avi.codedx.client.api.UserAdministrationApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: APIKeyHeader
+ApiKeyAuth APIKeyHeader = (ApiKeyAuth) defaultClient.getAuthentication("APIKeyHeader");
+APIKeyHeader.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//APIKeyHeader.setApiKeyPrefix("Token");
+
+// Configure HTTP basic authorization: basicAuth
+HttpBasicAuth basicAuth = (HttpBasicAuth) defaultClient.getAuthentication("basicAuth");
+basicAuth.setUsername("YOUR USERNAME");
+basicAuth.setPassword("YOUR PASSWORD");
+
+UserAdministrationApi apiInstance = new UserAdministrationApi();
+try {
+    List<User> result = apiInstance.getExternalUsers();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling UserAdministrationApi#getExternalUsers");
     e.printStackTrace();
 }
 ```

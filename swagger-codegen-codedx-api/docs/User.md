@@ -21,6 +21,7 @@ Name | Value
 LOCAL | &quot;local&quot;
 LDAP | &quot;ldap&quot;
 KEY | &quot;key&quot;
+EXTERNAL | &quot;external&quot;
 
 
 

@@ -12,5 +12,7 @@
 
 * `FAILED` (value: `"failed"`)
 
+* `CANCELLED` (value: `"cancelled"`)
+
 
 

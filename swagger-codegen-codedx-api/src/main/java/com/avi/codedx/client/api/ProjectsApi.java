@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-07-20T12:12:25.399-04:00")
+@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2018-11-27T11:18:43.181-05:00")
 public class ProjectsApi {
   private ApiClient apiClient;
 
@@ -386,7 +386,7 @@ public class ProjectsApi {
   /**
    * Query Projects
    * Get a list of projects which match some filter/query criteria, and which you are allowed to view. 
-   * @param query Should be a JSON object with a \&quot;filter\&quot; field, which is an object with the following fields&amp;#58; - &#x60;name&#x60; - an optional String. If given, specifies that each matching project should contain the given text in their name (case-insensitive) - &#x60;metadata&#x60; - an optional Object. If given, specifies that each matching project&#39;s metadata should match the criteria given in the metadata object  Both &#x60;name&#x60; and &#x60;metadata&#x60; are optional in the filter object, but the filter object is mandatory. A blank &#x60;filter&#x60; object matches all projects. The &#x60;filter.metadata&#x60; Object&#39;s keys and values should be the names of Project Metadata Fields and their respective search criteria. The value for each field will be interpreted according to that field&#39;s type&amp;#58; - **Text** and **Multiline** fields will check if the value is present in the project&#39;s value for that field (case-insensitive) - **Tags** fields will interpret the value as a set of tags, and will check if the project&#39;s tags contains at least one of them (case-insensitive) - **Dropdown** fields will check if the project&#39;s selected value is equal to the criteria value (case-insensitive)  Note that in some cases, you may need to specify the metadata field by its ID (e.g. if two different fields have the same name, or if you simply would prefer to use ID instead of name). In these cases, you can use a string in the format &#x60;id:&lt;ID&gt;&#x60; (e.g. &#x60;id:3&#x60;) in place of the field name as a key in the metadata criteria object.  (required)
+   * @param query Should be a JSON object with a \&quot;filter\&quot; field, which is an object with the following fields&amp;#58; - &#x60;name&#x60; - an optional String. If given, specifies that each matching project should contain the given text in their name (case-insensitive) - &#x60;metadata&#x60; - an optional Object. If given, specifies that each matching project&#39;s metadata should match the criteria given in the metadata object. - &#x60;parentId&#x60; - an optional Integer or &#x60;null&#x60;. If given, specifies that each matching project should be a direct child of the parent project, or if &#x60;parentId&#x60; is &#x60;null&#x60;, each matching project should be a top-level project.  Each of the fields in the filter object are optional, but the filter object itself is mandatory. A blank &#x60;filter&#x60; object matches all projects. The &#x60;filter.metadata&#x60; Object&#39;s keys and values should be the names of Project Metadata Fields and their respective search criteria. The value for each field will be interpreted according to that field&#39;s type&amp;#58; - **Text** and **Multiline** fields will check if the value is present in the project&#39;s value for that field (case-insensitive) - **Tags** fields will interpret the value as a set of tags, and will check if the project&#39;s tags contains at least one of them (case-insensitive) - **Dropdown** fields will check if the project&#39;s selected value is equal to the criteria value (case-insensitive)  Note that in some cases, you may need to specify the metadata field by its ID (e.g. if two different fields have the same name, or if you simply would prefer to use ID instead of name). In these cases, you can use a string in the format &#x60;id:&lt;ID&gt;&#x60; (e.g. &#x60;id:3&#x60;) in place of the field name as a key in the metadata criteria object.  This endpoint also supports pagination via the optional &#x60;offset&#x60; and &#x60;limit&#x60; fields, which may be specified in the body alongside the &#x60;filter&#x60;. Specifying an &#x60;offset&#x60; without also specifying a &#x60;limit&#x60; is an error.  (required)
    * @return List&lt;ProjectQueryResponse&gt;
    * @throws ApiException if fails to make API call
    */
@@ -424,6 +424,46 @@ public class ProjectsApi {
     GenericType<List<ProjectQueryResponse>> localVarReturnType = new GenericType<List<ProjectQueryResponse>>() {};
     return apiClient.invokeAPI(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
       }
+  /**
+   * 
+   * Get the number of projects which match some filter/query criteria, and which you are allowed to view. 
+   * @param query Should be a JSON object with a \&quot;filter\&quot; field. See the \&quot;Query Projects\&quot; endpoint (above) for details. Note that while the model for this request body is the same as with \&quot;Query Projects\&quot;, the &#x60;offset&#x60; and &#x60;limit&#x60; fields will be ignored.  (required)
+   * @throws ApiException if fails to make API call
+   */
+  public void queryProjectsCount(ProjectQuery query) throws ApiException {
+    Object localVarPostBody = query;
+    
+    // verify the required parameter 'query' is set
+    if (query == null) {
+      throw new ApiException(400, "Missing the required parameter 'query' when calling queryProjectsCount");
+    }
+    
+    // create path and map variables
+    String localVarPath = "/api/projects/query/count";
+
+    // query params
+    List<Pair> localVarQueryParams = new ArrayList<Pair>();
+    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+
+    
+    
+    final String[] localVarAccepts = {
+      
+    };
+    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+
+    final String[] localVarContentTypes = {
+      
+    };
+    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
+
+
+    apiClient.invokeAPI(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, null);
+  }
   /**
    * Update Project
    * Update a project by changing its name or parent 

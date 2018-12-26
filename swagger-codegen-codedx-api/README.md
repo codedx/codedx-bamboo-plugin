@@ -147,6 +147,7 @@ Class | Method | HTTP request | Description
 *ProjectsApi* | [**getStatuses**](docs/ProjectsApi.md#getStatuses) | **GET** /api/projects/{project-id}/statuses | Project Statuses
 *ProjectsApi* | [**getUserRole**](docs/ProjectsApi.md#getUserRole) | **GET** /api/projects/{project-id}/user-roles/user/{user-id} | User Role
 *ProjectsApi* | [**queryProjects**](docs/ProjectsApi.md#queryProjects) | **POST** /api/projects/query | Query Projects
+*ProjectsApi* | [**queryProjectsCount**](docs/ProjectsApi.md#queryProjectsCount) | **POST** /api/projects/query/count | 
 *ProjectsApi* | [**updateProject**](docs/ProjectsApi.md#updateProject) | **PUT** /api/projects/{project-id} | Update Project
 *ProjectsApi* | [**updateUserRole**](docs/ProjectsApi.md#updateUserRole) | **PUT** /api/projects/{project-id}/user-roles/user/{user-id} | Update User Role
 *ReportingApi* | [**generateReport**](docs/ReportingApi.md#generateReport) | **POST** /api/projects/{project-id}/report/{report-type} | Generate Report
@@ -178,11 +179,13 @@ Class | Method | HTTP request | Description
 *StandardsApi* | [**getStandards**](docs/StandardsApi.md#getStandards) | **GET** /api/standards/filter-views | Get Standards
 *SystemApi* | [**getSystemInfo**](docs/SystemApi.md#getSystemInfo) | **GET** /api/system-info | System Information
 *UserAdministrationApi* | [**changeUserPassword**](docs/UserAdministrationApi.md#changeUserPassword) | **POST** /api/admin/users/local/{user-id}/password | Change Password
+*UserAdministrationApi* | [**createExternalUser**](docs/UserAdministrationApi.md#createExternalUser) | **POST** /api/admin/users/external | Create External User
 *UserAdministrationApi* | [**createKeyUser**](docs/UserAdministrationApi.md#createKeyUser) | **POST** /api/admin/users/key | Create API Key User
 *UserAdministrationApi* | [**createLdapUser**](docs/UserAdministrationApi.md#createLdapUser) | **POST** /api/admin/users/ldap | Create LDAP User
 *UserAdministrationApi* | [**createLocalUser**](docs/UserAdministrationApi.md#createLocalUser) | **POST** /api/admin/users/local | Create Local User
 *UserAdministrationApi* | [**deleteUser**](docs/UserAdministrationApi.md#deleteUser) | **DELETE** /api/admin/users/{user-id} | Delete User
-*UserAdministrationApi* | [**getAllUsers**](docs/UserAdministrationApi.md#getAllUsers) | **GET** /api/admin/users/ | List All Users
+*UserAdministrationApi* | [**getAllUsers**](docs/UserAdministrationApi.md#getAllUsers) | **GET** /api/admin/users | List All Users
+*UserAdministrationApi* | [**getExternalUsers**](docs/UserAdministrationApi.md#getExternalUsers) | **GET** /api/admin/users/external | List External Users
 *UserAdministrationApi* | [**getKeyUsers**](docs/UserAdministrationApi.md#getKeyUsers) | **GET** /api/admin/users/key | List API Key Users
 *UserAdministrationApi* | [**getLdapUsers**](docs/UserAdministrationApi.md#getLdapUsers) | **GET** /api/admin/users/ldap | List LDAP Users
 *UserAdministrationApi* | [**getLocalUsers**](docs/UserAdministrationApi.md#getLocalUsers) | **GET** /api/admin/users/local | List Local Users
@@ -231,6 +234,7 @@ Class | Method | HTTP request | Description
  - [Header](docs/Header.md)
  - [InputDisplayInfo](docs/InputDisplayInfo.md)
  - [Issue](docs/Issue.md)
+ - [IssueStatus](docs/IssueStatus.md)
  - [Job](docs/Job.md)
  - [JobStatus](docs/JobStatus.md)
  - [Location](docs/Location.md)

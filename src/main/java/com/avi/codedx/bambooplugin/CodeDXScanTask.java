@@ -36,11 +36,13 @@ public class CodeDXScanTask implements TaskType{
         final String excludePaths = taskContext.getConfigurationMap().get("excludePaths");
         final int projectId = Integer.parseInt(taskContext.getConfigurationMap().get("selectedProjectId"));
         final String toolOutputFiles = taskContext.getConfigurationMap().get("toolOutputFiles");
-        buildLogger.addBuildLogEntry("Running Code DX at " + apiUrl);
+        buildLogger.addBuildLogEntry("Running Code Dx at " + apiUrl);
 
-        ApiClient cdxApiClient = new ApiClient();
-        cdxApiClient.setBasePath(apiUrl);
-        cdxApiClient.setApiKey(apiKey);
+        if (apiUrl == null || apiKey == null || apiUrl.isEmpty() || apiKey.isEmpty()) {
+            buildLogger.addErrorLogEntry("Code Dx url and api key are not properly configured.  Please configure them in the plug-in settings.");
+        }
+
+        ApiClient cdxApiClient = ServerConfigManager.getConfiguredClient();
 
         AnalysisApi analysisApi = new AnalysisApi();
         analysisApi.setApiClient(cdxApiClient);
@@ -64,7 +66,7 @@ public class CodeDXScanTask implements TaskType{
                 filesToUpload.add(Archiver.archive(taskContext.getRootDirectory(), includePaths, excludePaths, "files_to_scan"));
 
                 // Add tool output files
-                if (toolOutputFiles != null) {
+                if (toolOutputFiles != null && !toolOutputFiles.isEmpty()) {
                     for (String fileName : toolOutputFiles.split(",")) {
                         fileName = fileName.trim();
                         Path path = Paths.get(fileName);

@@ -3,7 +3,13 @@ package com.avi.codedx.bambooplugin;
 import com.atlassian.bamboo.bandana.PlanAwareBandanaContext;
 import com.atlassian.bandana.BandanaContext;
 import com.atlassian.bandana.BandanaManager;
+import com.avi.codedx.bambooplugin.security.BambooHostnameVerifierFactory;
+import com.avi.codedx.bambooplugin.security.SSLContextFactory;
+import com.avi.codedx.client.ApiClient;
+import org.glassfish.jersey.client.JerseyClientBuilder;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
 import java.io.Serializable;
 
 public class ServerConfigManager implements Serializable {
@@ -38,13 +44,49 @@ public class ServerConfigManager implements Serializable {
         saveData(data);
     }
 
+    public static String getFingerprint() {
+        return getData().fingerprint;
+    }
+
+    public static void setFingerprint(String fingerprint) {
+        GlobalData data = getData();
+        data.fingerprint = fingerprint;
+        saveData(data);
+    }
+
+    // Ease of use method to get a client configured correctly with the url, apiKey, and fingerprint.
+    public static ApiClient getConfiguredClient() {
+        String url = getUrl();
+        String apiKey = getApiKey();
+        String fingerprint = getFingerprint();
+
+        ApiClient cdxApiClient = new ApiClient();
+        cdxApiClient.setBasePath(url);
+        cdxApiClient.setApiKey(apiKey);
+
+        if (fingerprint != null && !fingerprint.isEmpty()) {
+            try {
+                ClientBuilder clientBuilder = JerseyClientBuilder.newBuilder();
+                Client client = clientBuilder.withConfig(cdxApiClient.getHttpClient().getConfiguration())
+                                             .hostnameVerifier(BambooHostnameVerifierFactory.getVerifier(url))
+                                             .sslContext(SSLContextFactory.getSSLContext(fingerprint))
+                                             .build();
+                cdxApiClient.setHttpClient(client);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return cdxApiClient;
+    }
+
     // Fields we want to save
     private static class GlobalData implements Serializable {
         public String url;
         public String apiKey;
+        public String fingerprint;
     }
 
-    // Helpers
+    // Private helpers
     private static GlobalData getData() {
         GlobalData data = (GlobalData) bandanaManager.getValue(GLOBAL_CONTEXT, BANDANA_KEY);
         if (data == null) {

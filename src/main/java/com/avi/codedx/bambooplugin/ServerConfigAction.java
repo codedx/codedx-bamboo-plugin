@@ -8,6 +8,7 @@ public class ServerConfigAction extends GlobalAdminAction implements GlobalAdmin
 
     private String url;
     private String apiKey;
+    private String fingerprint;
 
     public String getUrl() {
         return url;
@@ -25,10 +26,19 @@ public class ServerConfigAction extends GlobalAdminAction implements GlobalAdmin
         this.apiKey = apikey;
     }
 
+    public String getFingerprint() {
+        return fingerprint;
+    }
+
+    public void setFingerprint(String fingerprint) {
+        this.fingerprint = fingerprint;
+    }
+
     public String edit() {
         // Load config values
         setApiKey(ServerConfigManager.getApiKey());
         setUrl(ServerConfigManager.getUrl());
+        setFingerprint(ServerConfigManager.getFingerprint());
         System.out.println(ContainerManager.getInstance().getContainerContext());
         return "success";
     }
@@ -37,6 +47,7 @@ public class ServerConfigAction extends GlobalAdminAction implements GlobalAdmin
         // Save config values
         ServerConfigManager.setApiKey(this.getApiKey());
         ServerConfigManager.setUrl(this.getUrl());
+        ServerConfigManager.setFingerprint(this.getFingerprint());
         return "success";
     }
 }

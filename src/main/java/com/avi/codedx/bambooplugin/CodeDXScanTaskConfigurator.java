@@ -55,9 +55,7 @@ public class CodeDXScanTaskConfigurator extends AbstractTaskConfigurator {
             return new ArrayList<Project>();
         }
 
-        ApiClient cdxApiClient = new ApiClient();
-        cdxApiClient.setBasePath(url);
-        cdxApiClient.setApiKey(apiKey);
+        ApiClient cdxApiClient = ServerConfigManager.getConfiguredClient();
 
         ProjectsApi projectsApi = new ProjectsApi();
         projectsApi.setApiClient(cdxApiClient);

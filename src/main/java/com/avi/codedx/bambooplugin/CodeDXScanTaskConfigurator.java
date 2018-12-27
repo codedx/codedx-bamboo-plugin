@@ -17,6 +17,15 @@ import java.util.Map;
 
 public class CodeDXScanTaskConfigurator extends AbstractTaskConfigurator {
 
+    private static final String[] severities = new String[]{
+            "None",
+            "Info or higher",
+            "Low or higher",
+            "Medium or higher",
+            "High or higher",
+            "Critical"
+    };
+
     @java.lang.Override
     public Map<String, String> generateTaskConfigMap(final ActionParametersMap params, final TaskDefinition previousTaskDefinition) {
 
@@ -27,6 +36,9 @@ public class CodeDXScanTaskConfigurator extends AbstractTaskConfigurator {
         config.put("includePaths", params.getString("includePaths"));
         config.put("excludePaths", params.getString("excludePaths"));
         config.put("toolOutputFiles", params.getString("toolOutputFiles"));
+        config.put("waitForResults", params.getString("waitForResults"));
+        config.put("selectedFailureSeverity", params.getString("selectedFailureSeverity"));
+        config.put("onlyConsiderNewFindings", params.getString("onlyConsiderNewFindings"));
         return config;
     }
 
@@ -93,6 +105,10 @@ public class CodeDXScanTaskConfigurator extends AbstractTaskConfigurator {
         context.put("includePaths", "");
         context.put("excludePaths", "");
         context.put("toolOutputFiles", "");
+        context.put("waitForResults", false);
+        context.put("severities", severities);
+        context.put("selectedFailureSeverity", severities[0]);
+        context.put("onlyConsiderNewFindings", false);
     }
 
     @Override
@@ -118,6 +134,9 @@ public class CodeDXScanTaskConfigurator extends AbstractTaskConfigurator {
         context.put("includePaths", taskDefinition.getConfiguration().get("includePaths"));
         context.put("excludePaths", taskDefinition.getConfiguration().get("excludePaths"));
         context.put("toolOutputFiles", taskDefinition.getConfiguration().get("toolOutputFiles"));
-
+        context.put("waitForResults", taskDefinition.getConfiguration().get("waitForResults"));
+        context.put("severities", severities);
+        context.put("selectedFailureSeverity", taskDefinition.getConfiguration().get("selectedFailureSeverity"));
+        context.put("onlyConsiderNewFindings", taskDefinition.getConfiguration().get("onlyConsiderNewFindings"));
     }
 }

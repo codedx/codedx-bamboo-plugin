@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class CodeDXScanTaskConfigurator extends AbstractTaskConfigurator {
+public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
 
     private static final Severity[] severities = Severity.all;
 
@@ -43,7 +43,7 @@ public class CodeDXScanTaskConfigurator extends AbstractTaskConfigurator {
         final String selectedProjectId = params.getString("selectedProjectId");
         if (StringUtils.isEmpty(analysisName))
         {
-            errorCollection.addError("analysisName", "Missing Code DX Analysis Name.");
+            errorCollection.addError("analysisName", "Missing Code Dx Analysis Name.");
         }
         if (StringUtils.isEmpty(selectedProjectId))
         {

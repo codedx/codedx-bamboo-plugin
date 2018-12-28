@@ -12,8 +12,8 @@
 
     [@ui.bambooSection]
         [@ww.hidden name='serverId'/]
-        [@ww.textfield label="Code DX API URL" name="url" required='true'/]
-        [@ww.textfield label="Code DX API key" name="apiKey" required='true'/]
+        [@ww.textfield label="Code Dx API URL" name="url" required='true'/]
+        [@ww.textfield label="Code Dx API key" name="apiKey" required='true'/]
         [@ww.textfield label="Self-Signed Certificate Fingerprint" name="fingerprint" required='false'/]
     [/@ui.bambooSection]
 [/@ww.form]

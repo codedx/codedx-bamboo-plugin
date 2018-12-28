@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public class CodeDXScanTask implements TaskType {
+public class CodeDxScanTask implements TaskType {
 
     // Keeps track of everything we need to know during a single scan.
     private static class ScanTaskState {
@@ -71,13 +71,13 @@ public class CodeDXScanTask implements TaskType {
         // Split up the work and into "states" for readability and order
         List<Function<ScanTaskState, Boolean>> stateMachine = new ArrayList<Function<ScanTaskState, Boolean>>();
 
-        stateMachine.add(CodeDXScanTask::loadUserPreferences);
-        stateMachine.add(CodeDXScanTask::setupApiClient);
-        stateMachine.add(CodeDXScanTask::collectFilesToUpload);
-        stateMachine.add(CodeDXScanTask::uploadFiles);
-        stateMachine.add(CodeDXScanTask::waitForCodeDxToBeReadyForAnalysis);
-        stateMachine.add(CodeDXScanTask::startAnalysis);
-        stateMachine.add(CodeDXScanTask::handleAnalysisResults);
+        stateMachine.add(CodeDxScanTask::loadUserPreferences);
+        stateMachine.add(CodeDxScanTask::setupApiClient);
+        stateMachine.add(CodeDxScanTask::collectFilesToUpload);
+        stateMachine.add(CodeDxScanTask::uploadFiles);
+        stateMachine.add(CodeDxScanTask::waitForCodeDxToBeReadyForAnalysis);
+        stateMachine.add(CodeDxScanTask::startAnalysis);
+        stateMachine.add(CodeDxScanTask::handleAnalysisResults);
 
         boolean success = runStateMachine(stateMachine, state);
         if (success) {
@@ -284,10 +284,10 @@ public class CodeDXScanTask implements TaskType {
 
         List<Function<ScanTaskState, Boolean>> stateMachine = new ArrayList<Function<ScanTaskState, Boolean>>();
 
-        stateMachine.add(CodeDXScanTask::waitForAnalysisToFinish);
-        stateMachine.add(CodeDXScanTask::getBuildStats);
-        stateMachine.add(CodeDXScanTask::getGroupedCounts);
-        stateMachine.add(CodeDXScanTask::checkFailureSeverity);
+        stateMachine.add(CodeDxScanTask::waitForAnalysisToFinish);
+        stateMachine.add(CodeDxScanTask::getBuildStats);
+        stateMachine.add(CodeDxScanTask::getGroupedCounts);
+        stateMachine.add(CodeDxScanTask::checkFailureSeverity);
 
         return runStateMachine(stateMachine, state);
     }

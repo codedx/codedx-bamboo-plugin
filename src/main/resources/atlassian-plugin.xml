@@ -7,15 +7,15 @@
         <param name="plugin-logo">images/pluginLogo.png</param>
     </plugin-info>
 
-    <component name="Code DX Configuration Management Component" key="codedxServerConfigManager"
+    <component name="Code Dx Configuration Management Component" key="codeDxServerConfigManager"
                class="com.avi.codedx.bambooplugin.ServerConfigManager"/>
 
-    <web-item key="configureCodedxPlugin" name="Code DX Plugin" section="system.admin/plugins">
-        <label key="Code DX Plugin"/>
+    <web-item key="configureCodedxPlugin" name="Code Dx Plugin" section="system.admin/plugins">
+        <label key="Code Dx Plugin"/>
         <link linkId="configureCodeDxServer">/admin/codeDxServerConfig.action</link>
     </web-item>
 
-    <xwork key="codedxConfigAdmin" name="Code DX Plugin">
+    <xwork key="codeDxConfigAdmin" name="Code Dx Plugin">
         <package name="configureCodeDxServer" extends="admin">
             <action name="codeDxServerConfig" class="com.avi.codedx.bambooplugin.ServerConfigAction" method="edit">
                 <result name="success" type="freemarker">/admin/configureCodeDxServer.ftl</result>
@@ -28,9 +28,9 @@
     </xwork>
 
     <!-- add tasks -->
-    <taskType key="testTask" name="Code DX test task" class="com.avi.codedx.bambooplugin.CodeDXScanTask">
-        <description>Code DX task description! hooray.</description>
-        <configuration class="com.avi.codedx.bambooplugin.CodeDXScanTaskConfigurator"/>
+    <taskType key="codeDxScanTask" name="Code Dx Scan Task" class="com.avi.codedx.bambooplugin.CodeDxScanTask">
+        <description>Code Dx task description! hooray.</description>
+        <configuration class="com.avi.codedx.bambooplugin.CodeDxScanTaskConfigurator"/>
         <resource type="freemarker" name="edit" location="configureCodeDxTask.ftl"/>
     </taskType>
 

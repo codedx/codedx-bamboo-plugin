@@ -1,5 +1,5 @@
 [@ww.select
-	label="Code DX Project"
+	label="Code Dx Project"
 	id="project"
     name="selectedProjectId"
     value="selectedProjectId"
@@ -14,7 +14,7 @@
 </div>
 
 [@ww.textfield
-	label="Code DX Analysis Name"
+	label="Code Dx Analysis Name"
 	name="analysisName"
 	required='true'
 /]

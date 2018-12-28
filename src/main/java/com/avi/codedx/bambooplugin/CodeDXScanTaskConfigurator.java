@@ -17,14 +17,7 @@ import java.util.Map;
 
 public class CodeDXScanTaskConfigurator extends AbstractTaskConfigurator {
 
-    private static final String[] severities = new String[]{
-            "None",
-            "Info or higher",
-            "Low or higher",
-            "Medium or higher",
-            "High or higher",
-            "Critical"
-    };
+    private static final Severity[] severities = Severity.all;
 
     @java.lang.Override
     public Map<String, String> generateTaskConfigMap(final ActionParametersMap params, final TaskDefinition previousTaskDefinition) {

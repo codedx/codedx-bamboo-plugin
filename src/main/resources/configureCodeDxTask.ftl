@@ -52,6 +52,8 @@
         name="selectedFailureSeverity"
         value="selectedFailureSeverity"
         list="severities"
+        listKey="name"
+        listValue="displayName"
     	required="false"
     	toggle="true"
     /]

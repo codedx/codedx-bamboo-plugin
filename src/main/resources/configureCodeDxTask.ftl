@@ -16,25 +16,25 @@
 [@ww.textfield
 	label="Code Dx Analysis Name"
 	name="analysisName"
-	required='true'
+	required="true"
 /]
 
 [@ww.textfield
 	label="Source and binaries"
 	name="includePaths"
-	required='true'
+	required="true"
 /]
 
 [@ww.textfield
 	label="Files to exclude"
 	name="excludePaths"
-	required='true'
+	required="false"
 /]
 
 [@ww.textfield
 	label="Tool output files"
 	name="toolOutputFiles"
-	required='true'
+	required="false"
 /]
 
 [@ww.checkbox
@@ -61,6 +61,12 @@
     [@ww.checkbox
     	label="Only consider new findings"
     	name="onlyConsiderNewFindings"
+    	required="false"
+    /]
+
+    [@ww.textfield
+    	label="Report archive name"
+    	name="reportArchiveName"
     	required="false"
     /]
 </div>

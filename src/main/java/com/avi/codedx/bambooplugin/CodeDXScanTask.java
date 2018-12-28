@@ -9,6 +9,7 @@ import com.atlassian.bamboo.task.TaskResultBuilder;
 import com.atlassian.bamboo.task.TaskType;
 import com.atlassian.util.concurrent.NotNull;
 import com.avi.codedx.bambooplugin.utils.Archiver;
+import com.avi.codedx.bambooplugin.utils.CodeDxBuildStatistics;
 import com.avi.codedx.client.ApiClient;
 import com.avi.codedx.client.ApiException;
 import com.avi.codedx.client.api.*;
@@ -214,7 +215,7 @@ public class CodeDXScanTask implements TaskType {
             try {
                 Thread.sleep(1000); // Consider adding maximum wait time
             } catch (InterruptedException e) {
-                logError(state, "An unexpected threading issue occurred.");
+                logError(state, "An unexpected threading issue occurred.  This could occur if the build is manually cancelled.");
                 return false;
             }
 
@@ -301,7 +302,7 @@ public class CodeDXScanTask implements TaskType {
             try {
                 Thread.sleep(5000); // Consider adding maximum wait time
             } catch (InterruptedException e) {
-                logError(state, "An unexpected threading issue occurred.");
+                logError(state, "An unexpected threading issue occurred.  This could occur if the build is manually cancelled.");
                 return false;
             }
 

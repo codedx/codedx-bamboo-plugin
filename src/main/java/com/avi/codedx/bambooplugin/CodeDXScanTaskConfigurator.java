@@ -95,7 +95,7 @@ public class CodeDXScanTaskConfigurator extends AbstractTaskConfigurator {
             context.put("selectedProjectId", projectList.get(0).getId().toString());
         }
 
-        context.put("includePaths", "");
+        context.put("includePaths", "**");
         context.put("excludePaths", "");
         context.put("toolOutputFiles", "");
         context.put("waitForResults", false);

@@ -1,4 +1,4 @@
-package com.avi.codedx.bambooplugin;
+package com.avi.codedx.bambooplugin.utils;
 
 import com.avi.codedx.client.api.GroupedCount;
 import java.util.List;

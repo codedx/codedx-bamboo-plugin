@@ -29,9 +29,10 @@
 
     <!-- add tasks -->
     <taskType key="codeDxScanTask" name="Code Dx Scan Task" class="com.avi.codedx.bambooplugin.CodeDxScanTask">
-        <description>Code Dx task description! hooray.</description>
+        <description>Provides Code Dx integration</description>
         <configuration class="com.avi.codedx.bambooplugin.CodeDxScanTaskConfigurator"/>
         <resource type="freemarker" name="edit" location="configureCodeDxTask.ftl"/>
+        <resource type="download" name="icon" location="images/codedx-icon.png"/>
     </taskType>
 
     <!-- add our web resources -->

@@ -28,11 +28,11 @@ Create a new Analysis Prep associated with a particular project. If Git is confi
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.AnalysisApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.AnalysisApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -88,11 +88,11 @@ Note that depending on the timing of the deletion, one of two different endpoint
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.AnalysisApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.AnalysisApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -149,11 +149,11 @@ Note that depending on the timing of the deletion, one of two different endpoint
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.AnalysisApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.AnalysisApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -210,11 +210,11 @@ Obtain analysis details for a project, such as start and finish times
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.AnalysisApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.AnalysisApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -270,11 +270,11 @@ Obtain analysis details, such as start and finish times
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.AnalysisApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.AnalysisApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -332,11 +332,11 @@ Get metadata for a particular input associated with an Analysis Prep.
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.AnalysisApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.AnalysisApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -394,11 +394,11 @@ Get a list of Input IDs and Verification Errors for an Analysis Prep.
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.AnalysisApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.AnalysisApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -454,11 +454,11 @@ Once all of the verificationErrors in an Analysis Prep are addressed, an analysi
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.AnalysisApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.AnalysisApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -514,11 +514,11 @@ Set a name for a specific analysis
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.AnalysisApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.AnalysisApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -577,11 +577,11 @@ Enable and disable individual display tags on individual prop inputs. Disabled t
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.AnalysisApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.AnalysisApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -643,11 +643,11 @@ Analysis Preps should be populated by uploading files to Code Dx (or by configur
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.AnalysisApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.AnalysisApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 

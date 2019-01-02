@@ -19,11 +19,11 @@ Allows user to queue a job to generate a report. Each report type has a differen
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.ReportingApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.ReportingApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -83,11 +83,11 @@ Provides a list of report types for a project. Each report type (pdf, csv, xml, 
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.ReportingApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.ReportingApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 

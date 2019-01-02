@@ -29,11 +29,11 @@ Create a new project.
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.ProjectsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.ProjectsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -88,11 +88,11 @@ Delete a project.
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.ProjectsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.ProjectsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -147,11 +147,11 @@ Provides a list of all User roles.
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.ProjectsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.ProjectsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -207,11 +207,11 @@ Provides source path mappings for a project.
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.ProjectsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.ProjectsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -269,11 +269,11 @@ Provides a list of files for a project.
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.ProjectsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.ProjectsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -329,11 +329,11 @@ Lists all projects.
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.ProjectsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.ProjectsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -385,11 +385,11 @@ Provides information on all valid triage statuses for a project.
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.ProjectsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.ProjectsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -445,11 +445,11 @@ Provides a User Role for a given user.
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.ProjectsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.ProjectsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -507,11 +507,11 @@ Get a list of projects which match some filter/query criteria, and which you are
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.ProjectsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.ProjectsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -567,11 +567,11 @@ Get the number of projects which match some filter/query criteria, and which you
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.ProjectsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.ProjectsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -626,11 +626,11 @@ Update a project by changing its name or parent
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.ProjectsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.ProjectsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -687,11 +687,11 @@ Allows changing user roles. Note that you must specify the entire set of roles e
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.ProjectsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.ProjectsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 

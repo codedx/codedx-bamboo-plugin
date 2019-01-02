@@ -8,7 +8,7 @@
     </plugin-info>
 
     <component name="Code Dx Configuration Management Component" key="codeDxServerConfigManager"
-               class="com.avi.codedx.bambooplugin.ServerConfigManager"/>
+               class="com.codedx.bambooplugin.ServerConfigManager"/>
 
     <web-item key="configureCodedxPlugin" name="Code Dx Plugin" section="system.admin/plugins">
         <label key="Code Dx Plugin"/>
@@ -17,20 +17,20 @@
 
     <xwork key="codeDxConfigAdmin" name="Code Dx Plugin">
         <package name="configureCodeDxServer" extends="admin">
-            <action name="codeDxServerConfig" class="com.avi.codedx.bambooplugin.ServerConfigAction" method="edit">
+            <action name="codeDxServerConfig" class="com.codedx.bambooplugin.ServerConfigAction" method="edit">
                 <result name="success" type="freemarker">/admin/configureCodeDxServer.ftl</result>
                 <param name="mode">edit</param>
             </action>
-            <action name="codeDxServerSave" class="com.avi.codedx.bambooplugin.ServerConfigAction" method="save">
+            <action name="codeDxServerSave" class="com.codedx.bambooplugin.ServerConfigAction" method="save">
                 <result name="success" type="redirect">/admin/codeDxServerConfig.action</result>
             </action>
         </package>
     </xwork>
 
     <!-- add tasks -->
-    <taskType key="codeDxScanTask" name="Code Dx Scan Task" class="com.avi.codedx.bambooplugin.CodeDxScanTask">
+    <taskType key="codeDxScanTask" name="Code Dx Scan Task" class="com.codedx.bambooplugin.CodeDxScanTask">
         <description>Provides Code Dx integration</description>
-        <configuration class="com.avi.codedx.bambooplugin.CodeDxScanTaskConfigurator"/>
+        <configuration class="com.codedx.bambooplugin.CodeDxScanTaskConfigurator"/>
         <resource type="freemarker" name="edit" location="configureCodeDxTask.ftl"/>
         <resource type="download" name="icon" location="images/codedx-icon.png"/>
     </taskType>

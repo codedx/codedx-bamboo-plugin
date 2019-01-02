@@ -26,7 +26,7 @@ Add this dependency to your project's POM:
 
 ```xml
 <dependency>
-    <groupId>com.avi.codedx</groupId>
+    <groupId>com.codedx</groupId>
     <artifactId>swagger-codegen-codedx-api-client</artifactId>
     <version>1.0.0</version>
     <scope>compile</scope>
@@ -38,7 +38,7 @@ Add this dependency to your project's POM:
 Add this dependency to your project's build file:
 
 ```groovy
-compile "com.avi.codedx:swagger-codegen-codedx-api-client:1.0.0"
+compile "com.codedx:swagger-codegen-codedx-api-client:1.0.0"
 ```
 
 ### Others
@@ -58,10 +58,10 @@ Please follow the [installation](#installation) instruction and execute the foll
 
 ```java
 
-import com.avi.codedx.client.*;
-import com.avi.codedx.client.auth.*;
-import com.avi.codedx.client.api.*;
-import com.avi.codedx.client.api.ActionsApi;
+import com.codedx.client.*;
+import com.codedx.client.auth.*;
+import com.codedx.client.api.*;
+import com.codedx.client.api.ActionsApi;
 
 import java.io.File;
 import java.util.*;

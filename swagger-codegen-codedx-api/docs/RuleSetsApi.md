@@ -32,11 +32,11 @@ Allows user to add rule criteria
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.RuleSetsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.RuleSetsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -95,11 +95,11 @@ Allows user to clone a rule set
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.RuleSetsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.RuleSetsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -157,11 +157,11 @@ Allows user to create a Rule
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.RuleSetsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.RuleSetsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -219,11 +219,11 @@ Creates a rule set
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.RuleSetsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.RuleSetsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -279,11 +279,11 @@ Allows user to delete a rule
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.RuleSetsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.RuleSetsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -340,11 +340,11 @@ Allows user to delete rule criteria
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.RuleSetsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.RuleSetsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -403,11 +403,11 @@ Allows user to delete a rule set
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.RuleSetsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.RuleSetsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -465,11 +465,11 @@ Allows user to export a rule set as an XML file
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.RuleSetsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.RuleSetsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -525,11 +525,11 @@ Provides a list of rule sets
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.RuleSetsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.RuleSetsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -581,11 +581,11 @@ Allows user to view a specific rule&#39;s data
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.RuleSetsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.RuleSetsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -643,11 +643,11 @@ Returns an object representing the contents of a rule set
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.RuleSetsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.RuleSetsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -703,11 +703,11 @@ Allows user to modify a specific rule&#39;s data
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.RuleSetsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.RuleSetsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -767,11 +767,11 @@ Allows user to rename a rule set
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.RuleSetsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.RuleSetsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -829,11 +829,11 @@ Update rule set using an XML file
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.RuleSetsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.RuleSetsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -891,11 +891,11 @@ Import rule set using an XML file
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.RuleSetsApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.RuleSetsApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 

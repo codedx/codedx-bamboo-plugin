@@ -26,11 +26,11 @@ Returns metadata for the given finding
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.FindingDataApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.FindingDataApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -88,11 +88,11 @@ Returns the descriptions for the given finding from all available sources.
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.FindingDataApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.FindingDataApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -148,11 +148,11 @@ Returns filtered finding flow data. This endpoint is a candidate to be absorbed 
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.FindingDataApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.FindingDataApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -210,11 +210,11 @@ Responds with an array of \&quot;activity event\&quot; objects in JSON.
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.FindingDataApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.FindingDataApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -270,11 +270,11 @@ Returns the count of all findings in the project matching the given filter.
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.FindingDataApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.FindingDataApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -332,11 +332,11 @@ Returns filtered finding counts, grouped by the specified field.
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.FindingDataApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.FindingDataApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -394,11 +394,11 @@ Returns filtered finding table data. This endpoint is a candidate to become a mo
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.FindingDataApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.FindingDataApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -458,11 +458,11 @@ Returns the contents of a given file, as long as it is a text file.
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.FindingDataApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.FindingDataApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -520,11 +520,11 @@ Returns the contents of a given file, as long as it is a text file.
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.FindingDataApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.FindingDataApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 

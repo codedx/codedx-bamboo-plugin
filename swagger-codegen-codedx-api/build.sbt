@@ -1,6 +1,6 @@
 lazy val root = (project in file(".")).
   settings(
-    organization := "com.avi.codedx",
+    organization := "com.codedx",
     name := "swagger-codegen-codedx-api-client",
     version := "1.0.0",
     scalaVersion := "2.11.4",

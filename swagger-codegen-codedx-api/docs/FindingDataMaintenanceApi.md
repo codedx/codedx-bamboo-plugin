@@ -19,11 +19,11 @@ Returns a count of disabled findings present within a project. These are finding
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.FindingDataMaintenanceApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.FindingDataMaintenanceApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 
@@ -79,11 +79,11 @@ Executes a purge/cleanup operation on the finding data for the project. Any find
 ### Example
 ```java
 // Import classes:
-//import com.avi.codedx.client.ApiClient;
-//import com.avi.codedx.client.ApiException;
-//import com.avi.codedx.client.Configuration;
-//import com.avi.codedx.client.auth.*;
-//import com.avi.codedx.client.api.FindingDataMaintenanceApi;
+//import com.codedx.client.ApiClient;
+//import com.codedx.client.ApiException;
+//import com.codedx.client.Configuration;
+//import com.codedx.client.auth.*;
+//import com.codedx.client.api.FindingDataMaintenanceApi;
 
 ApiClient defaultClient = Configuration.getDefaultApiClient();
 

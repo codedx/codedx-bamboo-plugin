@@ -36,6 +36,7 @@
     </taskType>
 
     <!-- add our web resources -->
+    <!-- Couldn't get Web Resources to work -->
     <web-resource key="codedx-bamboo-plugin-resources" name="codedx-bamboo-plugin Web Resources">
         <dependency>com.atlassian.auiplugin:ajs</dependency>
         

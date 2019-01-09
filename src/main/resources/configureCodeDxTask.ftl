@@ -80,7 +80,7 @@
  <!--Code Dx URL-->
 <div class="setting-section">
     <div class="setting-textfield">
-        [@ww.textfield label="Code Dx API URL" name="url" onchange="warnRefreshProjects()" required='true'/]
+        [@ww.textfield label="Code Dx API URL" name="url" onchange="serverCredentialsOnChange()" required='true'/]
     </div>
     <span id="help-button-codedx-url" class="setting-help-textfield" onclick="toggleHelp(this)">
         <i class="fas fa-question-circle"></i>
@@ -91,11 +91,15 @@
     <br/>
     <span>Overrides the default set in the plugin admin page.</span>
 </div>
+<div id="url-warning" style="color:#C4A000;">
+	<i class="fas fa-exclamation-triangle"></i>
+	<span>HTTP is considered insecure, it is recommended that you use HTTPS.</span>
+</div>
 
 <!--Code Dx API Key-->
 <div class="setting-section">
     <div class="setting-textfield">
-        [@ww.textfield label="Code Dx API key" name="apiKey" onchange="warnRefreshProjects()" required='true'/]
+        [@ww.textfield label="Code Dx API key" name="apiKey" onchange="serverCredentialsOnChange()" required='true'/]
     </div>
     <span id="help-button-api-key" class="setting-help-textfield" onclick="toggleHelp(this)">
         <i class="fas fa-question-circle"></i>
@@ -110,7 +114,7 @@
 <!--Self-Signed Certificate-->
 <div class="setting-section">
     <div class="setting-textfield">
-        [@ww.textfield label="Self-Signed Certificate Fingerprint" name="fingerprint" onchange="warnRefreshProjects()" required='false'/]
+        [@ww.textfield label="Self-Signed Certificate Fingerprint" name="fingerprint" onchange="serverCredentialsOnChange()" required='false'/]
     </div>
     <span id="help-button-self-signed" class="setting-help-textfield" onclick="toggleHelp(this)">
         <i class="fas fa-question-circle"></i>
@@ -271,6 +275,7 @@
 
 	// Update when the page is loaded
     updateWaitForResultsAdvanced();
+    updateUrlWarning();
 
 	function updateWaitForResultsAdvanced() {
 		var checkbox = document.getElementById("waitForResultsCheckbox");
@@ -336,6 +341,9 @@
             apiKeyField.disabled = false;
             fingerprintField.disabled = false;
          }
+
+         // Warn the user http is insecure if they are using that
+         updateUrlWarning();
     }
 
 	function toggleHelp(event) {
@@ -404,8 +412,18 @@
         });
 	}
 
-	function warnRefreshProjects() {
+	function serverCredentialsOnChange() {
+		// Warn the user if they should refresh the projects
 		updateReachabilityMessage("Code Dx server info changed.  It is recommended to refresh the project list.");
+
+		// Warn the user http is insecure if they are using that
+		updateUrlWarning();
+	}
+
+	function updateUrlWarning() {
+        var urlWarning = document.getElementById("url-warning");
+        var isHttp = document.getElementById("url").value.startsWith("http:");
+        urlWarning.style.display = isHttp ? "block" : "none";
 	}
 
 	function updateReachabilityMessage(message, error = true) {

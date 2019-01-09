@@ -402,12 +402,6 @@
             },
             error:function (XMLHttpRequest, textStatus, errorThrown) {
                 updateReachabilityMessage(XMLHttpRequest.responseText);
-
-                // Remove all options
-                var projectSelect = document.getElementById("selectedProjectId");
-                while (projectSelect.options.length > 0) {
-                    projectSelect.options.remove(0);
-                }
             }
         });
 	}

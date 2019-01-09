@@ -88,6 +88,7 @@
 </div>
 <div id="help-content-codedx-url" class="setting-content">
     <span>The format is as follows: https://&lt;host&gt;:&lt;port&gt;/&lt;webapp_path&gt;/</span>
+    <br/>
     <span>Overrides the default set in the plugin admin page.</span>
 </div>
 
@@ -102,6 +103,7 @@
 </div>
 <div id="help-content-api-key" class="setting-content">
     <span>Verify that the API key you provide has the appropriate project permissions on the Code Dx admin page.</span>
+    <br/>
     <span>Overrides the default set in the plugin admin page.</span>
 </div>
 
@@ -116,6 +118,7 @@
 </div>
 <div id="help-content-self-signed" class="setting-content">
     <span>If you're using a self-signed certificate, provide its SHA1 Fingerprint here.</span>
+    <br/>
     <span>Overrides the default set in the plugin admin page.</span>
 </div>
 

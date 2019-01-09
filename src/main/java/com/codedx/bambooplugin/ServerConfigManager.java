@@ -3,7 +3,6 @@ package com.codedx.bambooplugin;
 import com.atlassian.bamboo.bandana.PlanAwareBandanaContext;
 import com.atlassian.bandana.BandanaContext;
 import com.atlassian.bandana.BandanaManager;
-import com.codedx.bambooplugin.security.BambooHostnameVerifierFactory;
 import com.codedx.bambooplugin.security.SSLContextFactory;
 import com.codedx.client.ApiClient;
 import org.glassfish.jersey.client.JerseyClientBuilder;
@@ -74,7 +73,6 @@ public class ServerConfigManager implements Serializable {
             try {
                 ClientBuilder clientBuilder = JerseyClientBuilder.newBuilder();
                 Client client = clientBuilder.withConfig(cdxApiClient.getHttpClient().getConfiguration())
-                        .hostnameVerifier(BambooHostnameVerifierFactory.getVerifier(url))
                         .sslContext(SSLContextFactory.getSSLContext(fingerprint))
                         .build();
                 cdxApiClient.setHttpClient(client);

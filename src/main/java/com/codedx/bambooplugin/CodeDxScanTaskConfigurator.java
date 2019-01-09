@@ -11,6 +11,8 @@ import com.codedx.client.api.ProjectsApi;
 import org.apache.commons.lang.StringUtils;
 
 import javax.ws.rs.ProcessingException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,13 +26,17 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
 
         final Map<String, String> config = super.generateTaskConfigMap(params, previousTaskDefinition);
 
+        config.put("useDefaults", params.getBoolean("useDefaults") ? "true" : "false");
+        config.put("url", params.getString("url"));
+        config.put("apiKey", params.getString("apiKey"));
+        config.put("fingerprint", params.getString("fingerprint"));
         config.put("analysisName", params.getString("analysisName"));
         config.put("selectedProjectId", params.getString("selectedProjectId"));
         config.put("includePaths", params.getString("includePaths"));
         config.put("excludePaths", params.getString("excludePaths"));
         config.put("toolOutputFiles", params.getString("toolOutputFiles"));
         config.put("reportArchiveName", params.getString("reportArchiveName"));
-        config.put("waitForResults", params.getString("waitForResults"));
+        config.put("waitForResults", params.getBoolean("waitForResults") ? "true" : "false");
         config.put("selectedFailureSeverity", params.getString("selectedFailureSeverity"));
         config.put("onlyConsiderNewFindings", params.getString("onlyConsiderNewFindings"));
         return config;
@@ -41,27 +47,59 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
         super.validate(params, errorCollection);
 
         final String analysisName = params.getString("analysisName");
-        final String selectedProjectId = params.getString("selectedProjectId");
-        if (StringUtils.isEmpty(analysisName))
-        {
+        if (StringUtils.isEmpty(analysisName)) {
             errorCollection.addError("analysisName", "Missing Code Dx Analysis Name.");
         }
-        if (StringUtils.isEmpty(selectedProjectId))
-        {
+
+        final String selectedProjectId = params.getString("selectedProjectId");
+        if (StringUtils.isEmpty(selectedProjectId)) {
             errorCollection.addError("selectedProjectId", "Missing Selected Project.");
+        }
+
+        final String useDefaults = params.getString("useDefaults");
+        if (!Boolean.parseBoolean(useDefaults)) {
+
+            final String url = params.getString("url");
+            if (url != null && !url.isEmpty()) {
+                // Make sure the URL is valid
+                try {
+                    new URL(url);
+                } catch (MalformedURLException e) {
+                    errorCollection.addError("url", "Invalid URL");
+                }
+            } else {
+                errorCollection.addError("url", "Missing Code Dx URL.");
+            }
+
+            final String apiKey = params.getString("apiKey");
+            if (StringUtils.isEmpty(apiKey)) {
+                errorCollection.addError("apiKey", "Missing Code Dx Api Key.");
+            }
         }
     }
 
-    private List<Project> getProjectList(Map<String, Object> context) {
+    private static List<Project> getProjectList(Map<String, Object> context) {
 
-        String url = ServerConfigManager.getUrl();
-        String apiKey = ServerConfigManager.getApiKey();
+        String url = null;
+        String apiKey = null;
+        String fingerprint = null;
+
+        if ((Boolean)context.get("useDefaults")) {
+            url = ServerConfigManager.getUrl();
+            apiKey = ServerConfigManager.getApiKey();
+            fingerprint = ServerConfigManager.getFingerprint();
+        } else {
+            url = context.get("url").toString();
+            apiKey = context.get("apiKey").toString();
+            fingerprint = context.get("fingerprint").toString();
+        }
+
         if (url == null || apiKey == null || url.isEmpty() || apiKey.isEmpty()) {
             context.put("reachabilityMessage", "CodeDx URL and API key are not configured");
             return new ArrayList<Project>();
         }
 
-        ApiClient cdxApiClient = ServerConfigManager.getConfiguredClient();
+        ApiClient cdxApiClient = ServerConfigManager.getConfiguredClient(url, apiKey, fingerprint);
 
         ProjectsApi projectsApi = new ProjectsApi();
         projectsApi.setApiClient(cdxApiClient);
@@ -75,7 +113,6 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
             e.printStackTrace();
         } catch (ProcessingException e) {
             context.put("reachabilityMessage", "CodeDx is unreachable");
-            e.printStackTrace();
         }
 
         return new ArrayList<Project>();
@@ -85,6 +122,27 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
     public void populateContextForCreate(final Map<String, Object> context) {
 
         super.populateContextForCreate(context);
+
+        boolean defaultsSet = ServerConfigManager.getDefaultsSet();
+        context.put("defaultsSet", defaultsSet);
+
+        String defaultUrl = emptyIfNull(ServerConfigManager.getUrl());
+        String defaultApiKey = emptyIfNull(ServerConfigManager.getApiKey());
+        String defaultFingerprint = emptyIfNull(ServerConfigManager.getFingerprint());
+
+        context.put("useDefaults", defaultsSet);
+        if (defaultsSet) {
+            context.put("url", defaultUrl);
+            context.put("apiKey", defaultApiKey);
+            context.put("fingerprint", defaultFingerprint);
+        } else {
+            context.put("url", "");
+            context.put("apiKey", "");
+            context.put("fingerprint", "");
+        }
+        context.put("defaultUrl", defaultUrl);
+        context.put("defaultApiKey", defaultApiKey);
+        context.put("defaultFingerprint", defaultFingerprint);
 
         context.put("analysisName", "Bamboo Analysis");
         context.put("reachabilityMessage", "");
@@ -111,6 +169,28 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
 
         super.populateContextForEdit(context, taskDefinition);
 
+        boolean defaultsSet = ServerConfigManager.getDefaultsSet();
+        context.put("defaultsSet", defaultsSet);
+
+        String defaultUrl = emptyIfNull(ServerConfigManager.getUrl());
+        String defaultApiKey = emptyIfNull(ServerConfigManager.getApiKey());
+        String defaultFingerprint = emptyIfNull(ServerConfigManager.getFingerprint());
+
+        boolean useDefaults = Boolean.parseBoolean(taskDefinition.getConfiguration().get("useDefaults"));
+        context.put("useDefaults", useDefaults);
+        if (defaultsSet && useDefaults) {
+            context.put("url", defaultUrl);
+            context.put("apiKey", defaultApiKey);
+            context.put("fingerprint", defaultFingerprint);
+        } else {
+            context.put("url", taskDefinition.getConfiguration().get("url"));
+            context.put("apiKey", taskDefinition.getConfiguration().get("apiKey"));
+            context.put("fingerprint", taskDefinition.getConfiguration().get("fingerprint"));
+        }
+        context.put("defaultUrl", defaultUrl);
+        context.put("defaultApiKey", defaultApiKey);
+        context.put("defaultFingerprint", defaultFingerprint);
+
         context.put("analysisName", taskDefinition.getConfiguration().get("analysisName"));
         context.put("reachabilityMessage", "");
 
@@ -134,5 +214,13 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
         context.put("severities", severities);
         context.put("selectedFailureSeverity", taskDefinition.getConfiguration().get("selectedFailureSeverity"));
         context.put("onlyConsiderNewFindings", taskDefinition.getConfiguration().get("onlyConsiderNewFindings"));
+    }
+
+    // Helper
+    private static String emptyIfNull(String value) {
+        if (value == null) {
+            return "";
+        }
+        return value;
     }
 }

@@ -1,3 +1,5 @@
+<ww:head theme="ajax"/>
+
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous"/>
 <style>
 
@@ -41,6 +43,17 @@
         max-width: 740px;
     }
 
+    .setting-button {
+        background-color: #205081BB;
+        color: white;
+        font-size: 0.8rem;
+        border-radius: 3.01px;
+        cursor: pointer;
+        margin: 31px 0px 0px 5px;
+        align-self: flex-start;
+        padding: 5px;
+    }
+
     code {
         width: fit-content;
         padding-right: 15px;
@@ -48,14 +61,73 @@
 
 </style>
 
+<h2>Code Dx Server Settings</h2>
+
+<!--Use Admin Defaults-->
+<div class="setting-section" id="useAdminDefaultSection">
+	<div class="setting-checkbox">
+		[@ww.checkbox id="useDefaultCheckbox" label="Use Default Code Dx Settings" name="useDefaults" onclick="toggleUseDefaults()"/]
+	</div>
+	<span id="help-button-use-defaults" class="setting-help-checkbox" onclick="toggleHelp(this)">
+        <i class="fas fa-question-circle"></i>
+    </span>
+</div>
+<div id="help-content-use-defaults" class="setting-content">
+    <span>When checked, this task will use the values saved in the plugin admin page for the Code Dx URL, api key, and self-signed fingerprint.</span>
+    <span>Un-checking allows to override these settings for this task.</span>
+</div>
+
+ <!--Code Dx URL-->
+<div class="setting-section">
+    <div class="setting-textfield">
+        [@ww.textfield label="Code Dx API URL" name="url" onchange="warnRefreshProjects()" required='true'/]
+    </div>
+    <span id="help-button-codedx-url" class="setting-help-textfield" onclick="toggleHelp(this)">
+        <i class="fas fa-question-circle"></i>
+    </span>
+</div>
+<div id="help-content-codedx-url" class="setting-content">
+    <span>The format is as follows: https://&lt;host&gt;:&lt;port&gt;/&lt;webapp_path&gt;/</span>
+    <span>Overrides the default set in the plugin admin page.</span>
+</div>
+
+<!--Code Dx API Key-->
+<div class="setting-section">
+    <div class="setting-textfield">
+        [@ww.textfield label="Code Dx API key" name="apiKey" onchange="warnRefreshProjects()" required='true'/]
+    </div>
+    <span id="help-button-api-key" class="setting-help-textfield" onclick="toggleHelp(this)">
+        <i class="fas fa-question-circle"></i>
+    </span>
+</div>
+<div id="help-content-api-key" class="setting-content">
+    <span>Verify that the API key you provide has the appropriate project permissions on the Code Dx admin page.</span>
+    <span>Overrides the default set in the plugin admin page.</span>
+</div>
+
+<!--Self-Signed Certificate-->
+<div class="setting-section">
+    <div class="setting-textfield">
+        [@ww.textfield label="Self-Signed Certificate Fingerprint" name="fingerprint" onchange="warnRefreshProjects()" required='false'/]
+    </div>
+    <span id="help-button-self-signed" class="setting-help-textfield" onclick="toggleHelp(this)">
+        <i class="fas fa-question-circle"></i>
+    </span>
+</div>
+<div id="help-content-self-signed" class="setting-content">
+    <span>If you're using a self-signed certificate, provide its SHA1 Fingerprint here.</span>
+    <span>Overrides the default set in the plugin admin page.</span>
+</div>
+
+<h2>Task Run Settings</h2>
+
 <!--Selected Project-->
 <div class="setting-section">
 	<div class="setting-textfield">
 		[@ww.select label="Code Dx Project" name="selectedProjectId" list="projectList" listKey="id" listValue="name" required="true"/]
-        <div style="color:#F00000;">
-            ${reachabilityMessage}
-        </div>
+        <div id="reachabilityMessage" style="color:#F00000;">${reachabilityMessage}</div>
 	</div>
+	<span class="setting-button" onclick="refreshProjects()">Refresh Projects</span>
 </div>
 
 <!--Analysis Name-->
@@ -148,7 +220,7 @@
 </div>
 
 <!--Section opens when "Wait for Analysis Results" is checked"-->
-<div id="waitForResultsAdvanced"">
+<div id="waitForResultsAdvanced">
 
 	<!--Build Failure Severity-->
     <div class="setting-section">
@@ -195,13 +267,73 @@
 <script>
 
 	// Update when the page is loaded
-	updateWaitForResultsAdvanced();
+    updateWaitForResultsAdvanced();
 
 	function updateWaitForResultsAdvanced() {
 		var checkbox = document.getElementById("waitForResultsCheckbox");
 		var advanced = document.getElementById("waitForResultsAdvanced");
 		advanced.style.display = checkbox.checked ? "block" : "none";
 	}
+
+	var useDefaults = ${useDefaults?c}; // The "?c" is for booleans
+	var defaultsSet = ${defaultsSet?c};
+	var defaultUrl = "${defaultUrl}";
+	var defaultApiKey = "${defaultApiKey}";
+	var defaultFingerprint = "${defaultFingerprint}";
+
+	var savedUrl = document.getElementById("url").value;
+	var savedApiKey = document.getElementById("apiKey").value;
+	var savedFingerprint = document.getElementById("fingerprint").value;
+
+	// Update when the page is loaded
+	if (defaultsSet) {
+        if (useDefaults) {
+            // Disable the fields
+            document.getElementById("url").disabled = true;
+            document.getElementById("apiKey").disabled = true;
+            document.getElementById("fingerprint").disabled = true;
+        }
+     } else {
+        document.getElementById("useAdminDefaultSection").style.display = "none";
+     }
+
+    function toggleUseDefaults() {
+
+         var checked = document.getElementById("useDefaultCheckbox").checked;
+
+         var urlField = document.getElementById("url");
+         var apiKeyField = document.getElementById("apiKey");
+         var fingerprintField = document.getElementById("fingerprint");
+
+         if (checked) {
+
+            // Save what they had for later in case they change their mind and uncheck.
+            savedUrl = urlField.value;
+            savedApiKey = apiKeyField.value;
+            savedFingerprint = fingerprintField.value;
+
+            // Set the fields to defaults
+            urlField.value = defaultUrl;
+            apiKeyField.value = defaultApiKey;
+            fingerprintField.value = defaultFingerprint;
+
+            // Disable the fields
+            urlField.disabled = true;
+            apiKeyField.disabled = true;
+            fingerprintField.disabled = true;
+         } else {
+
+            // Set the fields back to what they were (likely empty)
+            urlField.value = savedUrl;
+            apiKeyField.value = savedApiKey;
+            fingerprintField.value = savedFingerprint;
+
+            // Enable the fields
+            urlField.disabled = false;
+            apiKeyField.disabled = false;
+            fingerprintField.disabled = false;
+         }
+    }
 
 	function toggleHelp(event) {
 		var buttonId = event.id;
@@ -214,6 +346,73 @@
 				content.style.display = visible ? "none" : "block";
 			}
 		}
+	}
+
+	function refreshProjects() {
+
+		var data = {
+			url: document.getElementById("url").value,
+            apiKey: document.getElementById("apiKey").value,
+            fingerprint: document.getElementById("fingerprint").value
+		};
+
+		AJS.$.ajax({
+            url:"${req.contextPath}/plugins/servlet/projectRefresherServlet",
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            cache:false,
+            type: 'POST',
+            success:function (json) {
+
+                var projects = JSON.parse(json).projects;
+
+                var projectSelect = document.getElementById("selectedProjectId");
+				var oldSelectedIndex = projectSelect.selectedIndex;
+
+                // Remove old options
+                while (projectSelect.options.length > 0) {
+                    projectSelect.options.remove(0);
+                }
+
+                // Add new options
+				for (var i = 0; i < projects.length; i++) {
+					var option = document.createElement("option");
+                    option.value = projects[i].id;
+                    option.text = projects[i].name;
+                    projectSelect.add(option);
+				}
+
+				// Try to keep the project they had selected, selected
+				if (oldSelectedIndex >= 0 && projectSelect.options.length > oldSelectedIndex) {
+					projectSelect.selectedIndex = oldSelectedIndex;
+				}
+
+				updateReachabilityMessage("Projects refreshed successfully.", false);
+            },
+            error:function (XMLHttpRequest, textStatus, errorThrown) {
+                updateReachabilityMessage(XMLHttpRequest.responseText);
+
+                // Remove all options
+                var projectSelect = document.getElementById("selectedProjectId");
+                while (projectSelect.options.length > 0) {
+                    projectSelect.options.remove(0);
+                }
+            }
+        });
+	}
+
+	function warnRefreshProjects() {
+		updateReachabilityMessage("Code Dx server info changed.  It is recommended to refresh the project list.");
+	}
+
+	function updateReachabilityMessage(message, error = true) {
+		if (!message) {
+			message = "";
+		}
+		var messageDiv = document.getElementById("reachabilityMessage");
+		messageDiv.innerHTML = message;
+		messageDiv.style.display = (message === "") ? "none" : "block";
+		messageDiv.style.color = error ? "#F00000" : "#00D000";
 	}
 
 </script>

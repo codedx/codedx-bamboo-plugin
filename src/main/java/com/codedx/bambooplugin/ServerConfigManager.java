@@ -54,11 +54,17 @@ public class ServerConfigManager implements Serializable {
         saveData(data);
     }
 
-    // Ease of use method to get a client configured correctly with the url, apiKey, and fingerprint.
+    // Ease of use method to get a client configured correctly with the url, apiKey, and fingerprint loaded from the admin plug-in settings.
     public static ApiClient getConfiguredClient() {
-        String url = getUrl();
-        String apiKey = getApiKey();
-        String fingerprint = getFingerprint();
+        return getConfiguredClient(getUrl(), getApiKey(), getFingerprint());
+    }
+
+    // Ease of use method to get a client configured correctly with the given url, apiKey, and fingerprint.
+    public static ApiClient getConfiguredClient(String url, String apiKey, String fingerprint) {
+
+        if(url.endsWith("/")) {
+            url = url.substring(0, url.length() - 1);
+        }
 
         ApiClient cdxApiClient = new ApiClient();
         cdxApiClient.setBasePath(url);
@@ -68,15 +74,30 @@ public class ServerConfigManager implements Serializable {
             try {
                 ClientBuilder clientBuilder = JerseyClientBuilder.newBuilder();
                 Client client = clientBuilder.withConfig(cdxApiClient.getHttpClient().getConfiguration())
-                                             .hostnameVerifier(BambooHostnameVerifierFactory.getVerifier(url))
-                                             .sslContext(SSLContextFactory.getSSLContext(fingerprint))
-                                             .build();
+                        .hostnameVerifier(BambooHostnameVerifierFactory.getVerifier(url))
+                        .sslContext(SSLContextFactory.getSSLContext(fingerprint))
+                        .build();
                 cdxApiClient.setHttpClient(client);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
         return cdxApiClient;
+    }
+
+    // Helper method to tell us if the user configured settings in the admin page
+    public static boolean getDefaultsSet() {
+        String[] settings = new String[] {
+            getUrl(),
+            getApiKey(),
+            getFingerprint()
+        };
+        for (String setting : settings) {
+            if (setting != null && !setting.isEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     // Fields we want to save

@@ -34,8 +34,10 @@ public class CodeDxScanTask implements TaskType {
         BuildLogger buildLogger;
 
         // User settings
-        public String apiKey;
+        boolean useDefaults;
         String apiUrl;
+        String apiKey;
+        String fingerprint;
         String analysisName;
         int projectId;
         String includePaths;
@@ -109,17 +111,6 @@ public class CodeDxScanTask implements TaskType {
 
     private static Boolean loadUserPreferences(ScanTaskState state) {
 
-        // Load global settings
-        log(state, "Loading Code Dx plug-in global settings.");
-        state.apiKey = ServerConfigManager.getApiKey();
-        state.apiUrl = ServerConfigManager.getUrl();
-
-        if (state.apiUrl == null || state.apiKey == null || state.apiUrl.isEmpty() || state.apiKey.isEmpty()) {
-            logError(state, "Code Dx url and api key are not properly configured.  Please configure them on the plug-in settings page.");
-            return false;
-        }
-        log(state, "Code Dx url set to %s", state.apiUrl);
-
         // Load task specific settings
         log(state, "Loading Task settings.");
         ConfigurationMap config = state.taskContext.getConfigurationMap();
@@ -133,13 +124,36 @@ public class CodeDxScanTask implements TaskType {
         state.failureSeverity = config.get("selectedFailureSeverity");
         state.onlyConsiderNewFindings = config.getAsBoolean("onlyConsiderNewFindings");
 
+        state.useDefaults = config.getAsBoolean("useDefaults");
+        if (state.useDefaults) {
+            // Load global settings
+            log(state, "Loading Code Dx plug-in global settings.");
+            state.apiUrl = ServerConfigManager.getUrl();
+            state.apiKey = ServerConfigManager.getApiKey();
+            state.fingerprint = ServerConfigManager.getFingerprint();
+        } else {
+            state.apiUrl = config.get("url");
+            state.apiKey = config.get("apiKey");
+            state.fingerprint = config.get("fingerprint");
+        }
+
+        if (state.apiUrl == null || state.apiKey == null || state.apiUrl.isEmpty() || state.apiKey.isEmpty()) {
+            logError(state, "Code Dx url and api key are not properly configured.  Please configure them on the plug-in settings page.");
+            return false;
+        }
+        log(state, "Code Dx url set to %s", state.apiUrl);
+
         return true;
     }
 
     private static Boolean setupApiClient(ScanTaskState state) {
         log(state, "Setting up Code Dx Api Client.");
 
-        state.apiClient = ServerConfigManager.getConfiguredClient();
+        if (state.useDefaults) {
+            state.apiClient = ServerConfigManager.getConfiguredClient();
+        } else {
+            state.apiClient = ServerConfigManager.getConfiguredClient(state.apiUrl, state.apiKey, state.fingerprint);
+        }
 
         state.analysisApi = new AnalysisApi();
         state.analysisApi.setApiClient(state.apiClient);

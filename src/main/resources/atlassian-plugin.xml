@@ -27,6 +27,11 @@
         </package>
     </xwork>
 
+    <servlet name="Project Refresher Servlet" key="projectRefresherServlet"
+             class="com.codedx.bambooplugin.ProjectRefresherServlet">
+        <url-pattern>/projectRefresherServlet</url-pattern>
+    </servlet>
+
     <!-- add tasks -->
     <taskType key="codeDxScanTask" name="Code Dx Scan Task" class="com.codedx.bambooplugin.CodeDxScanTask">
         <description>Provides Code Dx integration</description>

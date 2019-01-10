@@ -256,7 +256,8 @@
     </div>
 
 	<!--Report Archive Name-->
-    <div class="setting-section">
+	<!-- TODO: Remove section if not needed after implementing Build Results / Tables  -->
+    <div class="setting-section" style="display:none;">
         <div class="setting-textfield">
             [@ww.textfield label="Report Archive Name" name="reportArchiveName"/]
         </div>

@@ -419,6 +419,8 @@ public class CodeDxScanTask implements TaskType {
 
     private static Boolean writeReportArchive(ScanTaskState state) {
 
+        // TODO: Remove if not needed after implementing Build Results / Tables
+        /*
         // If user provides an archive name, create a zip containing an simple html file
         if(state.reportArchiveName != null && !state.reportArchiveName.isEmpty()) {
             log(state, "Creating archived report file. Name: %s", state.reportArchiveName);
@@ -435,6 +437,7 @@ public class CodeDxScanTask implements TaskType {
                 return false;
             }
         }
+        */
 
         return true;
     }

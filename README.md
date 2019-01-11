@@ -73,7 +73,7 @@ codedx-bamboo-plugin
 
  * It is recommended to run and debug the plugin from IntelliJ.  Alternatively, it can be done from the command line.
 
-### Running and Debugging from Bamboo
+### Running and Debugging from IntelliJ
 
  * First, open the Maven window on the right side of IntelliJ.  If the window doesn't show any commands, use the `Reimport all Maven Projects` button and the `Generate Source and Update Folders for All Projects` button to populate the list.
 

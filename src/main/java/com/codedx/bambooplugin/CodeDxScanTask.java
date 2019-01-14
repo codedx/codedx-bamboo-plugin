@@ -250,7 +250,10 @@ public class CodeDxScanTask implements TaskType {
             List<String> inputIds = response.getInputIds();
             List<String> verificationErrors = response.getVerificationErrors();
 
-            if (!verificationErrors.isEmpty()) {
+            if(inputIds.size() != state.filesToUpload.size()) {
+                // Upload not done.  Probably don't want to log every second though.
+
+            } else if (!verificationErrors.isEmpty()) {
 
                 StringBuilder errorMessage = new StringBuilder();
                 errorMessage.append("Code Dx reported verification errors for attempted analysis: \n");
@@ -261,9 +264,8 @@ public class CodeDxScanTask implements TaskType {
                 logError(state, errorMessage.toString());
 
                 return false;
-            }
 
-            if(inputIds.size() == state.filesToUpload.size()) {
+            } else {
                 readyToRunAnalysis = true;
             }
         }

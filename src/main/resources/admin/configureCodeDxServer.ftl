@@ -22,7 +22,8 @@
     	}
 
     	.setting-help-textfield {
-    	    color: #205081BB;
+    	    opacity: 0.75;
+    	    color: #205081;
     	    font-size: 1.25rem;
     	    cursor: pointer;
     	    padding: 5px;

@@ -18,7 +18,8 @@
     }
 
     .setting-help-textfield {
-        color: #205081BB;
+        opacity: 0.75;
+        color: #205081;
         font-size: 1.25rem;
         cursor: pointer;
         padding: 5px;
@@ -26,7 +27,8 @@
     }
 
     .setting-help-checkbox {
-        color: #205081BB;
+        opacity: 0.75;
+        color: #205081;
         font-size: 1.25rem;
         cursor: pointer;
         padding: 0px 0px 0px 5px;
@@ -44,7 +46,8 @@
     }
 
     .setting-button {
-        background-color: #205081BB;
+        opacity: 0.75;
+        background-color: #205081;
         color: white;
         font-size: 0.8rem;
         border-radius: 3.01px;

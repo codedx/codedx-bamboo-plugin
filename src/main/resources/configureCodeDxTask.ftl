@@ -424,7 +424,12 @@
         urlWarning.style.display = isHttp ? "block" : "none";
 	}
 
-	function updateReachabilityMessage(message, error = true) {
+	function updateReachabilityMessage(message, error) {
+
+		if (error === undefined) {
+			error = true; // IE doesn't support default values for function parameter (ES6)
+		}
+
 		if (!message) {
 			message = "";
 		}

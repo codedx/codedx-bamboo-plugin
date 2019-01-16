@@ -11,8 +11,8 @@ import java.util.List;
 public class SSLContextFactory {
 	public static SSLContext getSSLContext(String fingerprint) throws GeneralSecurityException {
 
-		// Won't work if the fingerprint has the colons between every two hex characters
-		fingerprint = fingerprint.replaceAll(":", "");
+		// Won't work if the fingerprint has the colons, spaces, or other aesthetic separator characters between every two hex characters
+		fingerprint = fingerprint.replaceAll("[^A-Fa-f0-9]", "");
 
 		SingleCertManager manager = new SingleCertManager("floopydoop");
 

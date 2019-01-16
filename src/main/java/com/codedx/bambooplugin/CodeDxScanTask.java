@@ -122,6 +122,8 @@ public class CodeDxScanTask implements TaskType {
         state.reportArchiveName = config.get("reportArchiveName");
         state.waitForResults = config.getAsBoolean("waitForResults");
         state.failureSeverity = config.get("selectedFailureSeverity");
+        // Don't wait if the failure severity is "None".  Is this what we want?
+        state.waitForResults = state.waitForResults && !Severity.isNone(state.failureSeverity);
         state.onlyConsiderNewFindings = config.getAsBoolean("onlyConsiderNewFindings");
 
         state.useDefaults = config.getAsBoolean("useDefaults");

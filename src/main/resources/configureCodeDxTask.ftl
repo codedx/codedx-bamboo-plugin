@@ -83,7 +83,7 @@
  <!--Code Dx URL-->
 <div class="setting-section">
     <div class="setting-textfield">
-        [@ww.textfield label="Code Dx API URL" name="url" onchange="serverCredentialsOnChange()" required='true'/]
+        [@ww.textfield label="Code Dx API URL" name="url" onkeyup="serverCredentialsOnChange()" required='true'/]
     </div>
     <span id="help-button-codedx-url" class="setting-help-textfield" onclick="toggleHelp(this)">
         <i class="fas fa-question-circle"></i>
@@ -102,7 +102,7 @@
 <!--Code Dx API Key-->
 <div class="setting-section">
     <div class="setting-textfield">
-        [@ww.textfield label="Code Dx API key" name="apiKey" onchange="serverCredentialsOnChange()" required='true'/]
+        [@ww.textfield label="Code Dx API key" name="apiKey" onkeyup="serverCredentialsOnChange()" required='true'/]
     </div>
     <span id="help-button-api-key" class="setting-help-textfield" onclick="toggleHelp(this)">
         <i class="fas fa-question-circle"></i>
@@ -117,7 +117,7 @@
 <!--Self-Signed Certificate-->
 <div class="setting-section">
     <div class="setting-textfield">
-        [@ww.textfield label="Self-Signed Certificate Fingerprint" name="fingerprint" onchange="serverCredentialsOnChange()" required='false'/]
+        [@ww.textfield label="Self-Signed Certificate Fingerprint" name="fingerprint" onkeyup="serverCredentialsOnChange()" required='false'/]
     </div>
     <span id="help-button-self-signed" class="setting-help-textfield" onclick="toggleHelp(this)">
         <i class="fas fa-question-circle"></i>
@@ -275,6 +275,14 @@
 
 </div>
 
+<!-- Workaround for bug(?) in bamboo to pass variables from server.  After failing to save a configuration, variables get passed down inside of a size 1 array.  This causes normal escape syntax to fail. -->
+<!-- Pass the variables the user can edit through hidden fields instead -->
+<div style="display:none;">
+	[@ww.textfield label="" id="passVarUseDefaults" name="useDefaults" required="false"/]
+	[@ww.textfield label="" id="passVarDefaultsSet" name="defaultsSet" required="false"/]
+	[@ww.textfield label="" id="passVarFailedSave" name="failedSave" required="false"/]
+</div>
+
 <script>
 
 	// String "startsWith" polyfill for IE
@@ -286,18 +294,14 @@
         });
     }
 
-	// Update when the page is loaded
-    updateWaitForResultsAdvanced();
-    updateUrlWarning();
+	// Workaround for bug(?) in bamboo to pass variables from server.  After failing to save a configuration, variables get passed down inside of a size 1 array.  This causes normal escape syntax to fail.
+	// Get these from hidden fields instead.
+	var defaultsSet = (document.getElementById("passVarDefaultsSet").value == "true");
+	var failedSave = (document.getElementById("passVarFailedSave").value == "true"); // Not currently used
 
-	function updateWaitForResultsAdvanced() {
-		var checkbox = document.getElementById("waitForResultsCheckbox");
-		var advanced = document.getElementById("waitForResultsAdvanced");
-		advanced.style.display = checkbox.checked ? "block" : "none";
-	}
+	var useDefaults = document.getElementById("useDefaultCheckbox").checked;
 
-	var useDefaults = ${useDefaults?c}; // The "?c" is for booleans
-	var defaultsSet = ${defaultsSet?c};
+	// The user can't edit these variables so we can use normal escape syntax.
 	var defaultUrl = "${defaultUrl}";
 	var defaultApiKey = "${defaultApiKey}";
 	var defaultFingerprint = "${defaultFingerprint}";
@@ -306,27 +310,57 @@
 	var savedApiKey = document.getElementById("apiKey").value;
 	var savedFingerprint = document.getElementById("fingerprint").value;
 
+	var refreshProjectsUrl = document.getElementById("url").value;
+    var refreshProjectsApiKey = document.getElementById("apiKey").value;
+    var refreshProjectsFingerprint = document.getElementById("fingerprint").value;
+
 	// Update when the page is loaded
-	if (defaultsSet) {
-        if (useDefaults) {
-            // Disable the fields
-            document.getElementById("url").disabled = true;
-            document.getElementById("apiKey").disabled = true;
-            document.getElementById("fingerprint").disabled = true;
-        }
-     } else {
-        document.getElementById("useAdminDefaultSection").style.display = "none";
-     }
+	onPageLoad();
+
+    function onPageLoad() {
+
+	    updateWaitForResultsAdvanced();
+	    updateUrlWarning();
+
+		if (defaultsSet) {
+	        if (useDefaults) {
+	            // Disable the fields
+	            document.getElementById("url").disabled = true;
+	            document.getElementById("apiKey").disabled = true;
+	            document.getElementById("fingerprint").disabled = true;
+	        }
+	    } else {
+	        document.getElementById("useAdminDefaultSection").style.display = "none";
+	    }
+
+		if (document.getElementById("selectedProjectId").children.length == 0) {
+			document.getElementById("selectedProjectId").disabled = true;
+		}
+    }
+
+    function updateWaitForResultsAdvanced() {
+        var checkbox = document.getElementById("waitForResultsCheckbox");
+        var advanced = document.getElementById("waitForResultsAdvanced");
+        advanced.style.display = checkbox.checked ? "block" : "none";
+    }
 
     function toggleUseDefaults() {
 
-         var checked = document.getElementById("useDefaultCheckbox").checked;
+        var checked = document.getElementById("useDefaultCheckbox").checked;
 
-         var urlField = document.getElementById("url");
-         var apiKeyField = document.getElementById("apiKey");
-         var fingerprintField = document.getElementById("fingerprint");
+        document.getElementById("passVarUseDefaults").value = (checked ? "true" : "false");
 
-         if (checked) {
+        if (checked) {
+            document.getElementById("useDefaultCheckbox").value = "true";
+        } else {
+            document.getElementById("useDefaultCheckbox").value = "false";
+        }
+
+        var urlField = document.getElementById("url");
+        var apiKeyField = document.getElementById("apiKey");
+        var fingerprintField = document.getElementById("fingerprint");
+
+        if (checked) {
 
             // Save what they had for later in case they change their mind and uncheck.
             savedUrl = urlField.value;
@@ -342,7 +376,7 @@
             urlField.disabled = true;
             apiKeyField.disabled = true;
             fingerprintField.disabled = true;
-         } else {
+        } else {
 
             // Set the fields back to what they were (likely empty)
             urlField.value = savedUrl;
@@ -353,10 +387,10 @@
             urlField.disabled = false;
             apiKeyField.disabled = false;
             fingerprintField.disabled = false;
-         }
+        }
 
-         // Warn the user http is insecure if they are using that
-         updateUrlWarning();
+        // Warn the user http is insecure if they are using that
+        updateUrlWarning();
     }
 
 	function toggleHelp(event) {
@@ -411,17 +445,44 @@
 					projectSelect.selectedIndex = oldSelectedIndex;
 				}
 
-				updateReachabilityMessage("Projects refreshed successfully.", false);
+				if (projects.length > 0) {
+					updateReachabilityMessage("Projects refreshed successfully.", false);
+					projectSelect.disabled = false;
+				} else {
+					updateReachabilityMessage("No projects available for this API token.", true);
+					projectSelect.disabled = true;
+				}
             },
             error:function (XMLHttpRequest, textStatus, errorThrown) {
+
+				// Remove old options
+				var projectSelect = document.getElementById("selectedProjectId");
+				while (projectSelect.options.length > 0) {
+					projectSelect.options.remove(0);
+				}
+				projectSelect.disabled = true;
+
                 updateReachabilityMessage(XMLHttpRequest.responseText);
             }
         });
+
+        // Update these values so we can properly warn the user if they need to refresh the projects again
+        refreshProjectsUrl = document.getElementById("url").value;
+        refreshProjectsApiKey = document.getElementById("apiKey").value;
+        refreshProjectsFingerprint = document.getElementById("fingerprint").value;
 	}
 
 	function serverCredentialsOnChange() {
-		// Warn the user if they should refresh the projects
-		updateReachabilityMessage("Code Dx server info changed.  It is recommended to refresh the project list.");
+		let url = document.getElementById("url").value;
+        let apiKey = document.getElementById("apiKey").value;
+        let fingerprint = document.getElementById("fingerprint").value;
+
+        if (url != refreshProjectsUrl || apiKey != refreshProjectsApiKey || fingerprint != refreshProjectsFingerprint) {
+            // Warn the user if they should refresh the projects
+            updateReachabilityMessage("Code Dx server info changed.  It is recommended to refresh the project list.");
+        } else {
+            updateReachabilityMessage(); // Remove warning
+        }
 
 		// Warn the user http is insecure if they are using that
 		updateUrlWarning();

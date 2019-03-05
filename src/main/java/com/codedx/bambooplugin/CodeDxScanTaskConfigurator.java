@@ -97,6 +97,11 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
             errorCollection.addError("selectedProjectId", "Missing Selected Project.");
         }
 
+        final String includePaths = params.getString("includePaths");
+        if (StringUtils.isEmpty(includePaths)) {
+            errorCollection.addError("includePaths", "Missing source and binary files.");
+        }
+
         final String useDefaults = params.getString("useDefaults");
         if (!Boolean.parseBoolean(useDefaults)) {
 

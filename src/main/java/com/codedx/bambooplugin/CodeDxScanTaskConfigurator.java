@@ -19,6 +19,9 @@ import java.util.Map;
 
 public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
 
+    // Since much work was done surrounding saving invalid configs, lets keep the code and toggle it with a flag.
+    private static final boolean ALLOW_SAVE_INVALID_CONFIG = true;
+
     private static final Severity[] severities = Severity.all;
 
     // Tracks if we are going into an edit after a failed save attempt and remembers the credentials the user put in
@@ -83,6 +86,10 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
     public void validate(final ActionParametersMap params, final ErrorCollection errorCollection) {
 
         super.validate(params, errorCollection);
+
+        if (ALLOW_SAVE_INVALID_CONFIG) {
+            return;
+        }
 
         // Will be set back to false in generateTaskConfigMap(...) if save succeeds
         this.failedSave = new FailedCredentials(params);

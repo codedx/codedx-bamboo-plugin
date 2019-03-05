@@ -18,6 +18,8 @@ import com.codedx.client.api.*;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -117,7 +119,12 @@ public class CodeDxScanTask implements TaskType {
         state.analysisName = config.get("analysisName");
         state.includePaths = config.get("includePaths");
         state.excludePaths = config.get("excludePaths");
-        state.projectId = Integer.parseInt(config.get("selectedProjectId"));
+        try {
+            state.projectId = Integer.parseInt(config.get("selectedProjectId"));
+        } catch (NumberFormatException e) {
+            logError(state, "No project selected.  Please select a Code Dx project on the task configuration page.");
+            return false;
+        }
         state.toolOutputFiles = config.get("toolOutputFiles");
         state.reportArchiveName = config.get("reportArchiveName");
         state.waitForResults = config.getAsBoolean("waitForResults");
@@ -133,16 +140,44 @@ public class CodeDxScanTask implements TaskType {
             state.apiUrl = ServerConfigManager.getUrl();
             state.apiKey = ServerConfigManager.getApiKey();
             state.fingerprint = ServerConfigManager.getFingerprint();
+
+            if (state.apiUrl == null || state.apiKey == null || state.apiUrl.isEmpty() || state.apiKey.isEmpty()) {
+                logError(state, "Code Dx url and api key are not properly configured.  Please configure them on the plug-in settings page.");
+                return false;
+            }
         } else {
             state.apiUrl = config.get("url");
             state.apiKey = config.get("apiKey");
             state.fingerprint = config.get("fingerprint");
+
+            if (state.apiUrl == null || state.apiUrl.isEmpty()) {
+                logError(state, "Missing Code Dx url.  Please configure it on the task configuration page.");
+                return false;
+            } else {
+                try {
+                    new URL(state.apiUrl);
+                } catch (MalformedURLException e) {
+                    logError(state, "Malformed Code Dx url.  Please correct it on the task configuration page.");
+                    return false;
+                }
+            }
+
+            if (state.apiKey == null || state.apiKey.isEmpty()) {
+                logError(state, "Missing Code Dx api key.  Please configure it on the task configuration page.");
+                return false;
+            }
         }
 
-        if (state.apiUrl == null || state.apiKey == null || state.apiUrl.isEmpty() || state.apiKey.isEmpty()) {
-            logError(state, "Code Dx url and api key are not properly configured.  Please configure them on the plug-in settings page.");
+        if (state.analysisName == null || state.analysisName.isEmpty()) {
+            logError(state, "Missing Code Dx Analysis Name.  Please configure it on the task configuration page.");
             return false;
         }
+
+        if (state.includePaths == null || state.includePaths.isEmpty()) {
+            logError(state, "Missing source and binary files.  Please configure the field on the task configuration page.");
+            return false;
+        }
+
         log(state, "Code Dx url set to %s", state.apiUrl);
 
         return true;

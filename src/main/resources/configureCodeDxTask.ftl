@@ -391,6 +391,9 @@
 
         // Warn the user http is insecure if they are using that
         updateUrlWarning();
+
+        // Warn the user if they should refresh the projects
+        serverCredentialsOnChange();
     }
 
 	function toggleHelp(event) {

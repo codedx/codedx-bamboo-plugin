@@ -1,5 +1,6 @@
 package com.codedx.plugins.bamboo.security;
 
+import org.apache.log4j.Logger;
 import javax.net.ssl.*;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
@@ -9,7 +10,12 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class SSLContextFactory {
+
+	private static final Logger _logger = org.apache.log4j.Logger.getLogger(SSLContextFactory.class);
+
 	public static SSLContext getSSLContext(String fingerprint) throws GeneralSecurityException {
+
+		_logger.info(String.format("getSSLContext(...) called.  fingerprint: %s", fingerprint != null ? fingerprint : ""));
 
 		// Won't work if the fingerprint has the colons, spaces, or other aesthetic separator characters between every two hex characters
 		fingerprint = fingerprint.replaceAll("[^A-Fa-f0-9]", "");

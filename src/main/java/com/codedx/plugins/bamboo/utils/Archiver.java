@@ -1,5 +1,6 @@
 package com.codedx.plugins.bamboo.utils;
 
+import org.apache.log4j.Logger;
 import org.springframework.util.AntPathMatcher;
 
 import java.io.File;
@@ -16,7 +17,12 @@ import java.util.zip.ZipOutputStream;
 
 public class Archiver {
 
+	private static final Logger _logger = Logger.getLogger(Archiver.class);
+
 	public static File archive(File workspace, String paths, String excludePaths, String prefix) throws IOException {
+
+		_logger.info(String.format("archive(...) called.  paths: %s || excludePaths: %s || prefix: %s", emptyIfNull(paths), emptyIfNull(excludePaths), emptyIfNull(prefix)));
+
 		List<File> files = getFiles(workspace, paths, excludePaths);
 
 		Path workspaceDir = Paths.get(workspace.getCanonicalPath());
@@ -124,5 +130,13 @@ public class Archiver {
 			}
 		}
 		return false;
+	}
+
+	// Private helpers
+	private static String emptyIfNull(String value) {
+		if (value == null) {
+			return "";
+		}
+		return value;
 	}
 }

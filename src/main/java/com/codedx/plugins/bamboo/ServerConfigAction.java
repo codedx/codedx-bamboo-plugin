@@ -3,8 +3,11 @@ package com.codedx.plugins.bamboo;
 import com.atlassian.bamboo.configuration.GlobalAdminAction;
 import com.atlassian.bamboo.ww2.aware.permissions.GlobalAdminSecurityAware;
 import com.atlassian.spring.container.ContainerManager;
+import org.apache.log4j.Logger;
 
 public class ServerConfigAction extends GlobalAdminAction implements GlobalAdminSecurityAware {
+
+    private static final Logger _logger = Logger.getLogger(ServerConfigAction.class);
 
     private String url;
     private String apiKey;
@@ -35,6 +38,9 @@ public class ServerConfigAction extends GlobalAdminAction implements GlobalAdmin
     }
 
     public String edit() {
+
+        _logger.info("edit() called");
+
         // Load config values
         setApiKey(ServerConfigManager.getApiKey());
         setUrl(ServerConfigManager.getUrl());
@@ -44,6 +50,9 @@ public class ServerConfigAction extends GlobalAdminAction implements GlobalAdmin
     }
 
     public String save() {
+
+        _logger.info("save() called");
+
         // Save config values
         ServerConfigManager.setApiKey(this.getApiKey());
         ServerConfigManager.setUrl(this.getUrl());

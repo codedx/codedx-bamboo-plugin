@@ -5,6 +5,7 @@ import com.codedx.client.ApiException;
 import com.codedx.client.api.Projects;
 import com.codedx.client.api.ProjectsApi;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.log4j.Logger;
 
 import javax.net.ssl.SSLHandshakeException;
 import javax.servlet.ServletException;
@@ -17,6 +18,8 @@ import java.net.ConnectException;
 import java.net.UnknownHostException;
 
 public class ProjectRefresherServlet extends HttpServlet {
+
+    private static final Logger _logger = Logger.getLogger(ProjectRefresherServlet.class);
 
     private static class CodeDxCredentials {
 
@@ -55,6 +58,8 @@ public class ProjectRefresherServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
+        _logger.info("doPost(...) called");
+
         final ObjectMapper mapper = new ObjectMapper();
         CodeDxCredentials credentials = mapper.readValue(req.getInputStream(), CodeDxCredentials.class);
 
@@ -62,6 +67,7 @@ public class ProjectRefresherServlet extends HttpServlet {
         if (!ServerConfigManager.isURLValid(credentials.getUrl())) {
             resp.setStatus(404);
             resp.getOutputStream().print("Malformed Code Dx URL");
+            _logger.error("Malformed Code Dx URL");
             return;
         }
 
@@ -75,6 +81,9 @@ public class ProjectRefresherServlet extends HttpServlet {
         try {
             projects = projectsApi.getProjects();
         } catch (ApiException e) {
+
+            _logger.error(e.toString());
+
             // Bad API Token?
             int responseCode = e.getCode();
             String message;
@@ -97,14 +106,17 @@ public class ProjectRefresherServlet extends HttpServlet {
             responseCode = responseCode == 0 ? 500 : responseCode;
             resp.setStatus(responseCode);
             resp.getOutputStream().print(message);
+            _logger.error("Error message to send to client: " + message);
             return;
         } catch (ProcessingException e) {
+            _logger.error(e.toString());
             resp.setStatus(404);
             resp.getOutputStream().print("Connection refused. Please confirm that the URL is correct and that the Code Dx server is running.");
             return;
         }
 
         String projectsJson = mapper.writeValueAsString(projects);
+        _logger.info("Returning project list");
         resp.getOutputStream().print(projectsJson);
     }
 

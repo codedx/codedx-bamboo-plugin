@@ -5,6 +5,7 @@ import com.atlassian.bandana.BandanaContext;
 import com.atlassian.bandana.BandanaManager;
 import com.codedx.plugins.bamboo.security.SSLContextFactory;
 import com.codedx.client.ApiClient;
+import org.apache.log4j.Logger;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 
 import javax.ws.rs.client.Client;
@@ -14,6 +15,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 public class ServerConfigManager implements Serializable {
+
+    private static final Logger _logger = Logger.getLogger(ServerConfigManager.class);
 
     // Private fields
     private static BandanaManager bandanaManager = null;
@@ -26,30 +29,46 @@ public class ServerConfigManager implements Serializable {
     }
 
     public static String getUrl() {
-        return getData().url;
+
+        String url = getData().url;
+        _logger.info("getUrl: " + emptyIfNull(url));
+        return url;
     }
 
     public static void setUrl(String url) {
+
+        _logger.info("setUrl: " + emptyIfNull(url));
+
         GlobalData data = getData();
         data.url = url;
         saveData(data);
     }
 
     public static String getApiKey() {
-        return getData().apiKey;
+        String apiKey = getData().apiKey;
+        _logger.info("getApiKey: " + emptyIfNull(apiKey));
+        return apiKey;
     }
 
     public static void setApiKey(String apiKey) {
+
+        _logger.info("setApiKey: " + emptyIfNull(apiKey));
+
         GlobalData data = getData();
         data.apiKey = apiKey;
         saveData(data);
     }
 
     public static String getFingerprint() {
-        return getData().fingerprint;
+        String fingerprint = getData().fingerprint;
+        _logger.info("getFingerprint: " + emptyIfNull(fingerprint));
+        return fingerprint;
     }
 
     public static void setFingerprint(String fingerprint) {
+
+        _logger.info("setFingerprint: " + emptyIfNull(fingerprint));
+
         GlobalData data = getData();
         data.fingerprint = fingerprint;
         saveData(data);
@@ -57,14 +76,20 @@ public class ServerConfigManager implements Serializable {
 
     // Ease of use method to get a client configured correctly with the url, apiKey, and fingerprint loaded from the admin plug-in settings.
     public static ApiClient getConfiguredClient() {
+
+        _logger.info("getConfiguredClient() called");
+
         return getConfiguredClient(getUrl(), getApiKey(), getFingerprint());
     }
 
     // Ease of use method to get a client configured correctly with the given url, apiKey, and fingerprint.
     public static ApiClient getConfiguredClient(String url, String apiKey, String fingerprint) {
 
+        _logger.info("getConfiguredClient(...) called");
+
         if(url.endsWith("/")) {
             url = url.substring(0, url.length() - 1);
+            _logger.info("Removing trailing foward slash in URL");
         }
 
         ApiClient cdxApiClient = new ApiClient();
@@ -79,6 +104,7 @@ public class ServerConfigManager implements Serializable {
                         .build();
                 cdxApiClient.setHttpClient(client);
             } catch (Exception e) {
+                _logger.error(e.toString());
                 e.printStackTrace();
             }
         }
@@ -87,6 +113,9 @@ public class ServerConfigManager implements Serializable {
 
     // Helper method to tell us if the user configured settings in the admin page
     public static boolean getDefaultsSet() {
+
+        _logger.info("getDefaultsSet(...) called");
+
         String[] settings = new String[] {
             getUrl(),
             getApiKey(),
@@ -102,11 +131,16 @@ public class ServerConfigManager implements Serializable {
 
     // Helper method to tell if a url is formatted correctly
     public static boolean isURLValid(String url) {
+
+        _logger.info("isURLValid: " + emptyIfNull(url));
+
         try {
             new URL(url);
         } catch (MalformedURLException e) {
+            _logger.info("URL is not valid: " + emptyIfNull(url));
             return false;
         }
+        _logger.info("URL is valid: " + emptyIfNull(url));
         return true;
     }
 
@@ -128,5 +162,12 @@ public class ServerConfigManager implements Serializable {
 
     private static void saveData(GlobalData data) {
         bandanaManager.setValue(GLOBAL_CONTEXT, BANDANA_KEY, data);
+    }
+
+    private static String emptyIfNull(String value) {
+        if (value == null) {
+            return "";
+        }
+        return value;
     }
 }

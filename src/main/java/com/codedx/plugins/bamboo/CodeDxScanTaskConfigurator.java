@@ -9,6 +9,7 @@ import com.codedx.client.ApiException;
 import com.codedx.client.api.Project;
 import com.codedx.client.api.ProjectsApi;
 import org.apache.commons.lang.StringUtils;
+import org.apache.log4j.Logger;
 
 import javax.ws.rs.ProcessingException;
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ import java.util.List;
 import java.util.Map;
 
 public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
+
+    private static final Logger _logger = Logger.getLogger(CodeDxScanTaskConfigurator.class);
 
     // Since much work was done surrounding saving invalid configs, lets keep the code and toggle it with a flag.
     private static final boolean ALLOW_SAVE_INVALID_CONFIG = true;
@@ -61,6 +64,8 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
 
         final Map<String, String> config = super.generateTaskConfigMap(params, previousTaskDefinition);
 
+        _logger.info("generateTaskConfigMap(...) called");
+
         // Save succeeded.  Set this back to false.
         this.failedSave = null;
 
@@ -84,6 +89,8 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
 
         super.validate(params, errorCollection);
 
+        _logger.info("validate(...) called");
+
         if (ALLOW_SAVE_INVALID_CONFIG) {
             return;
         }
@@ -94,16 +101,19 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
         final String analysisName = params.getString("analysisName");
         if (StringUtils.isEmpty(analysisName)) {
             errorCollection.addError("analysisName", "Missing analysis name");
+            _logger.error("Missing analysis name");
         }
 
         final String selectedProjectId = params.getString("selectedProjectId");
         if (StringUtils.isEmpty(selectedProjectId)) {
             errorCollection.addError("selectedProjectId", "Missing selected project");
+            _logger.error("Missing selected project");
         }
 
         final String includePaths = params.getString("includePaths");
         if (StringUtils.isEmpty(includePaths)) {
             errorCollection.addError("includePaths", "Missing source and binary files");
+            _logger.error("Missing source and binary files");
         }
 
         final String useDefaults = params.getString("useDefaults");
@@ -114,19 +124,24 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
                 // Make sure the URL is valid
                 if (!ServerConfigManager.isURLValid(url)) {
                     errorCollection.addError("url", "Malformed URL");
+                    _logger.error("Malformed URL");
                 }
             } else {
                 errorCollection.addError("url", "Missing Code Dx URL");
+                _logger.error("Missing Code Dx URL");
             }
 
             final String apiKey = params.getString("apiKey");
             if (StringUtils.isEmpty(apiKey)) {
                 errorCollection.addError("apiKey", "Missing Code Dx API key");
+                _logger.error("Missing Code Dx API key");
             }
         }
     }
 
     private static List<Project> getProjectList(Map<String, Object> context) {
+
+        _logger.info("getProjectList(...) called");
 
         String url = null;
         String apiKey = null;
@@ -144,6 +159,7 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
         }
 
         if (url == null || apiKey == null || url.isEmpty() || apiKey.isEmpty()) {
+            _logger.info("Code Dx URL and API key are not configured");
             context.put("reachabilityMessage", "Code Dx URL and API key are not configured");
             return new ArrayList<Project>();
         }
@@ -158,10 +174,13 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
 
         } catch (IllegalArgumentException e) {
             e.printStackTrace();
+            _logger.error(e.toString());
         } catch (ApiException e) {
             e.printStackTrace();
+            _logger.error(e.toString());
         } catch (ProcessingException e) {
             context.put("reachabilityMessage", "Connection refused. Please confirm that the URL is correct and that the Code Dx server is running.");
+            _logger.error(e.toString());
         }
 
         return new ArrayList<Project>();
@@ -171,6 +190,8 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
     public void populateContextForCreate(final Map<String, Object> context) {
 
         super.populateContextForCreate(context);
+
+        _logger.info("populateContextForCreate(...) called");
 
         boolean defaultsSet = ServerConfigManager.getDefaultsSet();
         context.put("defaultsSet", String.valueOf(defaultsSet));
@@ -182,10 +203,12 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
 
         context.put("useDefaults", String.valueOf(defaultsSet));
         if (defaultsSet) {
+            _logger.info("User has default Code Dx credentials saved");
             context.put("url", defaultUrl);
             context.put("apiKey", defaultApiKey);
             context.put("fingerprint", defaultFingerprint);
         } else {
+            _logger.info("User does not have default Code Dx credentials saved");
             context.put("url", "");
             context.put("apiKey", "");
             context.put("fingerprint", "");
@@ -217,6 +240,8 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
     public void populateContextForEdit(Map<String, Object> context, TaskDefinition taskDefinition) {
 
         super.populateContextForEdit(context, taskDefinition);
+
+        _logger.info("populateContextForEdit(...) called");
 
         // Get saved user config
         Map<String, String> config = taskDefinition.getConfiguration();
@@ -250,6 +275,7 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
 
         if (failedSave != null) {
 
+            _logger.info("Failed save exists");
             failedSave.setContext(context);
 
         } else {
@@ -261,10 +287,12 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
 
             // We check defaultsSet in case the defaults were erased.  In that case we have what they used to be in the task configuration.
             if (useDefaults && defaultsSet) {
+                _logger.info("User has default Code Dx credentials saved");
                 context.put("url", defaultUrl);
                 context.put("apiKey", defaultApiKey);
                 context.put("fingerprint", defaultFingerprint);
             } else {
+                _logger.info("User does not have default Code Dx credentials saved");
                 context.put("url", config.get("url"));
                 context.put("apiKey", config.get("apiKey"));
                 context.put("fingerprint", config.get("fingerprint"));
@@ -278,6 +306,7 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
 
         if (selectedProjectId != null && !selectedProjectId.isEmpty() && projectList.size() == 0 && (failedSave == null || !failedSave.missingSelectedProject)) {
             // Case where user already selected a project, but we can't communicate with CodeDx for the name.  Just use a generic "name".
+            _logger.info("User already selected a project, but we can't communicate with CodeDx for the name.  using a generic name.");
             Project p = new Project();
             p.setId(Integer.parseInt(selectedProjectId));
             p.setName("Project Id: " + selectedProjectId);
@@ -285,6 +314,7 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
 
             // We get here if the previously selected project is not found
             if (context.get("reachabilityMessage") == null) {
+                _logger.info("Unable to access previously selected project from Code Dx");
                 context.put("reachabilityMessage", "Unable to access previously selected project from Code Dx");
             }
         }

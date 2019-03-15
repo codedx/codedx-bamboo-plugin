@@ -1,9 +1,14 @@
 package com.codedx.plugins.bamboo.utils;
 
 import com.codedx.client.api.GroupedCount;
+import org.apache.log4j.Logger;
+
 import java.util.List;
 
 public class CodeDxBuildStatistics {
+
+	private static final Logger _logger = Logger.getLogger(CodeDxBuildStatistics.class);
+
 	private List<GroupedCount> groupedSeverityCounts;
 	private List<GroupedCount> groupedStatusCounts;
 
@@ -26,6 +31,9 @@ public class CodeDxBuildStatistics {
 	}
 
 	public static int getNumberOfFindingsForGroupAndName(final List<GroupedCount> groupedCounts, String name) {
+
+		_logger.info("getNumberOfFindingsForGroupAndName(...) called");
+
 		if(name.equals("Total")) {
 			return getTotalFindingsForGroup(groupedCounts);
 		}
@@ -40,6 +48,7 @@ public class CodeDxBuildStatistics {
 	}
 
 	public static int getTotalFindingsForGroup(List<GroupedCount> groupedCounts) {
+		_logger.info("getTotalFindingsForGroup(...) called");
 		return groupedCounts.stream().mapToInt(gc -> gc.getCount()).sum();
 	}
 

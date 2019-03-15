@@ -13,6 +13,7 @@ import com.codedx.plugins.bamboo.utils.CodeDxBuildStatistics;
 import com.codedx.client.ApiClient;
 import com.codedx.client.ApiException;
 import com.codedx.client.api.*;
+import org.apache.log4j.Logger;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,6 +24,8 @@ import java.util.List;
 import java.util.function.Function;
 
 public class CodeDxScanTask implements TaskType {
+
+    private static final Logger _logger = Logger.getLogger(CodeDxScanTask.class);
 
     // Keeps track of everything we need to know during a single scan.
     private static class ScanTaskState {
@@ -460,11 +463,15 @@ public class CodeDxScanTask implements TaskType {
     }
 
     private static void log(ScanTaskState state, String format, Object... args) {
-        state.buildLogger.addBuildLogEntry(String.format(format, args));
+        String message = String.format(format, args);
+        state.buildLogger.addBuildLogEntry(message);
+        _logger.info(message);
     }
 
     private static void logError(ScanTaskState state, String format, Object... args) {
-        state.buildLogger.addErrorLogEntry(String.format(format, args));
+        String error = String.format(format, args);
+        state.buildLogger.addErrorLogEntry(error);
+        _logger.error(error);
     }
 
     private static void logApiException(ScanTaskState state, Exception e) {

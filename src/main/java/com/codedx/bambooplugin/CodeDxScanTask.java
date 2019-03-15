@@ -201,7 +201,7 @@ public class CodeDxScanTask implements TaskType {
         try {
             state.filesToUpload.add(Archiver.archive(state.taskContext.getRootDirectory(), state.includePaths, state.excludePaths, "files_to_scan"));
         } catch (IOException e) {
-            logError(state, "An error occurred while trying to archive source files");
+            logError(state, "An error occurred while trying to archive source files: %s", e.toString());
             return false;
         }
 
@@ -246,7 +246,7 @@ public class CodeDxScanTask implements TaskType {
             logApiException(state, e);
             return false;
         } catch (IOException e) {
-            logError(state, "An error occurred while trying to archive source files");
+            logError(state, "An error occurred while trying to archive source files: %s", e.toString());
             return false;
         }
 
@@ -262,7 +262,7 @@ public class CodeDxScanTask implements TaskType {
             try {
                 Thread.sleep(1000); // Consider adding maximum wait time
             } catch (InterruptedException e) {
-                logError(state, "An unexpected threading issue occurred.  This could occur if the build is manually cancelled.");
+                logError(state, "An unexpected threading issue occurred.  This could occur if the build is manually cancelled.  Exception: %s", e.toString());
                 return false;
             }
 
@@ -351,7 +351,7 @@ public class CodeDxScanTask implements TaskType {
             try {
                 Thread.sleep(5000); // Consider adding maximum wait time
             } catch (InterruptedException e) {
-                logError(state, "An unexpected threading issue occurred.  This could occur if the build is manually cancelled.");
+                logError(state, "An unexpected threading issue occurred.  This could occur if the build is manually cancelled.  Exception: %s", e.toString());
                 return false;
             }
 

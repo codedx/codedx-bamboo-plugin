@@ -74,7 +74,7 @@ public class CodeDxScanTask implements TaskType {
         state.taskContext = taskContext;
         state.buildLogger = taskContext.getBuildLogger();
 
-        log(state, "Starting Code Dx Task.");
+        log(state, "Starting Code Dx scan task");
 
         // Split up the work and into "states" for readability and order
         List<Function<ScanTaskState, Boolean>> stateMachine = new ArrayList<Function<ScanTaskState, Boolean>>();
@@ -90,10 +90,10 @@ public class CodeDxScanTask implements TaskType {
 
         boolean success = runStateMachine(stateMachine, state);
         if (success) {
-            log(state, "Code Dx Scan Task completed successfully!");
+            log(state, "Code Dx scan task completed successfully!");
             return TaskResultBuilder.newBuilder(taskContext).success().build();
         } else {
-            log(state, "Code Dx Scan Task failed to complete.");
+            log(state, "Code Dx scan task failed to complete");
             return TaskResultBuilder.newBuilder(taskContext).failed().build();
         }
     }
@@ -114,7 +114,7 @@ public class CodeDxScanTask implements TaskType {
     private static Boolean loadUserPreferences(ScanTaskState state) {
 
         // Load task specific settings
-        log(state, "Loading Task settings.");
+        log(state, "Loading task settings");
         ConfigurationMap config = state.taskContext.getConfigurationMap();
         state.analysisName = config.get("analysisName");
         state.includePaths = config.get("includePaths");
@@ -136,13 +136,13 @@ public class CodeDxScanTask implements TaskType {
         state.useDefaults = config.getAsBoolean("useDefaults");
         if (state.useDefaults) {
             // Load global settings
-            log(state, "Loading Code Dx plug-in global settings.");
+            log(state, "Loading Code Dx plug-in global settings");
             state.apiUrl = ServerConfigManager.getUrl();
             state.apiKey = ServerConfigManager.getApiKey();
             state.fingerprint = ServerConfigManager.getFingerprint();
 
             if (state.apiUrl == null || state.apiKey == null || state.apiUrl.isEmpty() || state.apiKey.isEmpty()) {
-                logError(state, "Code Dx url and api key are not properly configured.  Please configure them on the plug-in settings page.");
+                logError(state, "Code Dx URL and API key are not properly configured.  Please configure them on the plug-in settings page.");
                 return false;
             }
         } else {
@@ -151,25 +151,25 @@ public class CodeDxScanTask implements TaskType {
             state.fingerprint = config.get("fingerprint");
 
             if (state.apiUrl == null || state.apiUrl.isEmpty()) {
-                logError(state, "Missing Code Dx url.  Please configure it on the task configuration page.");
+                logError(state, "Missing Code Dx URL.  Please configure it on the task configuration page.");
                 return false;
             } else {
                 try {
                     new URL(state.apiUrl);
                 } catch (MalformedURLException e) {
-                    logError(state, "Malformed Code Dx url.  Please correct it on the task configuration page.");
+                    logError(state, "Malformed Code Dx URL.  Please correct it on the task configuration page.");
                     return false;
                 }
             }
 
             if (state.apiKey == null || state.apiKey.isEmpty()) {
-                logError(state, "Missing Code Dx api key.  Please configure it on the task configuration page.");
+                logError(state, "Missing Code Dx API key.  Please configure it on the task configuration page.");
                 return false;
             }
         }
 
         if (state.analysisName == null || state.analysisName.isEmpty()) {
-            logError(state, "Missing Code Dx Analysis Name.  Please configure it on the task configuration page.");
+            logError(state, "Missing Code Dx analysis name.  Please configure it on the task configuration page.");
             return false;
         }
 
@@ -178,13 +178,13 @@ public class CodeDxScanTask implements TaskType {
             return false;
         }
 
-        log(state, "Code Dx url set to %s", state.apiUrl);
+        log(state, "Code Dx URL set to %s", state.apiUrl);
 
         return true;
     }
 
     private static Boolean setupApiClient(ScanTaskState state) {
-        log(state, "Setting up Code Dx Api Client.");
+        log(state, "Setting up Code Dx API client");
 
         if (state.useDefaults) {
             state.apiClient = ServerConfigManager.getConfiguredClient();
@@ -205,19 +205,19 @@ public class CodeDxScanTask implements TaskType {
     }
 
     private static Boolean collectFilesToUpload(ScanTaskState state) {
-        log(state, "Archiving source files to upload to Code Dx.");
+        log(state, "Archiving source files to upload to Code Dx");
 
         state.filesToUpload = new ArrayList<>();
         try {
             state.filesToUpload.add(Archiver.archive(state.taskContext.getRootDirectory(), state.includePaths, state.excludePaths, "files_to_scan"));
         } catch (IOException e) {
-            logError(state, "An error occurred when trying to archive source files.");
+            logError(state, "An error occurred while trying to archive source files");
             return false;
         }
 
         // Add tool output files
         if (state.toolOutputFiles != null && !state.toolOutputFiles.isEmpty()) {
-            log(state, "Collecting tool output files.");
+            log(state, "Collecting tool output files");
             for (String fileName : state.toolOutputFiles.split(",")) {
                 fileName = fileName.trim();
                 Path path = Paths.get(fileName);
@@ -238,7 +238,7 @@ public class CodeDxScanTask implements TaskType {
     }
 
     private static Boolean uploadFiles(ScanTaskState state) {
-        log(state, "Uploading files to Code Dx.");
+        log(state, "Uploading files to Code Dx");
 
         ProjectId project = new ProjectId();
         project.setProjectId(state.projectId);
@@ -256,7 +256,7 @@ public class CodeDxScanTask implements TaskType {
             logApiException(state);
             return false;
         } catch (IOException e) {
-            logError(state, "An error occurred when trying to archive source files.");
+            logError(state, "An error occurred while trying to archive source files");
             return false;
         }
 
@@ -316,7 +316,7 @@ public class CodeDxScanTask implements TaskType {
             return true;
         }
 
-        log(state, "Querying Code Dx for pre-analysis statistics.");
+        log(state, "Querying Code Dx for pre-analysis statistics");
 
         CodeDxBuildStatistics stats = getBuildStats(state);
 
@@ -330,7 +330,7 @@ public class CodeDxScanTask implements TaskType {
     }
 
     private static Boolean startAnalysis(ScanTaskState state) {
-        log(state, "Querying Code Dx to start analysis.");
+        log(state, "Querying Code Dx to start analysis");
 
         try {
             Analysis analysis = state.analysisApi.runPreparedAnalysis(state.analysisPrepId);
@@ -342,7 +342,7 @@ public class CodeDxScanTask implements TaskType {
 
                 state.analysisApi.setAnalysisName(state.projectId, analysisId, analysisName);
             } else {
-                logError(state, "An unexpected issue arose regarding the analysis name.  Please double check it in the task configuration page.");
+                logError(state, "An unexpected issue arose regarding the analysis name.  Please double check it on the task configuration page.");
                 return false;
             }
             state.analysisJobId = analysis.getJobId();
@@ -396,7 +396,7 @@ public class CodeDxScanTask implements TaskType {
 
             JobStatus status = job.getStatus();
             if(status == null) {
-                logError(state, "Job status is null for job %s.", state.analysisJobId);
+                logError(state, "Job status is null for job %s", state.analysisJobId);
                 return false;
             }
 
@@ -409,7 +409,7 @@ public class CodeDxScanTask implements TaskType {
             if (status == JobStatus.COMPLETED) {
                 isAnalysisFinished = true;
             } else if(status == JobStatus.FAILED) {
-                logError(state, "The Code Dx analysis has reported a failure.");
+                logError(state, "The Code Dx analysis has reported a failure");
                 return false;
             }
         }
@@ -418,7 +418,7 @@ public class CodeDxScanTask implements TaskType {
     }
 
     private static Boolean getBuildStatsAfterAnalysis(ScanTaskState state) {
-        log(state, "Querying Code Dx for post-analysis statistics.");
+        log(state, "Querying Code Dx for post-analysis statistics");
 
         CodeDxBuildStatistics stats = getBuildStats(state);
 
@@ -487,7 +487,7 @@ public class CodeDxScanTask implements TaskType {
             return true;
         }
 
-        log(state, "Checking%s findings against build failure threshold.", state.onlyConsiderNewFindings ? " new" : "");
+        log(state, "Checking%s findings against build failure threshold", state.onlyConsiderNewFindings ? " new" : "");
 
         for(int i = Severity.all.length - 1; i >= Severity.indexOf(state.failureSeverity); i--) {
             String severityName = Severity.all[i].name;

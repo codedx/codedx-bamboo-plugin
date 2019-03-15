@@ -258,21 +258,6 @@
         <span>Only findings with the 'New' status will be considered when determining if the build is a failure.</span>
     </div>
 
-	<!--Report Archive Name-->
-	<!-- TODO: Remove section if not needed after implementing Build Results / Tables  -->
-    <div class="setting-section" style="display:none;">
-        <div class="setting-textfield">
-            [@ww.textfield label="Report Archive Name" name="reportArchiveName"/]
-        </div>
-        <span id="help-button-report-name" class="setting-help-textfield" onclick="toggleHelp(this)">
-            <i class="fas fa-question-circle"></i>
-        </span>
-    </div>
-    <div id="help-content-report-name" class="setting-content">
-        <span>Please provide a unique name for the report archive file.</span>
-        <span>If the name is not unique, the report may be overwritten by other Code Dx build steps.</span>
-    </div>
-
 </div>
 
 <!-- Workaround for bug(?) in bamboo to pass variables from server.  After failing to save a configuration, variables get passed down inside of a size 1 array.  This causes normal escape syntax to fail. -->

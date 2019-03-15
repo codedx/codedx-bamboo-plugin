@@ -75,7 +75,6 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
         config.put("includePaths", params.getString("includePaths"));
         config.put("excludePaths", params.getString("excludePaths"));
         config.put("toolOutputFiles", params.getString("toolOutputFiles"));
-        config.put("reportArchiveName", params.getString("reportArchiveName"));
         config.put("waitForResults", params.getString("waitForResults"));
         config.put("selectedFailureSeverity", params.getString("selectedFailureSeverity"));
         config.put("onlyConsiderNewFindings", params.getString("onlyConsiderNewFindings"));
@@ -212,7 +211,6 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
         context.put("includePaths", "**");
         context.put("excludePaths", "");
         context.put("toolOutputFiles", "");
-        context.put("reportArchiveName", "");
         context.put("waitForResults", false);
         context.put("severities", severities);
         context.put("selectedFailureSeverity", severities[0]);
@@ -250,7 +248,6 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
         context.put("includePaths", config.get("includePaths"));
         context.put("excludePaths", config.get("excludePaths"));
         context.put("toolOutputFiles", config.get("toolOutputFiles"));
-        context.put("reportArchiveName", config.get("reportArchiveName"));
         context.put("waitForResults", config.get("waitForResults"));
         context.put("selectedFailureSeverity", config.get("selectedFailureSeverity"));
         context.put("onlyConsiderNewFindings", config.get("onlyConsiderNewFindings"));

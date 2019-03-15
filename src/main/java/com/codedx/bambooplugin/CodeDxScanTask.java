@@ -10,8 +10,6 @@ import com.atlassian.bamboo.task.TaskType;
 import com.atlassian.util.concurrent.NotNull;
 import com.codedx.bambooplugin.utils.Archiver;
 import com.codedx.bambooplugin.utils.CodeDxBuildStatistics;
-import com.codedx.bambooplugin.utils.CodeDxConstants;
-import com.codedx.bambooplugin.utils.CodeDxReportWriter;
 import com.codedx.client.ApiClient;
 import com.codedx.client.ApiException;
 import com.codedx.client.api.*;
@@ -45,7 +43,6 @@ public class CodeDxScanTask implements TaskType {
         String includePaths;
         String excludePaths;
         String toolOutputFiles;
-        String reportArchiveName;
         boolean waitForResults;
         String failureSeverity;
         boolean onlyConsiderNewFindings;
@@ -60,8 +57,7 @@ public class CodeDxScanTask implements TaskType {
         List<File> filesToUpload;
         String analysisPrepId;
         String analysisJobId;
-        CodeDxBuildStatistics statsBeforeAnalysis;
-        CodeDxBuildStatistics statsAfterAnalysis;
+        CodeDxBuildStatistics buildStatistics;
         List<GroupedCount> groupedCounts;
     }
 
@@ -81,7 +77,6 @@ public class CodeDxScanTask implements TaskType {
 
         stateMachine.add(CodeDxScanTask::loadUserPreferences);
         stateMachine.add(CodeDxScanTask::setupApiClient);
-        stateMachine.add(CodeDxScanTask::getBuildStatsBeforeAnalysis);
         stateMachine.add(CodeDxScanTask::collectFilesToUpload);
         stateMachine.add(CodeDxScanTask::uploadFiles);
         stateMachine.add(CodeDxScanTask::waitForCodeDxToBeReadyForAnalysis);
@@ -126,7 +121,6 @@ public class CodeDxScanTask implements TaskType {
             return false;
         }
         state.toolOutputFiles = config.get("toolOutputFiles");
-        state.reportArchiveName = config.get("reportArchiveName");
         state.waitForResults = config.getAsBoolean("waitForResults");
         state.failureSeverity = config.get("selectedFailureSeverity");
         // Don't wait if the failure severity is "None".  Is this what we want?
@@ -309,26 +303,6 @@ public class CodeDxScanTask implements TaskType {
         return true;
     }
 
-    private static Boolean getBuildStatsBeforeAnalysis(ScanTaskState state) {
-
-        if(!state.waitForResults || state.reportArchiveName == null || state.reportArchiveName.isEmpty()) {
-            // We only need the pre-analysis stats if we are writing the report later
-            return true;
-        }
-
-        log(state, "Querying Code Dx for pre-analysis statistics");
-
-        CodeDxBuildStatistics stats = getBuildStats(state);
-
-        if (stats == null) {
-            return false; // Error already logged in helper method
-        }
-
-        state.statsBeforeAnalysis = stats;
-
-        return true;
-    }
-
     private static Boolean startAnalysis(ScanTaskState state) {
         log(state, "Querying Code Dx to start analysis");
 
@@ -364,9 +338,8 @@ public class CodeDxScanTask implements TaskType {
         List<Function<ScanTaskState, Boolean>> stateMachine = new ArrayList<Function<ScanTaskState, Boolean>>();
 
         stateMachine.add(CodeDxScanTask::waitForAnalysisToFinish);
-        stateMachine.add(CodeDxScanTask::getBuildStatsAfterAnalysis);
+        stateMachine.add(CodeDxScanTask::getBuildStatistics);
         stateMachine.add(CodeDxScanTask::getGroupedCounts);
-        stateMachine.add(CodeDxScanTask::writeReportArchive);
         stateMachine.add(CodeDxScanTask::checkFailureSeverity);
 
         return runStateMachine(stateMachine, state);
@@ -417,16 +390,30 @@ public class CodeDxScanTask implements TaskType {
         return true;
     }
 
-    private static Boolean getBuildStatsAfterAnalysis(ScanTaskState state) {
+    private static Boolean getBuildStatistics(ScanTaskState state) {
         log(state, "Querying Code Dx for post-analysis statistics");
 
-        CodeDxBuildStatistics stats = getBuildStats(state);
+        Filter filter = new Filter();
+        filter.put("~status", "gone");
 
-        if (stats == null) {
-            return false; // Error already logged in helper method
+        GroupedCountsRequest bySeverity = new GroupedCountsRequest();
+        bySeverity.setFilter(filter);
+        bySeverity.setCountBy("severity");
+
+        GroupedCountsRequest byStatus =  new GroupedCountsRequest();
+        byStatus.setFilter(filter);
+        byStatus.setCountBy("status");
+
+        CodeDxBuildStatistics stats = null;
+        try {
+            List<GroupedCount> severityGroupedCounts = state.findingDataApi.getFindingsGroupCount(state.projectId, bySeverity);
+            List<GroupedCount> statusGroupedCounts = state.findingDataApi.getFindingsGroupCount(state.projectId, byStatus);
+            stats = new CodeDxBuildStatistics(severityGroupedCounts, statusGroupedCounts);
+        } catch (ApiException e) {
+            logApiException(state, e);
         }
 
-        state.statsAfterAnalysis = stats;
+        state.buildStatistics = stats;
 
         return true;
     }
@@ -450,33 +437,8 @@ public class CodeDxScanTask implements TaskType {
                 return false;
             }
         } else {
-            state.groupedCounts = state.statsAfterAnalysis.getGroupedSeverityCounts();
+            state.groupedCounts = state.buildStatistics.getGroupedSeverityCounts();
         }
-
-        return true;
-    }
-
-    private static Boolean writeReportArchive(ScanTaskState state) {
-
-        // TODO: Remove if not needed after implementing Build Results / Tables
-        /*
-        // If user provides an archive name, create a zip containing an simple html file
-        if(state.reportArchiveName != null && !state.reportArchiveName.isEmpty()) {
-            log(state, "Creating archived report file. Name: %s", state.reportArchiveName);
-
-            CodeDxReportWriter reportWriter = new CodeDxReportWriter(state.reportArchiveName,
-                    state.statsBeforeAnalysis,
-                    state.statsAfterAnalysis,
-                    state.apiUrl,
-                    state.projectId);
-            try {
-                reportWriter.writeReport(state.taskContext.getRootDirectory());
-            } catch (IOException e) {
-                logError(state, "An error occurred when trying to create the report archive file.");
-                return false;
-            }
-        }
-        */
 
         return true;
     }
@@ -499,32 +461,6 @@ public class CodeDxScanTask implements TaskType {
         }
 
         return true;
-    }
-
-    // Helper methods
-
-    private static CodeDxBuildStatistics getBuildStats(ScanTaskState state) {
-        Filter filter = new Filter();
-        filter.put("~status", "gone");
-
-        GroupedCountsRequest bySeverity = new GroupedCountsRequest();
-        bySeverity.setFilter(filter);
-        bySeverity.setCountBy("severity");
-
-        GroupedCountsRequest byStatus =  new GroupedCountsRequest();
-        byStatus.setFilter(filter);
-        byStatus.setCountBy("status");
-
-        CodeDxBuildStatistics stats = null;
-        try {
-            List<GroupedCount> severityGroupedCounts = state.findingDataApi.getFindingsGroupCount(state.projectId, bySeverity);
-            List<GroupedCount> statusGroupedCounts = state.findingDataApi.getFindingsGroupCount(state.projectId, byStatus);
-            stats = new CodeDxBuildStatistics(severityGroupedCounts, statusGroupedCounts);
-        } catch (ApiException e) {
-            logApiException(state, e);
-        }
-
-        return stats;
     }
 
     private static void log(ScanTaskState state, String format, Object... args) {

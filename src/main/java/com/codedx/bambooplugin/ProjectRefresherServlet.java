@@ -65,7 +65,7 @@ public class ProjectRefresherServlet extends HttpServlet {
             new URL(credentials.getUrl());
         } catch (MalformedURLException e) {
             resp.setStatus(404);
-            resp.getOutputStream().print("Invalid URL");
+            resp.getOutputStream().print("Malformed Code Dx URL");
             return;
         }
 
@@ -104,7 +104,7 @@ public class ProjectRefresherServlet extends HttpServlet {
             return;
         } catch (ProcessingException e) {
             resp.setStatus(404);
-            resp.getOutputStream().print("Connection refused.  Please confirm the URL is correct and the Code Dx server is running.");
+            resp.getOutputStream().print("Connection refused. Please confirm that the URL is correct and that the Code Dx server is running.");
             return;
         }
 
@@ -116,7 +116,7 @@ public class ProjectRefresherServlet extends HttpServlet {
         String betterMessage = cause.getMessage();
 
         if (cause instanceof ConnectException)
-            betterMessage = "Connection failed, is the URL/port correct?";
+            betterMessage = "Connection refused. Please confirm that the URL is correct and that the Code Dx server is running.";
         else if (cause instanceof SSLHandshakeException)
             betterMessage = "The SSL Certificate presented by the server is invalid. If this is expected, please input the SHA1 fingerprint in the advanced options";
         else if (cause instanceof UnknownHostException)

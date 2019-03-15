@@ -96,7 +96,7 @@
 </div>
 <div id="url-warning" style="color:#C4A000;">
 	<i class="fas fa-exclamation-triangle"></i>
-	<span>HTTP is considered insecure, it is recommended that you use HTTPS.</span>
+	<span>HTTP is considered insecure.  It is recommended that you use HTTPS.</span>
 </div>
 
 <!--Code Dx API Key-->
@@ -449,10 +449,10 @@
 				}
 
 				if (projects.length > 0) {
-					updateReachabilityMessage("Projects refreshed successfully.", false);
+					updateReachabilityMessage("Projects refreshed successfully", false);
 					projectSelect.disabled = false;
 				} else {
-					updateReachabilityMessage("No projects available for this API token.", true);
+					updateReachabilityMessage("No projects available for this API token", true);
 					projectSelect.disabled = true;
 				}
             },

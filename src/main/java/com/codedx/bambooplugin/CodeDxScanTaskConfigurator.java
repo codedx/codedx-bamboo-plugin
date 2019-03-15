@@ -96,17 +96,17 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
 
         final String analysisName = params.getString("analysisName");
         if (StringUtils.isEmpty(analysisName)) {
-            errorCollection.addError("analysisName", "Missing Code Dx Analysis Name.");
+            errorCollection.addError("analysisName", "Missing analysis name");
         }
 
         final String selectedProjectId = params.getString("selectedProjectId");
         if (StringUtils.isEmpty(selectedProjectId)) {
-            errorCollection.addError("selectedProjectId", "Missing Selected Project.");
+            errorCollection.addError("selectedProjectId", "Missing selected project");
         }
 
         final String includePaths = params.getString("includePaths");
         if (StringUtils.isEmpty(includePaths)) {
-            errorCollection.addError("includePaths", "Missing source and binary files.");
+            errorCollection.addError("includePaths", "Missing source and binary files");
         }
 
         final String useDefaults = params.getString("useDefaults");
@@ -118,15 +118,15 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
                 try {
                     new URL(url);
                 } catch (MalformedURLException e) {
-                    errorCollection.addError("url", "Invalid URL");
+                    errorCollection.addError("url", "Malformed URL");
                 }
             } else {
-                errorCollection.addError("url", "Missing Code Dx URL.");
+                errorCollection.addError("url", "Missing Code Dx URL");
             }
 
             final String apiKey = params.getString("apiKey");
             if (StringUtils.isEmpty(apiKey)) {
-                errorCollection.addError("apiKey", "Missing Code Dx Api Key.");
+                errorCollection.addError("apiKey", "Missing Code Dx API key");
             }
         }
     }
@@ -149,7 +149,7 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
         }
 
         if (url == null || apiKey == null || url.isEmpty() || apiKey.isEmpty()) {
-            context.put("reachabilityMessage", "CodeDx URL and API key are not configured");
+            context.put("reachabilityMessage", "Code Dx URL and API key are not configured");
             return new ArrayList<Project>();
         }
 
@@ -166,7 +166,7 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
         } catch (ApiException e) {
             e.printStackTrace();
         } catch (ProcessingException e) {
-            context.put("reachabilityMessage", "CodeDx is unreachable");
+            context.put("reachabilityMessage", "Connection refused. Please confirm that the URL is correct and that the Code Dx server is running.");
         }
 
         return new ArrayList<Project>();
@@ -306,7 +306,7 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
         failedSave = null;
     }
 
-    // Helper
+    // Private helpers
     private static String emptyIfNull(String value) {
         if (value == null) {
             return "";

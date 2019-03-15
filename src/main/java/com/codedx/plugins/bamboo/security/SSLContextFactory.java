@@ -1,4 +1,4 @@
-package com.codedx.bambooplugin.security;
+package com.codedx.plugins.bamboo.security;
 
 import javax.net.ssl.*;
 import java.security.GeneralSecurityException;

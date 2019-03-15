@@ -1,4 +1,4 @@
-package com.codedx.bambooplugin.utils;
+package com.codedx.plugins.bamboo.utils;
 
 import org.springframework.util.AntPathMatcher;
 

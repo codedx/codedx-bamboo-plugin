@@ -1,4 +1,4 @@
-package com.codedx.bambooplugin;
+package com.codedx.plugins.bamboo;
 
 import com.codedx.client.ApiClient;
 import com.codedx.client.ApiException;

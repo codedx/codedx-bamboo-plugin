@@ -1,4 +1,4 @@
-package com.codedx.bambooplugin;
+package com.codedx.plugins.bamboo;
 
 import com.atlassian.bamboo.collections.ActionParametersMap;
 import com.atlassian.bamboo.task.AbstractTaskConfigurator;

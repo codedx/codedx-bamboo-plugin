@@ -1,4 +1,4 @@
-package com.codedx.bambooplugin.security;
+package com.codedx.plugins.bamboo.security;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

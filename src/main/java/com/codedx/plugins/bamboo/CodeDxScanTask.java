@@ -1,4 +1,4 @@
-package com.codedx.bambooplugin;
+package com.codedx.plugins.bamboo;
 
 import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.configuration.ConfigurationMap;
@@ -8,8 +8,8 @@ import com.atlassian.bamboo.task.TaskResult;
 import com.atlassian.bamboo.task.TaskResultBuilder;
 import com.atlassian.bamboo.task.TaskType;
 import com.atlassian.util.concurrent.NotNull;
-import com.codedx.bambooplugin.utils.Archiver;
-import com.codedx.bambooplugin.utils.CodeDxBuildStatistics;
+import com.codedx.plugins.bamboo.utils.Archiver;
+import com.codedx.plugins.bamboo.utils.CodeDxBuildStatistics;
 import com.codedx.client.ApiClient;
 import com.codedx.client.ApiException;
 import com.codedx.client.api.*;

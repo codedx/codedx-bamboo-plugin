@@ -1,4 +1,4 @@
-package com.codedx.bambooplugin;
+package com.codedx.plugins.bamboo;
 
 public class Severity {
 

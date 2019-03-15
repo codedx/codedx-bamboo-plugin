@@ -1,4 +1,4 @@
-package com.codedx.bambooplugin;
+package com.codedx.plugins.bamboo;
 
 import com.atlassian.bamboo.configuration.GlobalAdminAction;
 import com.atlassian.bamboo.ww2.aware.permissions.GlobalAdminSecurityAware;

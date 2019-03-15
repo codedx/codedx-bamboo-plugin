@@ -1,9 +1,9 @@
-package com.codedx.bambooplugin;
+package com.codedx.plugins.bamboo;
 
 import com.atlassian.bamboo.bandana.PlanAwareBandanaContext;
 import com.atlassian.bandana.BandanaContext;
 import com.atlassian.bandana.BandanaManager;
-import com.codedx.bambooplugin.security.SSLContextFactory;
+import com.codedx.plugins.bamboo.security.SSLContextFactory;
 import com.codedx.client.ApiClient;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 

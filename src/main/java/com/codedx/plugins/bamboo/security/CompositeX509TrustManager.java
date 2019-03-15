@@ -1,4 +1,4 @@
-package com.codedx.bambooplugin.security;
+package com.codedx.plugins.bamboo.security;
 
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;

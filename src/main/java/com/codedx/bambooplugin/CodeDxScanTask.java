@@ -253,7 +253,7 @@ public class CodeDxScanTask implements TaskType {
             }
 
         } catch (ApiException e) {
-            logApiException(state);
+            logApiException(state, e);
             return false;
         } catch (IOException e) {
             logError(state, "An error occurred while trying to archive source files");
@@ -280,7 +280,7 @@ public class CodeDxScanTask implements TaskType {
             try {
                 response = state.analysisApi.queryAnalysisPrepState(state.analysisPrepId);
             } catch (ApiException e) {
-                logApiException(state);
+                logApiException(state, e);
                 return false;
             }
 
@@ -347,7 +347,7 @@ public class CodeDxScanTask implements TaskType {
             }
             state.analysisJobId = analysis.getJobId();
         } catch (ApiException e) {
-            logApiException(state);
+            logApiException(state, e);
             return false;
         }
 
@@ -390,7 +390,7 @@ public class CodeDxScanTask implements TaskType {
             try {
                 job = state.jobsApi.getJobStatus(state.analysisJobId);
             } catch (ApiException e) {
-                logApiException(state);
+                logApiException(state, e);
                 return false;
             }
 
@@ -446,7 +446,7 @@ public class CodeDxScanTask implements TaskType {
             try {
                 state.groupedCounts = state.findingDataApi.getFindingsGroupCount(state.projectId, request);
             } catch (ApiException e) {
-                logApiException(state);
+                logApiException(state, e);
                 return false;
             }
         } else {
@@ -521,7 +521,7 @@ public class CodeDxScanTask implements TaskType {
             List<GroupedCount> statusGroupedCounts = state.findingDataApi.getFindingsGroupCount(state.projectId, byStatus);
             stats = new CodeDxBuildStatistics(severityGroupedCounts, statusGroupedCounts);
         } catch (ApiException e) {
-            logApiException(state);
+            logApiException(state, e);
         }
 
         return stats;
@@ -535,7 +535,7 @@ public class CodeDxScanTask implements TaskType {
         state.buildLogger.addErrorLogEntry(String.format(format, args));
     }
 
-    private static void logApiException(ScanTaskState state) {
-        logError(state, CodeDxConstants.API_ERROR_MESSAGE);
+    private static void logApiException(ScanTaskState state, Exception e) {
+        logError(state, "An error occurred while trying to communicate with Code Dx's API: %s", e.toString());
     }
 }

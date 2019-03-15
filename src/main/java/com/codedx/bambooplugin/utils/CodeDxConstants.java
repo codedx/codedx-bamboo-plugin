@@ -18,5 +18,4 @@ public final class CodeDxConstants {
 	public static final String NEW = "New";
 	public static final String TOTAL = "Total";
 
-	public static final String API_ERROR_MESSAGE = "An error occurred while trying to communicate with Code Dx's API.";
 }

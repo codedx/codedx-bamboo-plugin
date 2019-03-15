@@ -11,8 +11,6 @@ import com.codedx.client.api.ProjectsApi;
 import org.apache.commons.lang.StringUtils;
 
 import javax.ws.rs.ProcessingException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -114,9 +112,7 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
             final String url = params.getString("url");
             if (url != null && !url.isEmpty()) {
                 // Make sure the URL is valid
-                try {
-                    new URL(url);
-                } catch (MalformedURLException e) {
+                if (!ServerConfigManager.isURLValid(url)) {
                     errorCollection.addError("url", "Malformed URL");
                 }
             } else {

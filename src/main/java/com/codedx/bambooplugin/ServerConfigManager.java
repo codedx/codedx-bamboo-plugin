@@ -10,6 +10,8 @@ import org.glassfish.jersey.client.JerseyClientBuilder;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import java.io.Serializable;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class ServerConfigManager implements Serializable {
 
@@ -96,6 +98,16 @@ public class ServerConfigManager implements Serializable {
             }
         }
         return false;
+    }
+
+    // Helper method to tell if a url is formatted correctly
+    public static boolean isURLValid(String url) {
+        try {
+            new URL(url);
+        } catch (MalformedURLException e) {
+            return false;
+        }
+        return true;
     }
 
     // Fields we want to save

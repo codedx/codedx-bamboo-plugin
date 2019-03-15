@@ -14,8 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.ProcessingException;
 import java.io.IOException;
 import java.net.ConnectException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.net.UnknownHostException;
 
 public class ProjectRefresherServlet extends HttpServlet {
@@ -61,9 +59,7 @@ public class ProjectRefresherServlet extends HttpServlet {
         CodeDxCredentials credentials = mapper.readValue(req.getInputStream(), CodeDxCredentials.class);
 
         // Make sure the URL is valid
-        try {
-            new URL(credentials.getUrl());
-        } catch (MalformedURLException e) {
+        if (!ServerConfigManager.isURLValid(credentials.getUrl())) {
             resp.setStatus(404);
             resp.getOutputStream().print("Malformed Code Dx URL");
             return;

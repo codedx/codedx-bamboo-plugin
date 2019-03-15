@@ -16,8 +16,6 @@ import com.codedx.client.api.*;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -148,9 +146,7 @@ public class CodeDxScanTask implements TaskType {
                 logError(state, "Missing Code Dx URL.  Please configure it on the task configuration page.");
                 return false;
             } else {
-                try {
-                    new URL(state.apiUrl);
-                } catch (MalformedURLException e) {
+                if (!ServerConfigManager.isURLValid(state.apiUrl)) {
                     logError(state, "Malformed Code Dx URL.  Please correct it on the task configuration page.");
                     return false;
                 }

@@ -29,7 +29,7 @@ public class FingerprintStrategy {
 				String certFingerprint = toHexString(getSHA1(cert.getEncoded()));
 				logger.info("Certificate fingerprint:  " + certFingerprint.toUpperCase());
 				logger.info("User-entered fingerprint: " + fingerprint.toUpperCase());
-				if (certFingerprint.toUpperCase().equals(fingerprint.toUpperCase())) {
+				if (certFingerprint.equalsIgnoreCase(fingerprint)) {
 					return CertificateAcceptance.ACCEPT_PERMANENTLY;
 				}
 			} catch (CertificateEncodingException exception) {

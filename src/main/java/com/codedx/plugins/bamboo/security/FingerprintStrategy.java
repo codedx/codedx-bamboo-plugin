@@ -37,8 +37,7 @@ public class FingerprintStrategy {
 					return CertificateAcceptance.ACCEPT_PERMANENTLY;
 				}
 			} catch (CertificateEncodingException exception) {
-				_logger.error("Problem reading certificate: " + exception);
-				exception.printStackTrace();
+				_logger.error("Problem reading certificate", exception);
 			}
 		} else {
 			_logger.error("Certificate presented was not X509: " + genericCert);

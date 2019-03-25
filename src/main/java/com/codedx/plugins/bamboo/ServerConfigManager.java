@@ -104,8 +104,7 @@ public class ServerConfigManager implements Serializable {
                         .build();
                 cdxApiClient.setHttpClient(client);
             } catch (Exception e) {
-                _logger.error(e.toString());
-                e.printStackTrace();
+                _logger.error(e);
             }
         }
         return cdxApiClient;

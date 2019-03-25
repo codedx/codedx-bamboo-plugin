@@ -173,14 +173,12 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
             return projectsApi.getProjects().getProjects();
 
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-            _logger.error(e.toString());
+            _logger.error(e);
         } catch (ApiException e) {
-            e.printStackTrace();
-            _logger.error(e.toString());
+            _logger.error(e);
         } catch (ProcessingException e) {
             context.put("reachabilityMessage", "Connection refused. Please confirm that the URL is correct and that the Code Dx server is running.");
-            _logger.error(e.toString());
+            _logger.error(e);
         }
 
         return new ArrayList<Project>();

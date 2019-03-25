@@ -82,7 +82,7 @@ public class ProjectRefresherServlet extends HttpServlet {
             projects = projectsApi.getProjects();
         } catch (ApiException e) {
 
-            _logger.error(e.toString());
+            _logger.error(e);
 
             // Bad API Token?
             int responseCode = e.getCode();
@@ -109,7 +109,7 @@ public class ProjectRefresherServlet extends HttpServlet {
             _logger.error("Error message to send to client: " + message);
             return;
         } catch (ProcessingException e) {
-            _logger.error(e.toString());
+            _logger.error(e);
             resp.setStatus(404);
             resp.getOutputStream().print("Connection refused. Please confirm that the URL is correct and that the Code Dx server is running.");
             return;

@@ -204,7 +204,7 @@ public class CodeDxScanTask implements TaskType {
         try {
             state.filesToUpload.add(Archiver.archive(state.taskContext.getRootDirectory(), state.includePaths, state.excludePaths, "files_to_scan"));
         } catch (IOException e) {
-            logError(state, "An error occurred while trying to archive source files: %s", e.toString());
+            logError(state, e, "An error occurred while trying to archive source files");
             return false;
         }
 
@@ -249,7 +249,7 @@ public class CodeDxScanTask implements TaskType {
             logApiException(state, e);
             return false;
         } catch (IOException e) {
-            logError(state, "An error occurred while trying to archive source files: %s", e.toString());
+            logError(state, e, "An error occurred while trying to archive source files");
             return false;
         }
 
@@ -265,7 +265,7 @@ public class CodeDxScanTask implements TaskType {
             try {
                 Thread.sleep(1000); // Consider adding maximum wait time
             } catch (InterruptedException e) {
-                logError(state, "An unexpected threading issue occurred.  This could occur if the build is manually cancelled.  Exception: %s", e.toString());
+                logError(state, e, "An unexpected threading issue occurred.  This could occur if the build is manually cancelled.");
                 return false;
             }
 
@@ -354,7 +354,7 @@ public class CodeDxScanTask implements TaskType {
             try {
                 Thread.sleep(5000); // Consider adding maximum wait time
             } catch (InterruptedException e) {
-                logError(state, "An unexpected threading issue occurred.  This could occur if the build is manually cancelled.  Exception: %s", e.toString());
+                logError(state, e, "An unexpected threading issue occurred.  This could occur if the build is manually cancelled.");
                 return false;
             }
 
@@ -468,13 +468,19 @@ public class CodeDxScanTask implements TaskType {
         _logger.info(message);
     }
 
+    private static void logError(ScanTaskState state, Exception e, String format, Object... args) {
+        String errorMessage = String.format(format, args);
+        state.buildLogger.addErrorLogEntry(String.format("%s || Exception - %s", errorMessage, e.toString()));
+        _logger.error(errorMessage, e);
+    }
+
     private static void logError(ScanTaskState state, String format, Object... args) {
-        String error = String.format(format, args);
-        state.buildLogger.addErrorLogEntry(error);
-        _logger.error(error);
+        String errorMessage = String.format(format, args);
+        state.buildLogger.addErrorLogEntry(errorMessage);
+        _logger.error(errorMessage);
     }
 
     private static void logApiException(ScanTaskState state, Exception e) {
-        logError(state, "An error occurred while trying to communicate with Code Dx's API: %s", e.toString());
+        logError(state, e, "An error occurred while trying to communicate with Code Dx's API");
     }
 }

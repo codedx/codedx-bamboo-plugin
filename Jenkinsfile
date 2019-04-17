@@ -3,11 +3,13 @@
 
 pipeline {
 	agent {
-		dockerfile true
+		dockerfile {
+			dir 'repo/sdk-image'
+		}
 	}
 
 	environment {
-		ATLAS_OPTS = "-Dmaven.repo.local='$WORKSPACE/maven-cache' ${env.ATLAS_OPTS}"
+		ATLAS_OPTS = "-Dmaven.repo.local='$WORKSPACE/maven-cache'"
 	}
 
 	stages {
@@ -26,7 +28,7 @@ pipeline {
 
 	post {
 		always {
-			cleanWs deleteDirs: true, patterns: [[pattern: 'maven-cache/', type: 'EXCLUDE']]
+			cleanWs deleteDirs: true, patterns: [[pattern: 'repo/target/', type: 'INCLUDE']]
 		}
 		failure {
 			slackSend botUser: true, channel: '#devchat', color: 'danger', message: "Bamboo Plugin build FAILED (<${env.BUILD_URL}|Open>)"

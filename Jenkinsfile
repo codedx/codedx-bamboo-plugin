@@ -1,5 +1,5 @@
-// check out repo to $WORKSPACE/repo
-// we'll store the maven cache in $WORKSPACE/maven-cache
+// param for RELEASE_VERSION - if empty, generate snapshot build, otherwise, release build
+// this pipeline doesn't do release management (yet), so test->release is still a manual process
 
 pipeline {
 	agent {
@@ -32,7 +32,6 @@ pipeline {
 						}
 					}
 
-					//TODO: if release, atlas-mvn versions:set -DnewVersion=version
 					sh 'atlas-unit-test'
 					sh 'atlas-package'
 				}

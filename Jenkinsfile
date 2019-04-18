@@ -38,7 +38,7 @@ pipeline {
 
 			post {
 				success {
-					archiveArtifacts artifacts: 'target/codedx-bamboo-plugin*.jar', fingerprint: true, onlyIfSuccessful: true
+					archiveArtifacts artifacts: 'repo/target/codedx-bamboo-plugin*.jar', fingerprint: true, onlyIfSuccessful: true
 
 					script {
 						if (isRelease) {

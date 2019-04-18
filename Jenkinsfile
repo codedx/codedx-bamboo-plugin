@@ -17,7 +17,7 @@ pipeline {
 			environment {
 				// we'll be one directory deep. this is a little brittle, but there's no clean way
 				// to use $WORKSPACE here if it contains spaces it seems
-				ATLAS_OPTS = "-Dmaven.repo.local='../maven-cache'"
+				ATLAS_OPTS = "-Dmaven.repo.local=../maven-cache"
 			}
 
 			steps {

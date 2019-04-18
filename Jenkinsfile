@@ -8,8 +8,12 @@ pipeline {
 		}
 	}
 
+	options {
+		buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '20')
+	}
+
 	parameters {
-		string name: 'RELEASE_VERSION', defaultValue: '', description: '(leave blank for current snapshot)', trim: true
+		string name: 'RELEASE_VERSION', defaultValue: '', description: '(e.g., 1.0.0, leave blank for current snapshot)', trim: true
 	}
 
 	stages {
@@ -23,10 +27,8 @@ pipeline {
 			steps {
 				dir("repo/") {
 					script {
-						def isRelease = params.RELEASE_VERSION != ""
-
-						if (isRelease) {
-							sh "atlas-mvn versinos:set -DnewVersion=${params.RELEASE_VERSION}"
+						if (params.RELEASE_VERSION != "") {
+							sh "atlas-mvn versions:set -DnewVersion=${params.RELEASE_VERSION}"
 						}
 					}
 
@@ -41,7 +43,7 @@ pipeline {
 					archiveArtifacts artifacts: 'repo/target/codedx-bamboo-plugin*.jar', fingerprint: true, onlyIfSuccessful: true
 
 					script {
-						if (isRelease) {
+						if (params.RELEASE_VERSION != "") {
 							currentBuild.displayName = params.RELEASE_VERSION
 							currentBuild.description = "Release build ${params.RELEASE_VERSION}"
 							currentBuild.setKeepLog(true)

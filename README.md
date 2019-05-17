@@ -39,4 +39,4 @@ codedx-bamboo-plugin
 
 ## Deploying the Plugin
 
- * TBD
+See https://confluence.atlassian.com/bamboo/installing-a-plugin-289277265.html for details on plugin installation.

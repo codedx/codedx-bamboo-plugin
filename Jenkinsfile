@@ -17,21 +17,19 @@ pipeline {
 	stages {
 		stage('Build plugin') {
 			steps {
-				dir("repo/") {
-					script {
-						if (params.RELEASE_VERSION != "") {
-							sh "atlas-mvn versions:set -DnewVersion=${params.RELEASE_VERSION}"
-						}
+				script {
+					if (params.RELEASE_VERSION != "") {
+						sh "atlas-mvn versions:set -DnewVersion=${params.RELEASE_VERSION}"
 					}
-
-					sh 'atlas-unit-test'
-					sh 'atlas-package'
 				}
+
+				sh 'atlas-unit-test'
+				sh 'atlas-package'
 			}
 
 			post {
 				success {
-					archiveArtifacts artifacts: 'repo/target/codedx-bamboo-plugin*.jar', fingerprint: true, onlyIfSuccessful: true
+					archiveArtifacts artifacts: 'target/codedx-bamboo-plugin*.jar', fingerprint: true, onlyIfSuccessful: true
 
 					script {
 						if (params.RELEASE_VERSION != "") {

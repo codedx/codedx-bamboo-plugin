@@ -3,9 +3,7 @@
 
 pipeline {
 	agent {
-		dockerfile {
-			dir 'repo/sdk-image'
-		}
+		label 'atlassian'
 	}
 
 	options {
@@ -18,12 +16,6 @@ pipeline {
 
 	stages {
 		stage('Build plugin') {
-			environment {
-				// we'll be one directory deep. this is a little brittle, but there's no clean way
-				// to use $WORKSPACE here if it contains spaces it seems
-				ATLAS_OPTS = "-Dmaven.repo.local=../maven-cache"
-			}
-
 			steps {
 				dir("repo/") {
 					script {
@@ -54,11 +46,8 @@ pipeline {
 	}
 
 	post {
-		always {
-			cleanWs deleteDirs: true, patterns: [[pattern: 'repo/target/', type: 'INCLUDE']]
-		}
 		failure {
-			slackSend botUser: true, channel: '#devchat', color: 'danger', message: "Bamboo Plugin build FAILED (<${env.BUILD_URL}|Open>)"
+			slackSend botUser: true, channel: '#codedx-devchat', color: 'danger', message: "Bamboo Plugin build FAILED (<${env.BUILD_URL}|Open>)"
 		}
 	}
 }

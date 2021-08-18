@@ -3,9 +3,7 @@
 
 pipeline {
 	agent {
-		dockerfile {
-			dir 'repo/sdk-image'
-		}
+		label 'atlassian'
 	}
 
 	options {
@@ -18,28 +16,20 @@ pipeline {
 
 	stages {
 		stage('Build plugin') {
-			environment {
-				// we'll be one directory deep. this is a little brittle, but there's no clean way
-				// to use $WORKSPACE here if it contains spaces it seems
-				ATLAS_OPTS = "-Dmaven.repo.local=../maven-cache"
-			}
-
 			steps {
-				dir("repo/") {
-					script {
-						if (params.RELEASE_VERSION != "") {
-							sh "atlas-mvn versions:set -DnewVersion=${params.RELEASE_VERSION}"
-						}
+				script {
+					if (params.RELEASE_VERSION != "") {
+						sh "atlas-mvn versions:set -DnewVersion=${params.RELEASE_VERSION}"
 					}
-
-					sh 'atlas-unit-test'
-					sh 'atlas-package'
 				}
+
+				sh 'atlas-unit-test'
+				sh 'atlas-package'
 			}
 
 			post {
 				success {
-					archiveArtifacts artifacts: 'repo/target/codedx-bamboo-plugin*.jar', fingerprint: true, onlyIfSuccessful: true
+					archiveArtifacts artifacts: 'target/codedx-bamboo-plugin*.jar', fingerprint: true, onlyIfSuccessful: true
 
 					script {
 						if (params.RELEASE_VERSION != "") {
@@ -54,11 +44,8 @@ pipeline {
 	}
 
 	post {
-		always {
-			cleanWs deleteDirs: true, patterns: [[pattern: 'repo/target/', type: 'INCLUDE']]
-		}
 		failure {
-			slackSend botUser: true, channel: '#devchat', color: 'danger', message: "Bamboo Plugin build FAILED (<${env.BUILD_URL}|Open>)"
+			slackSend botUser: true, channel: '#codedx-devchat', color: 'danger', message: "Bamboo Plugin build FAILED (<${env.BUILD_URL}|Open>)"
 		}
 	}
 }

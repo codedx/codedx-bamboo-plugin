@@ -2,29 +2,27 @@
 // this pipeline doesn't do release management (yet), so test->release is still a manual process
 
 pipeline {
-	agent {
-		label 'atlassian'
-	}
-
-	options {
-		buildDiscarder logRotator(artifactDaysToKeepStr: '', artifactNumToKeepStr: '', daysToKeepStr: '', numToKeepStr: '20')
-	}
-
 	parameters {
 		string name: 'RELEASE_VERSION', defaultValue: '', description: '(e.g., 1.0.0, leave blank for current snapshot)', trim: true
+	}
+
+	agent {
+		label 'atlassian'
 	}
 
 	stages {
 		stage('Build plugin') {
 			steps {
-				script {
-					if (params.RELEASE_VERSION != "") {
-						sh "atlas-mvn versions:set -DnewVersion=${params.RELEASE_VERSION}"
+				withCache(name: 'codedx-bamboo-cache', baseFolder: env.HOME, contents: '.m2') {
+					script {
+						if (params.RELEASE_VERSION != "") {
+							sh "atlas-mvn versions:set -DnewVersion=${params.RELEASE_VERSION}"
+						}
 					}
-				}
 
-				sh 'atlas-unit-test'
-				sh 'atlas-package'
+					sh 'atlas-unit-test'
+					sh 'atlas-package'
+				}
 			}
 
 			post {
@@ -36,6 +34,7 @@ pipeline {
 							currentBuild.displayName = params.RELEASE_VERSION
 							currentBuild.description = "Release build ${params.RELEASE_VERSION}"
 							currentBuild.setKeepLog(true)
+							slack.info "Bamboo Plugin release build ${params.RELEASE_VERSION} complete"
 						}
 					}
 				}
@@ -45,7 +44,9 @@ pipeline {
 
 	post {
 		failure {
-			slackSend botUser: true, channel: '#codedx-devchat', color: 'danger', message: "Bamboo Plugin build FAILED (<${env.BUILD_URL}|Open>)"
+			script {
+				slack.error 'Burp Plugin build FAILED'
+			}
 		}
 	}
 }

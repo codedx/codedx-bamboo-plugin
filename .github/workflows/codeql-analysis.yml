@@ -62,7 +62,7 @@ jobs:
 
     - name: Install Atlassian SDK
       run: |
-        sudo curl https{{:}}//packages.atlassian.com/api/gpg/key/public | apt-key add -
+        sudo curl https://packages.atlassian.com/api/gpg/key/public | apt-key add -
         sudo echo "deb https://packages.atlassian.com/atlassian-sdk-deb stable contrib" >>/etc/apt/sources.list
         sudo apt-get -qq update
         sudo apt-get -qqy install atlassian-plugin-sdk

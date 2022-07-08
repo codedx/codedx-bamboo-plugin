@@ -82,7 +82,8 @@ jobs:
     # - run: |
     #   echo "Run, Build Application using script"
     #   ./location_of_script_within_repo/buildscript.sh
-    - run: |
+    - name: Build/Package using atlas-package
+      run: |
         cd "$GITHUB_WORKSPACE"
         atlas-package
 

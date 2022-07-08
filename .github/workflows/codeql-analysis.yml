@@ -59,6 +59,14 @@ jobs:
         distribution: 'zulu'
         java-version: 8
         architecture: x64
+
+    - name: Install Atlassian SDK
+      run: |
+        sudo curl https://packages.atlassian.com/api/gpg/key/public | apt-key add -
+      	sudo echo "deb https://packages.atlassian.com/atlassian-sdk-deb stable contrib" >>/etc/apt/sources.list && \
+       	sudo apt-get -qq update
+       	sudo apt-get -qqy install atlassian-plugin-sdk
+       	atlas-version
         
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)

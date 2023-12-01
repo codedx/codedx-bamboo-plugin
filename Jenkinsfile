@@ -34,18 +34,9 @@ pipeline {
 							currentBuild.displayName = params.RELEASE_VERSION
 							currentBuild.description = "Release build ${params.RELEASE_VERSION}"
 							currentBuild.setKeepLog(true)
-							slack.info "Bamboo Plugin release build ${params.RELEASE_VERSION} complete"
 						}
 					}
 				}
-			}
-		}
-	}
-
-	post {
-		failure {
-			script {
-				slack.error 'Burp Plugin build FAILED'
 			}
 		}
 	}

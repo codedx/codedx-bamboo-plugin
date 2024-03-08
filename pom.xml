@@ -19,9 +19,7 @@
     <packaging>atlassian-plugin</packaging>
 
     <properties>
-        <!-- Note: change to 7.1.1 for local testing using `atlas-*` commands due to icu4j init errors in earlier Bamboo
-                   versions when using recent Java 8 versions -->
-        <bamboo.version>7.1.1</bamboo.version>
+        <bamboo.version>9.0.0</bamboo.version>
         <bamboo.data.version>${bamboo.version}</bamboo.data.version>
         <amps.version>8.1.2</amps.version>
         <plugin.testrunner.version>2.0.2</plugin.testrunner.version>
@@ -48,6 +46,7 @@
 
         <!-- test dependencies -->
         <dependency>
+            <!-- TODO - update (?) -->
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit-version}</version>
@@ -55,6 +54,7 @@
         </dependency>
 
         <dependency>
+            <!-- TODO - update (?) -->
             <groupId>com.atlassian.bamboo</groupId>
             <artifactId>atlassian-bamboo-web</artifactId>
             <version>${bamboo.version}</version>
@@ -63,12 +63,14 @@
 
         <!-- https://mvnrepository.com/artifact/org.apache.ant/ant -->
         <dependency>
+            <!-- TODO - update -->
             <groupId>org.apache.ant</groupId>
             <artifactId>ant</artifactId>
             <version>1.8.2</version>
         </dependency>
 
         <dependency>
+            <!-- TODO - update -->
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.2.2-atlassian-1</version>
@@ -134,6 +136,23 @@
                     <productVersion>${bamboo.version}</productVersion>
                     <productDataVersion>${bamboo.data.version}</productDataVersion>
                     <enableQuickReload>true</enableQuickReload>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>com.atlassian.plugin</groupId>
+                <artifactId>atlassian-spring-scanner-maven-plugin</artifactId>
+                <version>${atlassian.spring.scanner.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>atlassian-spring-scanner</goal>
+                        </goals>
+                        <phase>process-classes</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <verbose>false</verbose>
                 </configuration>
             </plugin>
         </plugins>

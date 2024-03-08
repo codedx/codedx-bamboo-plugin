@@ -19,14 +19,15 @@
     <packaging>atlassian-plugin</packaging>
 
     <properties>
-
-        <bamboo.version>6.3.2</bamboo.version>
-        <bamboo.data.version>6.3.2</bamboo.data.version>
-        <amps.version>6.3.15</amps.version>
-        <plugin.testrunner.version>1.2.3</plugin.testrunner.version>
-        <atlassian.spring.scanner.version>1.2.13</atlassian.spring.scanner.version>
-        <jersey-version>2.25.1</jersey-version>
-        <jackson-version>2.9.8</jackson-version>
+        <!-- Note: change to 7.1.1 for local testing using `atlas-*` commands due to icu4j init errors in earlier Bamboo
+                   versions when using recent Java 8 versions -->
+        <bamboo.version>7.1.1</bamboo.version>
+        <bamboo.data.version>${bamboo.version}</bamboo.data.version>
+        <amps.version>8.1.2</amps.version>
+        <plugin.testrunner.version>2.0.2</plugin.testrunner.version>
+        <atlassian.spring.scanner.version>2.1.7</atlassian.spring.scanner.version>
+        <jersey-version>2.41</jersey-version>
+        <jackson-version>2.15.2</jackson-version>
         <!-- This key is used to keep the consistency between the key in atlassian-plugin.xml and the key to generate bundle. -->
         <atlassian.plugin.key>${project.groupId}.${project.artifactId}</atlassian.plugin.key>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -109,11 +110,12 @@
         <dependency>
             <groupId>com.github.joschi.jackson</groupId>
             <artifactId>jackson-datatype-threetenbp</artifactId>
-            <version>2.6.4</version>
+            <version>${jackson-version}</version>
         </dependency>
 
         <!-- Base64 encoding that works in both JVM and Android -->
         <dependency>
+            <!-- TODO - update / remove -->
             <groupId>com.brsanthu</groupId>
             <artifactId>migbase64</artifactId>
             <version>2.2</version>
@@ -125,32 +127,16 @@
         <plugins>
             <plugin>
                 <groupId>com.atlassian.maven.plugins</groupId>
-                <artifactId>maven-bamboo-plugin</artifactId>
+                <artifactId>bamboo-maven-plugin</artifactId>
                 <version>${amps.version}</version>
                 <extensions>true</extensions>
                 <configuration>
                     <productVersion>${bamboo.version}</productVersion>
                     <productDataVersion>${bamboo.data.version}</productDataVersion>
                     <enableQuickReload>true</enableQuickReload>
-                    <enableFastdev>false</enableFastdev>
                 </configuration>
             </plugin>
         </plugins>
     </build>
-
-    <pluginRepositories>
-        <pluginRepository>
-            <releases>
-                <enabled>true</enabled>
-                <checksumPolicy>warn</checksumPolicy>
-            </releases>
-            <snapshots>
-                <updatePolicy>never</updatePolicy>
-                <checksumPolicy>warn</checksumPolicy>
-            </snapshots>
-            <id>atlassian-public</id>
-            <url>https://maven.atlassian.com/repository/public</url>
-        </pluginRepository>
-    </pluginRepositories>
 
 </project>

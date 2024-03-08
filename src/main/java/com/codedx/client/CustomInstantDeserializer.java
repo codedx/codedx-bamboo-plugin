@@ -152,13 +152,13 @@ public class CustomInstantDeserializer<T extends Temporal>
 
   @Override
   protected ThreeTenDateTimeDeserializerBase<T> withLeniency(Boolean leniency) {
-    // TODO
+    // not relevant for us
     return this;
   }
 
   @Override
   protected ThreeTenDateTimeDeserializerBase<T> withShape(JsonFormat.Shape shape) {
-    // TODO
+    // not relevant for us
     return this;
   }
 

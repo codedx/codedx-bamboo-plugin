@@ -46,7 +46,6 @@
 
         <!-- test dependencies -->
         <dependency>
-            <!-- TODO - update (?) -->
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit-version}</version>
@@ -54,7 +53,6 @@
         </dependency>
 
         <dependency>
-            <!-- TODO - update (?) -->
             <groupId>com.atlassian.bamboo</groupId>
             <artifactId>atlassian-bamboo-web</artifactId>
             <version>${bamboo.version}</version>

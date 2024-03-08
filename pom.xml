@@ -113,9 +113,8 @@
             <version>${jackson-version}</version>
         </dependency>
 
-        <!-- Base64 encoding that works in both JVM and Android -->
+        <!-- Note: Required by Swagger-generated API client impl. for Basic Auth, but basic auth is not used here -->
         <dependency>
-            <!-- TODO - update / remove -->
             <groupId>com.brsanthu</groupId>
             <artifactId>migbase64</artifactId>
             <version>2.2</version>

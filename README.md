@@ -8,7 +8,7 @@ codedx-bamboo-plugin
  1. Install Atlassian Plugin SDK: (Windows url) - https://developer.atlassian.com/server/framework/atlassian-sdk/install-the-atlassian-sdk-on-a-windows-system/
  Additional information about the SDK can be found here - https://developer.atlassian.com/display/DOCS/Introduction+to+the+Atlassian+Plugin+SDK
 
- 2. For development, IntelliJ is recommended.  If stuck setting up IntelliJ, [some notes are included here](IntelliJNotes.md) from a user who set up the plugin for development in IntelliJ on Windows.
+ 2. For development, IntelliJ is recommended. See [the notes included here](IntelliJNotes.md) for detailed instructions on how to configure IntelliJ to load the project and resolve dependencies.
 
  3. If needed, update the Swagger client [following the instructions here](SwaggerSetup.md).  This shouldn't be needed but may be necessary if there is a version mismatch with the Code Dx server.
 
@@ -30,7 +30,7 @@ codedx-bamboo-plugin
 
 ### Running and Debugging from Command Line
 
- * The following commands can be used to run and debug the plugin from the root of this repository.  Only the run command was tested (briefly), and it didn't work consistently.
+ * The following commands can be used to run and debug the plugin from the root of this repository.  Only the run command was tested (briefly), and it didn't work consistently. (Normal `mvn` commands won't work, must use the `atlas-*` commands.)
 
  `atlas-run`
  `atlas-debug`

@@ -2,17 +2,12 @@ package com.codedx.plugins.bamboo;
 
 import com.atlassian.bamboo.build.logger.BuildLogger;
 import com.atlassian.bamboo.configuration.ConfigurationMap;
-import com.atlassian.bamboo.task.TaskContext;
-import com.atlassian.bamboo.task.TaskException;
-import com.atlassian.bamboo.task.TaskResult;
-import com.atlassian.bamboo.task.TaskResultBuilder;
-import com.atlassian.bamboo.task.TaskType;
-import com.atlassian.util.concurrent.NotNull;
-import com.codedx.plugins.bamboo.utils.Archiver;
-import com.codedx.plugins.bamboo.utils.CodeDxBuildStatistics;
+import com.atlassian.bamboo.task.*;
 import com.codedx.client.ApiClient;
 import com.codedx.client.ApiException;
 import com.codedx.client.api.*;
+import com.codedx.plugins.bamboo.utils.Archiver;
+import com.codedx.plugins.bamboo.utils.CodeDxBuildStatistics;
 import org.apache.log4j.Logger;
 
 import java.io.File;
@@ -62,8 +57,7 @@ public class CodeDxScanTask implements TaskType {
         List<GroupedCount> groupedCounts;
     }
 
-    @NotNull
-    @java.lang.Override
+    @Override
     public TaskResult execute(final TaskContext taskContext) throws TaskException
     {
         ScanTaskState state = new ScanTaskState();

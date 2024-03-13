@@ -3,8 +3,8 @@ package com.codedx.plugins.bamboo;
 import com.atlassian.bamboo.bandana.PlanAwareBandanaContext;
 import com.atlassian.bandana.BandanaContext;
 import com.atlassian.bandana.BandanaManager;
-import com.codedx.plugins.bamboo.security.SSLContextFactory;
 import com.codedx.client.ApiClient;
+import com.codedx.plugins.bamboo.security.SSLContextFactory;
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 
@@ -24,8 +24,8 @@ public class ServerConfigManager implements Serializable {
     private static final String BANDANA_KEY =  "com.codedx.bambooplugin:Config";
 
     // This gets called automatically
-    public void setBandanaManager(BandanaManager bandanaManager) {
-        this.bandanaManager = bandanaManager;
+    public ServerConfigManager(BandanaManager bandanaManager) {
+        ServerConfigManager.bandanaManager = bandanaManager;
     }
 
     public static String getUrl() {

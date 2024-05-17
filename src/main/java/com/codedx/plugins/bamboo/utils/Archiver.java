@@ -23,7 +23,7 @@ public class Archiver {
 
 		_logger.info(String.format("archive(...) called.  paths: %s || excludePaths: %s || prefix: %s", emptyIfNull(paths), emptyIfNull(excludePaths), emptyIfNull(prefix)));
 
-		List<File> files = getFiles(workspace, paths, excludePaths);
+		List<File> files = getFiles(workspace, workspace, paths, excludePaths);
 
 		Path workspaceDir = Paths.get(workspace.getCanonicalPath());
 		Path tempFile = Files.createTempFile(prefix, ".zip");
@@ -69,20 +69,20 @@ public class Archiver {
 		return new String[0];
 	}
 
-	private static List<File> getFiles(File workspace, String paths, String excludePaths) throws IOException {
+	private static List<File> getFiles(File rootPath, File directory, String paths, String excludePaths) throws IOException {
 		AntPathMatcher matcher = new AntPathMatcher();
 
 		List<File> collectedFiles = new ArrayList<>();
-		File[] files = workspace.listFiles();
+		File[] files = directory.listFiles();
 		for (File file : files)
 		{
-			if (matches(matcher, paths, excludePaths, file.getCanonicalPath())) {
+			if (matches(matcher, paths, excludePaths, file.getCanonicalPath().substring(rootPath.getCanonicalPath().length()))) {
 				collectedFiles.add(file);
 
 				// recursively add subdirectories
 				if(file.isDirectory())
 				{
-					collectedFiles.addAll(getFiles(file, paths, excludePaths));
+					collectedFiles.addAll(getFiles(rootPath, file, paths, excludePaths));
 				}
 			}
 		}

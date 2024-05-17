@@ -172,13 +172,11 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
         try {
             return projectsApi.getProjects().getProjects();
 
-        } catch (IllegalArgumentException e) {
-            _logger.error(e);
-        } catch (ApiException e) {
-            _logger.error(e);
+        } catch (IllegalArgumentException | ApiException e) {
+            _logger.error("Error while getting projects", e);
         } catch (ProcessingException e) {
             context.put("reachabilityMessage", "Connection refused. Please confirm that the URL is correct and that the Code Dx server is running.");
-            _logger.error(e);
+            _logger.error("Error while getting projects", e);
         }
 
         return new ArrayList<Project>();

@@ -104,7 +104,7 @@ public class ServerConfigManager implements Serializable {
                         .build();
                 cdxApiClient.setHttpClient(client);
             } catch (Exception e) {
-                _logger.error(e);
+                _logger.error("Unexpected error configuring SSL", e);
             }
         }
         return cdxApiClient;

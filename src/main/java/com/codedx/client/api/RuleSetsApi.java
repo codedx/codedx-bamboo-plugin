@@ -2,27 +2,29 @@ package com.codedx.client.api;
 
 import com.codedx.client.ApiException;
 import com.codedx.client.ApiClient;
+import com.codedx.client.ApiResponse;
 import com.codedx.client.Configuration;
 import com.codedx.client.Pair;
 
-import javax.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.GenericType;
 
-import com.codedx.client.api.CreateRule;
+import com.codedx.client.model.CreateRule;
 import java.io.File;
-import com.codedx.client.api.ModifyRuleResponse;
-import com.codedx.client.api.Rule;
-import com.codedx.client.api.RuleCriteria;
-import com.codedx.client.api.RuleSet;
-import com.codedx.client.api.RuleSetContents;
-import com.codedx.client.api.RuleSetDeleteError;
-import com.codedx.client.api.RuleSetDeleteResponse;
+import com.codedx.client.model.ModifyRuleResponse;
+import com.codedx.client.model.Rule;
+import com.codedx.client.model.RuleCriteria;
+import com.codedx.client.model.RuleSet;
+import com.codedx.client.model.RuleSetContents;
+import com.codedx.client.model.RuleSetDeleteError;
+import com.codedx.client.model.RuleSetDeleteResponse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-01-02T17:17:22.434-05:00")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-04-02T11:55:06.722228-04:00[America/New_York]", comments = "Generator version: 7.21.0")
 public class RuleSetsApi {
   private ApiClient apiClient;
 
@@ -34,713 +36,910 @@ public class RuleSetsApi {
     this.apiClient = apiClient;
   }
 
+  /**
+   * Get the API client
+   *
+   * @return API client
+   */
   public ApiClient getApiClient() {
     return apiClient;
   }
 
+  /**
+   * Set the API client
+   *
+   * @param apiClient an instance of API client
+   */
   public void setApiClient(ApiClient apiClient) {
     this.apiClient = apiClient;
   }
 
   /**
    * Add Rule Criteria
-   * Allows user to add rule criteria
+   * Allows user to add rule criteria.  Requires the \&quot;rule-set:manage\&quot; permission which is provided by the \&quot;Admin\&quot; role.
    * @param rulesetId  (required)
    * @param ruleId  (required)
    * @param ruleCriteria  (required)
    * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Criteria was successfully created </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 404 </td><td> Not Found - Specified Rule Set or Rule does not exist </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
    */
-  public void addRuleCriteria(Integer rulesetId, Integer ruleId, RuleCriteria ruleCriteria) throws ApiException {
-    Object localVarPostBody = ruleCriteria;
-    
-    // verify the required parameter 'rulesetId' is set
+  public void addRuleCriteria(@jakarta.annotation.Nonnull Integer rulesetId, @jakarta.annotation.Nonnull Integer ruleId, @jakarta.annotation.Nonnull RuleCriteria ruleCriteria) throws ApiException {
+    addRuleCriteriaWithHttpInfo(rulesetId, ruleId, ruleCriteria);
+  }
+
+  /**
+   * Add Rule Criteria
+   * Allows user to add rule criteria.  Requires the \&quot;rule-set:manage\&quot; permission which is provided by the \&quot;Admin\&quot; role.
+   * @param rulesetId  (required)
+   * @param ruleId  (required)
+   * @param ruleCriteria  (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Criteria was successfully created </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 404 </td><td> Not Found - Specified Rule Set or Rule does not exist </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
+   */
+  public ApiResponse<Void> addRuleCriteriaWithHttpInfo(@jakarta.annotation.Nonnull Integer rulesetId, @jakarta.annotation.Nonnull Integer ruleId, @jakarta.annotation.Nonnull RuleCriteria ruleCriteria) throws ApiException {
+    // Check required parameters
     if (rulesetId == null) {
       throw new ApiException(400, "Missing the required parameter 'rulesetId' when calling addRuleCriteria");
     }
-    
-    // verify the required parameter 'ruleId' is set
     if (ruleId == null) {
       throw new ApiException(400, "Missing the required parameter 'ruleId' when calling addRuleCriteria");
     }
-    
-    // verify the required parameter 'ruleCriteria' is set
     if (ruleCriteria == null) {
       throw new ApiException(400, "Missing the required parameter 'ruleCriteria' when calling addRuleCriteria");
     }
-    
-    // create path and map variables
+
+    // Path parameters
     String localVarPath = "/api/ruleset/{ruleset-id}/rule/{rule-id}/criteria"
-      .replaceAll("\\{" + "ruleset-id" + "\\}", apiClient.escapeString(rulesetId.toString()))
-      .replaceAll("\\{" + "rule-id" + "\\}", apiClient.escapeString(ruleId.toString()));
+            .replaceAll("\\{ruleset-id}", apiClient.escapeString(rulesetId.toString()))
+            .replaceAll("\\{rule-id}", apiClient.escapeString(ruleId.toString()));
 
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
-
-    apiClient.invokeAPI(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, null);
+    String localVarAccept = apiClient.selectHeaderAccept();
+    String localVarContentType = apiClient.selectHeaderContentType();
+    String[] localVarAuthNames = new String[] {"APIKeyHeader", "basicAuth", "bearerAuth"};
+    return apiClient.invokeAPI("RuleSetsApi.addRuleCriteria", localVarPath, "POST", new ArrayList<>(), ruleCriteria,
+                               new LinkedHashMap<>(), new LinkedHashMap<>(), new LinkedHashMap<>(), localVarAccept, localVarContentType,
+                               localVarAuthNames, null, false);
   }
   /**
    * Clone Rule Set
-   * Allows user to clone a rule set
+   * Allows user to clone a rule set.  Requires the \&quot;rule-set:manage\&quot; permission which is provided by the \&quot;Admin\&quot; role.
    * @param rulesetId  (required)
    * @param ruleSet The values for &#x60;id&#x60; and &#x60;canEdit&#x60; will be ignored, only &#x60;name&#x60; is required (required)
    * @return RuleSet
    * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains a RuleSet object </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 404 </td><td> Not Found - Rule Set with specified ID does not exist </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
    */
-  public RuleSet cloneRuleSet(Integer rulesetId, RuleSet ruleSet) throws ApiException {
-    Object localVarPostBody = ruleSet;
-    
-    // verify the required parameter 'rulesetId' is set
+  public RuleSet cloneRuleSet(@jakarta.annotation.Nonnull Integer rulesetId, @jakarta.annotation.Nonnull RuleSet ruleSet) throws ApiException {
+    return cloneRuleSetWithHttpInfo(rulesetId, ruleSet).getData();
+  }
+
+  /**
+   * Clone Rule Set
+   * Allows user to clone a rule set.  Requires the \&quot;rule-set:manage\&quot; permission which is provided by the \&quot;Admin\&quot; role.
+   * @param rulesetId  (required)
+   * @param ruleSet The values for &#x60;id&#x60; and &#x60;canEdit&#x60; will be ignored, only &#x60;name&#x60; is required (required)
+   * @return ApiResponse&lt;RuleSet&gt;
+   * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains a RuleSet object </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 404 </td><td> Not Found - Rule Set with specified ID does not exist </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
+   */
+  public ApiResponse<RuleSet> cloneRuleSetWithHttpInfo(@jakarta.annotation.Nonnull Integer rulesetId, @jakarta.annotation.Nonnull RuleSet ruleSet) throws ApiException {
+    // Check required parameters
     if (rulesetId == null) {
       throw new ApiException(400, "Missing the required parameter 'rulesetId' when calling cloneRuleSet");
     }
-    
-    // verify the required parameter 'ruleSet' is set
     if (ruleSet == null) {
       throw new ApiException(400, "Missing the required parameter 'ruleSet' when calling cloneRuleSet");
     }
-    
-    // create path and map variables
+
+    // Path parameters
     String localVarPath = "/api/ruleset/{ruleset-id}/clone"
-      .replaceAll("\\{" + "ruleset-id" + "\\}", apiClient.escapeString(rulesetId.toString()));
+            .replaceAll("\\{ruleset-id}", apiClient.escapeString(rulesetId.toString()));
 
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
+    String localVarAccept = apiClient.selectHeaderAccept("*/*");
+    String localVarContentType = apiClient.selectHeaderContentType();
+    String[] localVarAuthNames = new String[] {"APIKeyHeader", "basicAuth", "bearerAuth"};
     GenericType<RuleSet> localVarReturnType = new GenericType<RuleSet>() {};
-    return apiClient.invokeAPI(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
-      }
+    return apiClient.invokeAPI("RuleSetsApi.cloneRuleSet", localVarPath, "POST", new ArrayList<>(), ruleSet,
+                               new LinkedHashMap<>(), new LinkedHashMap<>(), new LinkedHashMap<>(), localVarAccept, localVarContentType,
+                               localVarAuthNames, localVarReturnType, false);
+  }
   /**
    * Create Rule
-   * Allows user to create a Rule
+   * Allows user to create a Rule.  Requires the \&quot;rule-set:manage\&quot; permission which is provided by the \&quot;Admin\&quot; role.
    * @param rulesetId  (required)
-   * @param rule  (required)
+   * @param createRule  (required)
    * @return Rule
    * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains the created Rule </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 404 </td><td> Not Found - Specified Rule Set does not exist </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
    */
-  public Rule createRule(Integer rulesetId, CreateRule rule) throws ApiException {
-    Object localVarPostBody = rule;
-    
-    // verify the required parameter 'rulesetId' is set
+  public Rule createRule(@jakarta.annotation.Nonnull Integer rulesetId, @jakarta.annotation.Nonnull CreateRule createRule) throws ApiException {
+    return createRuleWithHttpInfo(rulesetId, createRule).getData();
+  }
+
+  /**
+   * Create Rule
+   * Allows user to create a Rule.  Requires the \&quot;rule-set:manage\&quot; permission which is provided by the \&quot;Admin\&quot; role.
+   * @param rulesetId  (required)
+   * @param createRule  (required)
+   * @return ApiResponse&lt;Rule&gt;
+   * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains the created Rule </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 404 </td><td> Not Found - Specified Rule Set does not exist </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
+   */
+  public ApiResponse<Rule> createRuleWithHttpInfo(@jakarta.annotation.Nonnull Integer rulesetId, @jakarta.annotation.Nonnull CreateRule createRule) throws ApiException {
+    // Check required parameters
     if (rulesetId == null) {
       throw new ApiException(400, "Missing the required parameter 'rulesetId' when calling createRule");
     }
-    
-    // verify the required parameter 'rule' is set
-    if (rule == null) {
-      throw new ApiException(400, "Missing the required parameter 'rule' when calling createRule");
+    if (createRule == null) {
+      throw new ApiException(400, "Missing the required parameter 'createRule' when calling createRule");
     }
-    
-    // create path and map variables
+
+    // Path parameters
     String localVarPath = "/api/ruleset/{ruleset-id}/rule"
-      .replaceAll("\\{" + "ruleset-id" + "\\}", apiClient.escapeString(rulesetId.toString()));
+            .replaceAll("\\{ruleset-id}", apiClient.escapeString(rulesetId.toString()));
 
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
+    String localVarAccept = apiClient.selectHeaderAccept("*/*");
+    String localVarContentType = apiClient.selectHeaderContentType();
+    String[] localVarAuthNames = new String[] {"APIKeyHeader", "basicAuth", "bearerAuth"};
     GenericType<Rule> localVarReturnType = new GenericType<Rule>() {};
-    return apiClient.invokeAPI(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
-      }
+    return apiClient.invokeAPI("RuleSetsApi.createRule", localVarPath, "POST", new ArrayList<>(), createRule,
+                               new LinkedHashMap<>(), new LinkedHashMap<>(), new LinkedHashMap<>(), localVarAccept, localVarContentType,
+                               localVarAuthNames, localVarReturnType, false);
+  }
   /**
    * Create Rule Set
-   * Creates a rule set
-   * @param ruleSet The values for &#x60;id&#x60; and &#x60;canEdit&#x60; will be ignored, only &#x60;name&#x60; is required (required)
+   * Creates a rule set.  Requires the \&quot;rule-set:manage\&quot; permission which is provided by the \&quot;Admin\&quot; role.
+   * @param ruleSet The values for &#x60;id&#x60; and &#x60;canEdit&#x60; will be ignored, only &#x60;name&#x60; is required. (required)
    * @return RuleSet
    * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains a RuleSet object </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
    */
-  public RuleSet createRuleSet(RuleSet ruleSet) throws ApiException {
-    Object localVarPostBody = ruleSet;
-    
-    // verify the required parameter 'ruleSet' is set
+  public RuleSet createRuleSet(@jakarta.annotation.Nonnull RuleSet ruleSet) throws ApiException {
+    return createRuleSetWithHttpInfo(ruleSet).getData();
+  }
+
+  /**
+   * Create Rule Set
+   * Creates a rule set.  Requires the \&quot;rule-set:manage\&quot; permission which is provided by the \&quot;Admin\&quot; role.
+   * @param ruleSet The values for &#x60;id&#x60; and &#x60;canEdit&#x60; will be ignored, only &#x60;name&#x60; is required. (required)
+   * @return ApiResponse&lt;RuleSet&gt;
+   * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains a RuleSet object </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
+   */
+  public ApiResponse<RuleSet> createRuleSetWithHttpInfo(@jakarta.annotation.Nonnull RuleSet ruleSet) throws ApiException {
+    // Check required parameters
     if (ruleSet == null) {
       throw new ApiException(400, "Missing the required parameter 'ruleSet' when calling createRuleSet");
     }
-    
-    // create path and map variables
-    String localVarPath = "/api/ruleset";
 
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      "application/json"
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
+    String localVarAccept = apiClient.selectHeaderAccept("application/json");
+    String localVarContentType = apiClient.selectHeaderContentType();
+    String[] localVarAuthNames = new String[] {"APIKeyHeader", "basicAuth", "bearerAuth"};
     GenericType<RuleSet> localVarReturnType = new GenericType<RuleSet>() {};
-    return apiClient.invokeAPI(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
-      }
+    return apiClient.invokeAPI("RuleSetsApi.createRuleSet", "/api/ruleset", "POST", new ArrayList<>(), ruleSet,
+                               new LinkedHashMap<>(), new LinkedHashMap<>(), new LinkedHashMap<>(), localVarAccept, localVarContentType,
+                               localVarAuthNames, localVarReturnType, false);
+  }
   /**
    * Delete Rule
-   * Allows user to delete a rule
+   * Allows user to delete a rule.  Requires the \&quot;rule-set:manage\&quot; permission which is provided by the \&quot;Admin\&quot; role.
    * @param rulesetId  (required)
    * @param ruleId  (required)
    * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Rule was successfully deleted </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 404 </td><td> Not Found - Specified Rule Set or Rule does not exist </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
    */
-  public void deleteRule(Integer rulesetId, Integer ruleId) throws ApiException {
-    Object localVarPostBody = null;
-    
-    // verify the required parameter 'rulesetId' is set
+  public void deleteRule(@jakarta.annotation.Nonnull Integer rulesetId, @jakarta.annotation.Nonnull Integer ruleId) throws ApiException {
+    deleteRuleWithHttpInfo(rulesetId, ruleId);
+  }
+
+  /**
+   * Delete Rule
+   * Allows user to delete a rule.  Requires the \&quot;rule-set:manage\&quot; permission which is provided by the \&quot;Admin\&quot; role.
+   * @param rulesetId  (required)
+   * @param ruleId  (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Rule was successfully deleted </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 404 </td><td> Not Found - Specified Rule Set or Rule does not exist </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
+   */
+  public ApiResponse<Void> deleteRuleWithHttpInfo(@jakarta.annotation.Nonnull Integer rulesetId, @jakarta.annotation.Nonnull Integer ruleId) throws ApiException {
+    // Check required parameters
     if (rulesetId == null) {
       throw new ApiException(400, "Missing the required parameter 'rulesetId' when calling deleteRule");
     }
-    
-    // verify the required parameter 'ruleId' is set
     if (ruleId == null) {
       throw new ApiException(400, "Missing the required parameter 'ruleId' when calling deleteRule");
     }
-    
-    // create path and map variables
+
+    // Path parameters
     String localVarPath = "/api/ruleset/{ruleset-id}/rule/{rule-id}"
-      .replaceAll("\\{" + "ruleset-id" + "\\}", apiClient.escapeString(rulesetId.toString()))
-      .replaceAll("\\{" + "rule-id" + "\\}", apiClient.escapeString(ruleId.toString()));
+            .replaceAll("\\{ruleset-id}", apiClient.escapeString(rulesetId.toString()))
+            .replaceAll("\\{rule-id}", apiClient.escapeString(ruleId.toString()));
 
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
-
-    apiClient.invokeAPI(localVarPath, "DELETE", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, null);
+    String localVarAccept = apiClient.selectHeaderAccept();
+    String localVarContentType = apiClient.selectHeaderContentType();
+    String[] localVarAuthNames = new String[] {"APIKeyHeader", "basicAuth", "bearerAuth"};
+    return apiClient.invokeAPI("RuleSetsApi.deleteRule", localVarPath, "DELETE", new ArrayList<>(), null,
+                               new LinkedHashMap<>(), new LinkedHashMap<>(), new LinkedHashMap<>(), localVarAccept, localVarContentType,
+                               localVarAuthNames, null, false);
   }
   /**
    * Delete Rule Criteria
-   * Allows user to delete rule criteria
+   * Allows user to delete rule criteria.  Requires the \&quot;rule-set:manage\&quot; permission which is provided by the \&quot;Admin\&quot; role.
    * @param rulesetId  (required)
    * @param ruleId  (required)
-   * @param ruleCriteria  (required)
    * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Criteria was successfully deleted </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 404 </td><td> Not Found - Specified Rule Set or Rule does not exist </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
    */
-  public void deleteRuleCriteria(Integer rulesetId, Integer ruleId, RuleCriteria ruleCriteria) throws ApiException {
-    Object localVarPostBody = ruleCriteria;
-    
-    // verify the required parameter 'rulesetId' is set
+  public void deleteRuleCriteria(@jakarta.annotation.Nonnull Integer rulesetId, @jakarta.annotation.Nonnull Integer ruleId) throws ApiException {
+    deleteRuleCriteriaWithHttpInfo(rulesetId, ruleId);
+  }
+
+  /**
+   * Delete Rule Criteria
+   * Allows user to delete rule criteria.  Requires the \&quot;rule-set:manage\&quot; permission which is provided by the \&quot;Admin\&quot; role.
+   * @param rulesetId  (required)
+   * @param ruleId  (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Criteria was successfully deleted </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 404 </td><td> Not Found - Specified Rule Set or Rule does not exist </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
+   */
+  public ApiResponse<Void> deleteRuleCriteriaWithHttpInfo(@jakarta.annotation.Nonnull Integer rulesetId, @jakarta.annotation.Nonnull Integer ruleId) throws ApiException {
+    // Check required parameters
     if (rulesetId == null) {
       throw new ApiException(400, "Missing the required parameter 'rulesetId' when calling deleteRuleCriteria");
     }
-    
-    // verify the required parameter 'ruleId' is set
     if (ruleId == null) {
       throw new ApiException(400, "Missing the required parameter 'ruleId' when calling deleteRuleCriteria");
     }
-    
-    // verify the required parameter 'ruleCriteria' is set
-    if (ruleCriteria == null) {
-      throw new ApiException(400, "Missing the required parameter 'ruleCriteria' when calling deleteRuleCriteria");
-    }
-    
-    // create path and map variables
+
+    // Path parameters
     String localVarPath = "/api/ruleset/{ruleset-id}/rule/{rule-id}/criteria"
-      .replaceAll("\\{" + "ruleset-id" + "\\}", apiClient.escapeString(rulesetId.toString()))
-      .replaceAll("\\{" + "rule-id" + "\\}", apiClient.escapeString(ruleId.toString()));
+            .replaceAll("\\{ruleset-id}", apiClient.escapeString(rulesetId.toString()))
+            .replaceAll("\\{rule-id}", apiClient.escapeString(ruleId.toString()));
 
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
-
-    apiClient.invokeAPI(localVarPath, "DELETE", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, null);
+    String localVarAccept = apiClient.selectHeaderAccept();
+    String localVarContentType = apiClient.selectHeaderContentType();
+    String[] localVarAuthNames = new String[] {"APIKeyHeader", "basicAuth", "bearerAuth"};
+    return apiClient.invokeAPI("RuleSetsApi.deleteRuleCriteria", localVarPath, "DELETE", new ArrayList<>(), null,
+                               new LinkedHashMap<>(), new LinkedHashMap<>(), new LinkedHashMap<>(), localVarAccept, localVarContentType,
+                               localVarAuthNames, null, false);
   }
   /**
    * Delete Rule Set
-   * Allows user to delete a rule set
+   * Allows user to delete a rule set.  Requires the \&quot;rule-set:manage\&quot; permission which is provided by the \&quot;Admin\&quot; role.
    * @param rulesetId  (required)
-   * @param force Set to true to force delete the rule set (optional)
+   * @param force If set to &#x60;true&#x60;, this will force the operation. Defaults to &#x60;false&#x60;. (optional)
    * @return RuleSetDeleteResponse
    * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains a RuleSetDeleteResponse object </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 404 </td><td> Not Found - Rule Set with specified ID does not exist </td><td>  -  </td></tr>
+       <tr><td> 409 </td><td> Conflict - One or more projects are configured to use the &#39;i renamed this using swagger&#39; Rule Set. Use &#x60;force&#x3D;true&#x60; in the query string to automatically reconfigure each of them to use the default Rule Set instead. </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
    */
-  public RuleSetDeleteResponse deleteRuleSet(Integer rulesetId, Boolean force) throws ApiException {
-    Object localVarPostBody = null;
-    
-    // verify the required parameter 'rulesetId' is set
+  public RuleSetDeleteResponse deleteRuleSet(@jakarta.annotation.Nonnull Integer rulesetId, @jakarta.annotation.Nullable Boolean force) throws ApiException {
+    return deleteRuleSetWithHttpInfo(rulesetId, force).getData();
+  }
+
+  /**
+   * Delete Rule Set
+   * Allows user to delete a rule set.  Requires the \&quot;rule-set:manage\&quot; permission which is provided by the \&quot;Admin\&quot; role.
+   * @param rulesetId  (required)
+   * @param force If set to &#x60;true&#x60;, this will force the operation. Defaults to &#x60;false&#x60;. (optional)
+   * @return ApiResponse&lt;RuleSetDeleteResponse&gt;
+   * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains a RuleSetDeleteResponse object </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 404 </td><td> Not Found - Rule Set with specified ID does not exist </td><td>  -  </td></tr>
+       <tr><td> 409 </td><td> Conflict - One or more projects are configured to use the &#39;i renamed this using swagger&#39; Rule Set. Use &#x60;force&#x3D;true&#x60; in the query string to automatically reconfigure each of them to use the default Rule Set instead. </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
+   */
+  public ApiResponse<RuleSetDeleteResponse> deleteRuleSetWithHttpInfo(@jakarta.annotation.Nonnull Integer rulesetId, @jakarta.annotation.Nullable Boolean force) throws ApiException {
+    // Check required parameters
     if (rulesetId == null) {
       throw new ApiException(400, "Missing the required parameter 'rulesetId' when calling deleteRuleSet");
     }
-    
-    // create path and map variables
+
+    // Path parameters
     String localVarPath = "/api/ruleset/{ruleset-id}"
-      .replaceAll("\\{" + "ruleset-id" + "\\}", apiClient.escapeString(rulesetId.toString()));
+            .replaceAll("\\{ruleset-id}", apiClient.escapeString(rulesetId.toString()));
 
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+    // Query parameters
+    List<Pair> localVarQueryParams = new ArrayList<>(
+            apiClient.parameterToPairs("", "force", force)
+    );
 
-    localVarQueryParams.addAll(apiClient.parameterToPairs("", "force", force));
-
-    
-    
-    final String[] localVarAccepts = {
-      
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
+    String localVarAccept = apiClient.selectHeaderAccept("*/*");
+    String localVarContentType = apiClient.selectHeaderContentType();
+    String[] localVarAuthNames = new String[] {"APIKeyHeader", "basicAuth", "bearerAuth"};
     GenericType<RuleSetDeleteResponse> localVarReturnType = new GenericType<RuleSetDeleteResponse>() {};
-    return apiClient.invokeAPI(localVarPath, "DELETE", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
-      }
+    return apiClient.invokeAPI("RuleSetsApi.deleteRuleSet", localVarPath, "DELETE", localVarQueryParams, null,
+                               new LinkedHashMap<>(), new LinkedHashMap<>(), new LinkedHashMap<>(), localVarAccept, localVarContentType,
+                               localVarAuthNames, localVarReturnType, false);
+  }
   /**
    * Export Rule Set
-   * Allows user to export a rule set as an XML file
+   * Allows user to export a rule set as an XML file.  Requires the \&quot;rule-set:manage\&quot; permission which is provided by the \&quot;Admin\&quot; role.
    * @param rulesetId  (required)
    * @return File
    * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains an XML file representing the Rule Set </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 404 </td><td> Not Found - Rule Set with specified ID does not exist </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
    */
-  public File exportRuleSet(Integer rulesetId) throws ApiException {
-    Object localVarPostBody = null;
-    
-    // verify the required parameter 'rulesetId' is set
+  public File exportRuleSet(@jakarta.annotation.Nonnull Integer rulesetId) throws ApiException {
+    return exportRuleSetWithHttpInfo(rulesetId).getData();
+  }
+
+  /**
+   * Export Rule Set
+   * Allows user to export a rule set as an XML file.  Requires the \&quot;rule-set:manage\&quot; permission which is provided by the \&quot;Admin\&quot; role.
+   * @param rulesetId  (required)
+   * @return ApiResponse&lt;File&gt;
+   * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains an XML file representing the Rule Set </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 404 </td><td> Not Found - Rule Set with specified ID does not exist </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
+   */
+  public ApiResponse<File> exportRuleSetWithHttpInfo(@jakarta.annotation.Nonnull Integer rulesetId) throws ApiException {
+    // Check required parameters
     if (rulesetId == null) {
       throw new ApiException(400, "Missing the required parameter 'rulesetId' when calling exportRuleSet");
     }
-    
-    // create path and map variables
+
+    // Path parameters
     String localVarPath = "/api/ruleset/{ruleset-id}/export"
-      .replaceAll("\\{" + "ruleset-id" + "\\}", apiClient.escapeString(rulesetId.toString()));
+            .replaceAll("\\{ruleset-id}", apiClient.escapeString(rulesetId.toString()));
 
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      "text/xml"
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
+    String localVarAccept = apiClient.selectHeaderAccept("text/xml");
+    String localVarContentType = apiClient.selectHeaderContentType();
+    String[] localVarAuthNames = new String[] {"APIKeyHeader", "basicAuth", "bearerAuth"};
     GenericType<File> localVarReturnType = new GenericType<File>() {};
-    return apiClient.invokeAPI(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
-      }
+    return apiClient.invokeAPI("RuleSetsApi.exportRuleSet", localVarPath, "GET", new ArrayList<>(), null,
+                               new LinkedHashMap<>(), new LinkedHashMap<>(), new LinkedHashMap<>(), localVarAccept, localVarContentType,
+                               localVarAuthNames, localVarReturnType, false);
+  }
   /**
    * Get Rule Sets
-   * Provides a list of rule sets
+   * Provides a list of rule sets.  Requires no role, all users have sufficient permissions by default.
    * @return List&lt;RuleSet&gt;
    * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains a list of rule sets </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
    */
   public List<RuleSet> getAllRuleSets() throws ApiException {
-    Object localVarPostBody = null;
-    
-    // create path and map variables
-    String localVarPath = "/api/ruleset/all";
+    return getAllRuleSetsWithHttpInfo().getData();
+  }
 
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      "application/json"
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
+  /**
+   * Get Rule Sets
+   * Provides a list of rule sets.  Requires no role, all users have sufficient permissions by default.
+   * @return ApiResponse&lt;List&lt;RuleSet&gt;&gt;
+   * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains a list of rule sets </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
+   */
+  public ApiResponse<List<RuleSet>> getAllRuleSetsWithHttpInfo() throws ApiException {
+    String localVarAccept = apiClient.selectHeaderAccept("application/json");
+    String localVarContentType = apiClient.selectHeaderContentType();
+    String[] localVarAuthNames = new String[] {"APIKeyHeader", "basicAuth", "bearerAuth"};
     GenericType<List<RuleSet>> localVarReturnType = new GenericType<List<RuleSet>>() {};
-    return apiClient.invokeAPI(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
-      }
+    return apiClient.invokeAPI("RuleSetsApi.getAllRuleSets", "/api/ruleset/all", "GET", new ArrayList<>(), null,
+                               new LinkedHashMap<>(), new LinkedHashMap<>(), new LinkedHashMap<>(), localVarAccept, localVarContentType,
+                               localVarAuthNames, localVarReturnType, false);
+  }
   /**
    * Get Rule Data
-   * Allows user to view a specific rule&#39;s data
+   * Allows user to view a specific rule&#39;s data.  Requires no role, all users have sufficient permissions by default.
    * @param rulesetId  (required)
    * @param ruleId  (required)
    * @return Rule
    * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains the Rule </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 404 </td><td> Not Found - Specified Rule Set or Rule does not exist </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
    */
-  public Rule getRuleData(Integer rulesetId, Integer ruleId) throws ApiException {
-    Object localVarPostBody = null;
-    
-    // verify the required parameter 'rulesetId' is set
+  public Rule getRuleData(@jakarta.annotation.Nonnull Integer rulesetId, @jakarta.annotation.Nonnull Integer ruleId) throws ApiException {
+    return getRuleDataWithHttpInfo(rulesetId, ruleId).getData();
+  }
+
+  /**
+   * Get Rule Data
+   * Allows user to view a specific rule&#39;s data.  Requires no role, all users have sufficient permissions by default.
+   * @param rulesetId  (required)
+   * @param ruleId  (required)
+   * @return ApiResponse&lt;Rule&gt;
+   * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains the Rule </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 404 </td><td> Not Found - Specified Rule Set or Rule does not exist </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
+   */
+  public ApiResponse<Rule> getRuleDataWithHttpInfo(@jakarta.annotation.Nonnull Integer rulesetId, @jakarta.annotation.Nonnull Integer ruleId) throws ApiException {
+    // Check required parameters
     if (rulesetId == null) {
       throw new ApiException(400, "Missing the required parameter 'rulesetId' when calling getRuleData");
     }
-    
-    // verify the required parameter 'ruleId' is set
     if (ruleId == null) {
       throw new ApiException(400, "Missing the required parameter 'ruleId' when calling getRuleData");
     }
-    
-    // create path and map variables
+
+    // Path parameters
     String localVarPath = "/api/ruleset/{ruleset-id}/rule/{rule-id}"
-      .replaceAll("\\{" + "ruleset-id" + "\\}", apiClient.escapeString(rulesetId.toString()))
-      .replaceAll("\\{" + "rule-id" + "\\}", apiClient.escapeString(ruleId.toString()));
+            .replaceAll("\\{ruleset-id}", apiClient.escapeString(rulesetId.toString()))
+            .replaceAll("\\{rule-id}", apiClient.escapeString(ruleId.toString()));
 
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
+    String localVarAccept = apiClient.selectHeaderAccept("*/*");
+    String localVarContentType = apiClient.selectHeaderContentType();
+    String[] localVarAuthNames = new String[] {"APIKeyHeader", "basicAuth", "bearerAuth"};
     GenericType<Rule> localVarReturnType = new GenericType<Rule>() {};
-    return apiClient.invokeAPI(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
-      }
+    return apiClient.invokeAPI("RuleSetsApi.getRuleData", localVarPath, "GET", new ArrayList<>(), null,
+                               new LinkedHashMap<>(), new LinkedHashMap<>(), new LinkedHashMap<>(), localVarAccept, localVarContentType,
+                               localVarAuthNames, localVarReturnType, false);
+  }
   /**
    * Get Rule Set Contents
-   * Returns an object representing the contents of a rule set
+   * Returns an object representing the contents of a rule set.  Requires no role, all users have sufficient permissions by default.
    * @param rulesetId  (required)
    * @return RuleSetContents
    * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains a RuleSetContents object </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 404 </td><td> Not Found - Rule Set with specified ID does not exist </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
    */
-  public RuleSetContents getRuleSetContents(Integer rulesetId) throws ApiException {
-    Object localVarPostBody = null;
-    
-    // verify the required parameter 'rulesetId' is set
+  public RuleSetContents getRuleSetContents(@jakarta.annotation.Nonnull Integer rulesetId) throws ApiException {
+    return getRuleSetContentsWithHttpInfo(rulesetId).getData();
+  }
+
+  /**
+   * Get Rule Set Contents
+   * Returns an object representing the contents of a rule set.  Requires no role, all users have sufficient permissions by default.
+   * @param rulesetId  (required)
+   * @return ApiResponse&lt;RuleSetContents&gt;
+   * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains a RuleSetContents object </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 404 </td><td> Not Found - Rule Set with specified ID does not exist </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
+   */
+  public ApiResponse<RuleSetContents> getRuleSetContentsWithHttpInfo(@jakarta.annotation.Nonnull Integer rulesetId) throws ApiException {
+    // Check required parameters
     if (rulesetId == null) {
       throw new ApiException(400, "Missing the required parameter 'rulesetId' when calling getRuleSetContents");
     }
-    
-    // create path and map variables
+
+    // Path parameters
     String localVarPath = "/api/ruleset/{ruleset-id}"
-      .replaceAll("\\{" + "ruleset-id" + "\\}", apiClient.escapeString(rulesetId.toString()));
+            .replaceAll("\\{ruleset-id}", apiClient.escapeString(rulesetId.toString()));
 
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
+    String localVarAccept = apiClient.selectHeaderAccept("*/*");
+    String localVarContentType = apiClient.selectHeaderContentType();
+    String[] localVarAuthNames = new String[] {"APIKeyHeader", "basicAuth", "bearerAuth"};
     GenericType<RuleSetContents> localVarReturnType = new GenericType<RuleSetContents>() {};
-    return apiClient.invokeAPI(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
-      }
+    return apiClient.invokeAPI("RuleSetsApi.getRuleSetContents", localVarPath, "GET", new ArrayList<>(), null,
+                               new LinkedHashMap<>(), new LinkedHashMap<>(), new LinkedHashMap<>(), localVarAccept, localVarContentType,
+                               localVarAuthNames, localVarReturnType, false);
+  }
   /**
    * Modify Rule Descriptor
-   * Allows user to modify a specific rule&#39;s data
+   * Allows user to modify a specific rule&#39;s data.  Requires the \&quot;rule-set:manage\&quot; permission which is provided by the \&quot;Admin\&quot; role.
    * @param rulesetId  (required)
    * @param ruleId  (required)
-   * @param rule  (required)
+   * @param createRule  (required)
    * @return ModifyRuleResponse
    * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains information about the modified rule </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 404 </td><td> Not Found - Specified Rule Set or Rule does not exist </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
    */
-  public ModifyRuleResponse modifyRuleData(Integer rulesetId, Integer ruleId, CreateRule rule) throws ApiException {
-    Object localVarPostBody = rule;
-    
-    // verify the required parameter 'rulesetId' is set
+  public ModifyRuleResponse modifyRuleData(@jakarta.annotation.Nonnull Integer rulesetId, @jakarta.annotation.Nonnull Integer ruleId, @jakarta.annotation.Nonnull CreateRule createRule) throws ApiException {
+    return modifyRuleDataWithHttpInfo(rulesetId, ruleId, createRule).getData();
+  }
+
+  /**
+   * Modify Rule Descriptor
+   * Allows user to modify a specific rule&#39;s data.  Requires the \&quot;rule-set:manage\&quot; permission which is provided by the \&quot;Admin\&quot; role.
+   * @param rulesetId  (required)
+   * @param ruleId  (required)
+   * @param createRule  (required)
+   * @return ApiResponse&lt;ModifyRuleResponse&gt;
+   * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains information about the modified rule </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 404 </td><td> Not Found - Specified Rule Set or Rule does not exist </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
+   */
+  public ApiResponse<ModifyRuleResponse> modifyRuleDataWithHttpInfo(@jakarta.annotation.Nonnull Integer rulesetId, @jakarta.annotation.Nonnull Integer ruleId, @jakarta.annotation.Nonnull CreateRule createRule) throws ApiException {
+    // Check required parameters
     if (rulesetId == null) {
       throw new ApiException(400, "Missing the required parameter 'rulesetId' when calling modifyRuleData");
     }
-    
-    // verify the required parameter 'ruleId' is set
     if (ruleId == null) {
       throw new ApiException(400, "Missing the required parameter 'ruleId' when calling modifyRuleData");
     }
-    
-    // verify the required parameter 'rule' is set
-    if (rule == null) {
-      throw new ApiException(400, "Missing the required parameter 'rule' when calling modifyRuleData");
+    if (createRule == null) {
+      throw new ApiException(400, "Missing the required parameter 'createRule' when calling modifyRuleData");
     }
-    
-    // create path and map variables
+
+    // Path parameters
     String localVarPath = "/api/ruleset/{ruleset-id}/rule/{rule-id}"
-      .replaceAll("\\{" + "ruleset-id" + "\\}", apiClient.escapeString(rulesetId.toString()))
-      .replaceAll("\\{" + "rule-id" + "\\}", apiClient.escapeString(ruleId.toString()));
+            .replaceAll("\\{ruleset-id}", apiClient.escapeString(rulesetId.toString()))
+            .replaceAll("\\{rule-id}", apiClient.escapeString(ruleId.toString()));
 
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
+    String localVarAccept = apiClient.selectHeaderAccept("*/*");
+    String localVarContentType = apiClient.selectHeaderContentType();
+    String[] localVarAuthNames = new String[] {"APIKeyHeader", "basicAuth", "bearerAuth"};
     GenericType<ModifyRuleResponse> localVarReturnType = new GenericType<ModifyRuleResponse>() {};
-    return apiClient.invokeAPI(localVarPath, "PUT", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
-      }
+    return apiClient.invokeAPI("RuleSetsApi.modifyRuleData", localVarPath, "PUT", new ArrayList<>(), createRule,
+                               new LinkedHashMap<>(), new LinkedHashMap<>(), new LinkedHashMap<>(), localVarAccept, localVarContentType,
+                               localVarAuthNames, localVarReturnType, false);
+  }
   /**
    * Rename Rule Set
-   * Allows user to rename a rule set
+   * Allows user to rename a rule set.  Requires the \&quot;rule-set:manage\&quot; permission which is provided by the \&quot;Admin\&quot; role.
    * @param rulesetId  (required)
    * @param ruleSet The values for &#x60;id&#x60; and &#x60;canEdit&#x60; will be ignored, only &#x60;name&#x60; is required (required)
    * @return RuleSet
    * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains a RuleSet object </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 404 </td><td> Not Found - Rule Set with specified ID does not exist </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
    */
-  public RuleSet renameRuleSet(Integer rulesetId, RuleSet ruleSet) throws ApiException {
-    Object localVarPostBody = ruleSet;
-    
-    // verify the required parameter 'rulesetId' is set
+  public RuleSet renameRuleSet(@jakarta.annotation.Nonnull Integer rulesetId, @jakarta.annotation.Nonnull RuleSet ruleSet) throws ApiException {
+    return renameRuleSetWithHttpInfo(rulesetId, ruleSet).getData();
+  }
+
+  /**
+   * Rename Rule Set
+   * Allows user to rename a rule set.  Requires the \&quot;rule-set:manage\&quot; permission which is provided by the \&quot;Admin\&quot; role.
+   * @param rulesetId  (required)
+   * @param ruleSet The values for &#x60;id&#x60; and &#x60;canEdit&#x60; will be ignored, only &#x60;name&#x60; is required (required)
+   * @return ApiResponse&lt;RuleSet&gt;
+   * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains a RuleSet object </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 404 </td><td> Not Found - Rule Set with specified ID does not exist </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
+   */
+  public ApiResponse<RuleSet> renameRuleSetWithHttpInfo(@jakarta.annotation.Nonnull Integer rulesetId, @jakarta.annotation.Nonnull RuleSet ruleSet) throws ApiException {
+    // Check required parameters
     if (rulesetId == null) {
       throw new ApiException(400, "Missing the required parameter 'rulesetId' when calling renameRuleSet");
     }
-    
-    // verify the required parameter 'ruleSet' is set
     if (ruleSet == null) {
       throw new ApiException(400, "Missing the required parameter 'ruleSet' when calling renameRuleSet");
     }
-    
-    // create path and map variables
+
+    // Path parameters
     String localVarPath = "/api/ruleset/{ruleset-id}"
-      .replaceAll("\\{" + "ruleset-id" + "\\}", apiClient.escapeString(rulesetId.toString()));
+            .replaceAll("\\{ruleset-id}", apiClient.escapeString(rulesetId.toString()));
 
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
+    String localVarAccept = apiClient.selectHeaderAccept("*/*");
+    String localVarContentType = apiClient.selectHeaderContentType();
+    String[] localVarAuthNames = new String[] {"APIKeyHeader", "basicAuth", "bearerAuth"};
     GenericType<RuleSet> localVarReturnType = new GenericType<RuleSet>() {};
-    return apiClient.invokeAPI(localVarPath, "PUT", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
-      }
+    return apiClient.invokeAPI("RuleSetsApi.renameRuleSet", localVarPath, "PUT", new ArrayList<>(), ruleSet,
+                               new LinkedHashMap<>(), new LinkedHashMap<>(), new LinkedHashMap<>(), localVarAccept, localVarContentType,
+                               localVarAuthNames, localVarReturnType, false);
+  }
   /**
    * Update Rule Set
-   * Update rule set using an XML file
-   * @param ruleSetXml The xml file to be uploaded (required)
+   * Update rule set using an XML file.  Requires the \&quot;rule-set:manage\&quot; permission which is provided by the \&quot;Admin\&quot; role.
    * @param rulesetId  (required)
+   * @param ruleSetXml The xml file to be uploaded (required)
    * @return RuleSet
    * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains the updated Rule Set </td><td>  -  </td></tr>
+       <tr><td> 400 </td><td> Bad Request - Incorrect file format </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
    */
-  public RuleSet updateRuleSet(File ruleSetXml, Integer rulesetId) throws ApiException {
-    Object localVarPostBody = null;
-    
-    // verify the required parameter 'ruleSetXml' is set
-    if (ruleSetXml == null) {
-      throw new ApiException(400, "Missing the required parameter 'ruleSetXml' when calling updateRuleSet");
-    }
-    
-    // verify the required parameter 'rulesetId' is set
+  public RuleSet updateRuleSet(@jakarta.annotation.Nonnull Integer rulesetId, @jakarta.annotation.Nonnull File ruleSetXml) throws ApiException {
+    return updateRuleSetWithHttpInfo(rulesetId, ruleSetXml).getData();
+  }
+
+  /**
+   * Update Rule Set
+   * Update rule set using an XML file.  Requires the \&quot;rule-set:manage\&quot; permission which is provided by the \&quot;Admin\&quot; role.
+   * @param rulesetId  (required)
+   * @param ruleSetXml The xml file to be uploaded (required)
+   * @return ApiResponse&lt;RuleSet&gt;
+   * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains the updated Rule Set </td><td>  -  </td></tr>
+       <tr><td> 400 </td><td> Bad Request - Incorrect file format </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
+   */
+  public ApiResponse<RuleSet> updateRuleSetWithHttpInfo(@jakarta.annotation.Nonnull Integer rulesetId, @jakarta.annotation.Nonnull File ruleSetXml) throws ApiException {
+    // Check required parameters
     if (rulesetId == null) {
       throw new ApiException(400, "Missing the required parameter 'rulesetId' when calling updateRuleSet");
     }
-    
-    // create path and map variables
+    if (ruleSetXml == null) {
+      throw new ApiException(400, "Missing the required parameter 'ruleSetXml' when calling updateRuleSet");
+    }
+
+    // Path parameters
     String localVarPath = "/api/ruleset/{ruleset-id}/update"
-      .replaceAll("\\{" + "ruleset-id" + "\\}", apiClient.escapeString(rulesetId.toString()));
+            .replaceAll("\\{ruleset-id}", apiClient.escapeString(rulesetId.toString()));
 
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+    // Form parameters
+    Map<String, Object> localVarFormParams = new LinkedHashMap<>();
+    localVarFormParams.put("ruleSetXml", ruleSetXml);
 
-
-    
-    if (ruleSetXml != null)
-      localVarFormParams.put("ruleSetXml", ruleSetXml);
-
-    final String[] localVarAccepts = {
-      
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      "multipart/form-data"
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
+    String localVarAccept = apiClient.selectHeaderAccept("*/*");
+    String localVarContentType = apiClient.selectHeaderContentType("multipart/form-data");
+    String[] localVarAuthNames = new String[] {"APIKeyHeader", "basicAuth", "bearerAuth"};
     GenericType<RuleSet> localVarReturnType = new GenericType<RuleSet>() {};
-    return apiClient.invokeAPI(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
-      }
+    return apiClient.invokeAPI("RuleSetsApi.updateRuleSet", localVarPath, "POST", new ArrayList<>(), null,
+                               new LinkedHashMap<>(), new LinkedHashMap<>(), localVarFormParams, localVarAccept, localVarContentType,
+                               localVarAuthNames, localVarReturnType, false);
+  }
   /**
    * Import Rule Set
-   * Import rule set using an XML file
+   * Import rule set using an XML file.  Requires the \&quot;rule-set:manage\&quot; permission which is provided by the \&quot;Admin\&quot; role.
    * @param ruleSetXml The xml file to be uploaded (required)
    * @return RuleSet
    * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains the newly created Rule Set </td><td>  -  </td></tr>
+       <tr><td> 400 </td><td> Bad Request - Incorrect file format </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
    */
-  public RuleSet uploadRuleSet(File ruleSetXml) throws ApiException {
-    Object localVarPostBody = null;
-    
-    // verify the required parameter 'ruleSetXml' is set
+  public RuleSet uploadRuleSet(@jakarta.annotation.Nonnull File ruleSetXml) throws ApiException {
+    return uploadRuleSetWithHttpInfo(ruleSetXml).getData();
+  }
+
+  /**
+   * Import Rule Set
+   * Import rule set using an XML file.  Requires the \&quot;rule-set:manage\&quot; permission which is provided by the \&quot;Admin\&quot; role.
+   * @param ruleSetXml The xml file to be uploaded (required)
+   * @return ApiResponse&lt;RuleSet&gt;
+   * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains the newly created Rule Set </td><td>  -  </td></tr>
+       <tr><td> 400 </td><td> Bad Request - Incorrect file format </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User does not have permission </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
+   */
+  public ApiResponse<RuleSet> uploadRuleSetWithHttpInfo(@jakarta.annotation.Nonnull File ruleSetXml) throws ApiException {
+    // Check required parameters
     if (ruleSetXml == null) {
       throw new ApiException(400, "Missing the required parameter 'ruleSetXml' when calling uploadRuleSet");
     }
-    
-    // create path and map variables
-    String localVarPath = "/api/ruleset/import";
 
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+    // Form parameters
+    Map<String, Object> localVarFormParams = new LinkedHashMap<>();
+    localVarFormParams.put("ruleSetXml", ruleSetXml);
 
-
-    
-    if (ruleSetXml != null)
-      localVarFormParams.put("ruleSetXml", ruleSetXml);
-
-    final String[] localVarAccepts = {
-      
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      "multipart/form-data"
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
+    String localVarAccept = apiClient.selectHeaderAccept("*/*");
+    String localVarContentType = apiClient.selectHeaderContentType("multipart/form-data");
+    String[] localVarAuthNames = new String[] {"APIKeyHeader", "basicAuth", "bearerAuth"};
     GenericType<RuleSet> localVarReturnType = new GenericType<RuleSet>() {};
-    return apiClient.invokeAPI(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
-      }
+    return apiClient.invokeAPI("RuleSetsApi.uploadRuleSet", "/api/ruleset/import", "POST", new ArrayList<>(), null,
+                               new LinkedHashMap<>(), new LinkedHashMap<>(), localVarFormParams, localVarAccept, localVarContentType,
+                               localVarAuthNames, localVarReturnType, false);
+  }
 }

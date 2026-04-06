@@ -6,6 +6,7 @@ import com.atlassian.bamboo.task.*;
 import com.codedx.client.ApiClient;
 import com.codedx.client.ApiException;
 import com.codedx.client.api.*;
+import com.codedx.client.model.*;
 import com.codedx.plugins.bamboo.utils.Archiver;
 import com.codedx.plugins.bamboo.utils.CodeDxBuildStatistics;
 import org.apache.log4j.Logger;
@@ -227,11 +228,11 @@ public class CodeDxScanTask implements TaskType {
     private static Boolean uploadFiles(ScanTaskState state) {
         log(state, "Uploading files to Code Dx");
 
-        ProjectId project = new ProjectId();
-        project.setProjectId(state.projectId);
+        var request = new CreateAnalysisPrepRequest();
+        request.setProjectId(state.projectId);
 
         try {
-            AnalysisPrepResponse analysisPrep = state.analysisApi.createAnalysisPrep(project);
+            AnalysisPrepResponse analysisPrep = state.analysisApi.createAnalysisPrep(request);
             state.analysisPrepId = analysisPrep.getPrepId();
 
             for (File file : state.filesToUpload) {
@@ -387,7 +388,7 @@ public class CodeDxScanTask implements TaskType {
         log(state, "Querying Code Dx for post-analysis statistics");
 
         Filter filter = new Filter();
-        filter.put("~status", "gone");
+        filter.putAdditionalProperty("~status", "gone");
 
         GroupedCountsRequest bySeverity = new GroupedCountsRequest();
         bySeverity.setFilter(filter);
@@ -399,8 +400,8 @@ public class CodeDxScanTask implements TaskType {
 
         CodeDxBuildStatistics stats = null;
         try {
-            List<GroupedCount> severityGroupedCounts = state.findingDataApi.getFindingsGroupCount(state.projectId, bySeverity);
-            List<GroupedCount> statusGroupedCounts = state.findingDataApi.getFindingsGroupCount(state.projectId, byStatus);
+            List<GroupedCount> severityGroupedCounts = state.findingDataApi.getFindingsGroupCount(String.valueOf(state.projectId), bySeverity);
+            List<GroupedCount> statusGroupedCounts = state.findingDataApi.getFindingsGroupCount(String.valueOf(state.projectId), byStatus);
             stats = new CodeDxBuildStatistics(severityGroupedCounts, statusGroupedCounts);
         } catch (ApiException e) {
             logApiException(state, e);
@@ -419,12 +420,12 @@ public class CodeDxScanTask implements TaskType {
             GroupedCountsRequest request = new GroupedCountsRequest();
             Filter filter = new Filter();
 
-            filter.put("status", "new");
+            filter.putAdditionalProperty("status", "new");
             request.setCountBy("severity");
             request.setFilter(filter);
 
             try {
-                state.groupedCounts = state.findingDataApi.getFindingsGroupCount(state.projectId, request);
+                state.groupedCounts = state.findingDataApi.getFindingsGroupCount(String.valueOf(state.projectId), request);
             } catch (ApiException e) {
                 logApiException(state, e);
                 return false;

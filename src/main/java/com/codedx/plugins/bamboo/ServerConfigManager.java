@@ -8,8 +8,6 @@ import com.codedx.plugins.bamboo.security.SSLContextFactory;
 import org.apache.log4j.Logger;
 import org.glassfish.jersey.client.JerseyClientBuilder;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -98,8 +96,8 @@ public class ServerConfigManager implements Serializable {
 
         if (fingerprint != null && !fingerprint.isEmpty()) {
             try {
-                ClientBuilder clientBuilder = JerseyClientBuilder.newBuilder();
-                Client client = clientBuilder.withConfig(cdxApiClient.getHttpClient().getConfiguration())
+                var clientBuilder = JerseyClientBuilder.newBuilder();
+                var client = clientBuilder.withConfig(cdxApiClient.getHttpClient().getConfiguration())
                         .sslContext(SSLContextFactory.getSSLContext(fingerprint))
                         .build();
                 cdxApiClient.setHttpClient(client);

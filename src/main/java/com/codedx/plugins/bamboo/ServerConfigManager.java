@@ -6,7 +6,7 @@ import com.atlassian.bandana.BandanaManager;
 import com.codedx.client.ApiClient;
 import com.codedx.plugins.bamboo.security.SSLContextFactory;
 import org.apache.log4j.Logger;
-import org.glassfish.jersey.client.JerseyClientBuilder;
+import jakarta.ws.rs.client.ClientBuilder;
 
 import java.io.Serializable;
 import java.net.MalformedURLException;
@@ -96,7 +96,7 @@ public class ServerConfigManager implements Serializable {
 
         if (fingerprint != null && !fingerprint.isEmpty()) {
             try {
-                var clientBuilder = JerseyClientBuilder.newBuilder();
+                var clientBuilder = ClientBuilder.newBuilder();
                 var client = clientBuilder.withConfig(cdxApiClient.getHttpClient().getConfiguration())
                         .sslContext(SSLContextFactory.getSSLContext(fingerprint))
                         .build();

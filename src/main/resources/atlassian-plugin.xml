@@ -5,6 +5,7 @@
         <vendor name="${project.organization.name}" url="${project.organization.url}" />
         <param name="plugin-icon">images/pluginIcon.png</param>
         <param name="plugin-logo">images/pluginLogo.png</param>
+        <param name="atlassian-logging.level">DEBUG</param>
     </plugin-info>
 
     <component name="Code Dx Configuration Management Component" key="codeDxServerConfigManager"
@@ -52,8 +53,8 @@
         <context>codedx-bamboo-plugin</context>
     </web-resource>
 
-    <component-import key="taskContextHelper" interface="com.atlassian.bamboo.task.TaskContextHelperService"/>
-    <component-import key="taskConfiguratorHelper" interface="com.atlassian.bamboo.task.TaskConfiguratorHelper"/>
-    <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties"/>
-    
+    <component-import key="taskContextHelper" interface="com.atlassian.bamboo.task.TaskContextHelperService" optional="true"/>
+    <component-import key="taskConfiguratorHelper" interface="com.atlassian.bamboo.task.TaskConfiguratorHelper" optional="true"/>
+    <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties" optional="true"/>
+
 </atlassian-plugin>

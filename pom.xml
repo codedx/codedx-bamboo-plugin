@@ -61,7 +61,6 @@
             <groupId>jakarta.ws.rs</groupId>
             <artifactId>jakarta.ws.rs-api</artifactId>
             <version>3.1.0</version>
-            <scope>provided</scope>
         </dependency>
 
 <!--        <dependency>-->
@@ -90,6 +89,32 @@
             <artifactId>atlassian-bamboo-web</artifactId>
             <version>${bamboo.version}</version>
             <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.glassfish.jersey.core</groupId>
+                    <artifactId>jersey-common</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.glassfish.jersey.core</groupId>
+                    <artifactId>jersey-server</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.glassfish.jersey.containers</groupId>
+                    <artifactId>jersey-container-servlet</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.glassfish.jersey.containers</groupId>
+                    <artifactId>jersey-container-servlet-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.glassfish.jersey.media</groupId>
+                    <artifactId>jersey-media-jaxb</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.glassfish.hk2</groupId>
+                    <artifactId>osgi-resource-locator</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -202,8 +227,49 @@
                     <bannedDependenciesCheck>false</bannedDependenciesCheck>
                     <instructions>
                         <Bundle-SymbolicName>${atlassian.plugin.key}</Bundle-SymbolicName>
-                        <Import-Package>*;resolution:=optional</Import-Package>
-                        <DynamicImport-Package>*</DynamicImport-Package>
+                        <Import-Package>
+                            !org.glassfish.jersey.server*,
+                            !org.glassfish.jersey.innate*,
+                            !org.hibernate*,
+                            !org.apache.avalon*,
+                            !org.apache.log4j*,
+                            !org.apache.logging*,
+                            !com.sun.jdi*,
+                            !com.sun.tools*,
+                            !java.applet*,
+                            !jdk.internal*,
+                            !sun.misc*,
+                            !javassist*,
+                            !jakarta.inject*,
+                            !org.aopalliance*,
+                            !jakarta.validation*,
+                            !com.opensymphony*,
+                            *;resolution:=optional
+                        </Import-Package>
+                        <DynamicImport-Package></DynamicImport-Package>
+                        <Embed-Dependency>
+                            jersey-client,
+                            jersey-hk2,
+                            jersey-media-multipart,
+                            jersey-media-json-jackson,
+                            jersey-apache-connector,
+                            jersey-common,
+                            jersey-entity-filtering,
+                            hk2-locator,
+                            hk2-api,
+                            hk2-utils,
+                            aopalliance-repackaged,
+                            osgi-resource-locator,
+                            jakarta.ws.rs-api,
+                            jackson-core,
+                            jackson-annotations,
+                            jackson-databind,
+                            jackson-databind-nullable,
+                            jackson-datatype-jsr310,
+                            migbase64,
+                            swagger-annotations
+                        </Embed-Dependency>
+                        <Embed-Transitive>true</Embed-Transitive>
                     </instructions>
                 </configuration>
             </plugin>
@@ -222,7 +288,43 @@
                 </executions>
                 <configuration>
                     <verbose>false</verbose>
+                    <scannedPackages>
+                        <scannedPackage>com.codedx</scannedPackage>
+                    </scannedPackages>
                 </configuration>
+            </plugin>
+
+            <!--
+                The Atlassian Spring Scanner reads META-INF/hk2-locator/default inhabitant files
+                from embedded HK2/Jersey JARs and writes all their @Service-annotated classes into
+                META-INF/plugin-components/component. At OSGi runtime, Bamboo's Spring container
+                tries to instantiate those HK2/Jersey internal classes, causing
+                "Class name must not be empty" errors.
+
+                Since our own components are declared explicitly in atlassian-plugin.xml (not via
+                @Component/@Service annotations), we overwrite the generated file with a truly
+                empty (0-byte) file immediately after the Spring Scanner runs.
+            -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>clear-hk2-spring-component-index</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <echo message="Clearing META-INF/plugin-components/component to remove HK2/Jersey internal classes registered by Spring Scanner"/>
+                                <mkdir dir="${project.build.outputDirectory}/META-INF/plugin-components"/>
+                                <truncate file="${project.build.outputDirectory}/META-INF/plugin-components/component" create="true" length="0"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

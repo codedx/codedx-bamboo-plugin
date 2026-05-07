@@ -232,7 +232,6 @@
                             !org.glassfish.jersey.innate*,
                             !org.hibernate*,
                             !org.apache.avalon*,
-                            !org.apache.log4j*,
                             !org.apache.logging*,
                             !com.sun.jdi*,
                             !com.sun.tools*,

@@ -24,13 +24,14 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
-import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.client.ClientProperties;
-import org.glassfish.jersey.jackson.JacksonFeature;
-import org.glassfish.jersey.media.multipart.FormDataBodyPart;
-import org.glassfish.jersey.media.multipart.FormDataContentDisposition;
-import org.glassfish.jersey.media.multipart.MultiPart;
-import org.glassfish.jersey.media.multipart.MultiPartFeature;
+import com.codedx.shaded.jersey.client.ClientConfig;
+import com.codedx.shaded.jersey.client.ClientProperties;
+import com.codedx.shaded.jersey.client.JerseyClientBuilder;
+import com.codedx.shaded.jersey.jackson.JacksonFeature;
+import com.codedx.shaded.jersey.media.multipart.FormDataBodyPart;
+import com.codedx.shaded.jersey.media.multipart.FormDataContentDisposition;
+import com.codedx.shaded.jersey.media.multipart.MultiPart;
+import com.codedx.shaded.jersey.media.multipart.MultiPartFeature;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -46,7 +47,7 @@ import java.security.SecureRandom;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import org.glassfish.jersey.logging.LoggingFeature;
+import com.codedx.shaded.jersey.logging.LoggingFeature;
 import java.util.AbstractMap.SimpleEntry;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -1169,8 +1170,13 @@ public class ApiClient extends JavaTimeFormatter {
       clientConfig = getDefaultClientConfig();
     }
 
-    ClientBuilder clientBuilder = ClientBuilder.newBuilder();
-    clientBuilder = clientBuilder.withConfig(clientConfig);
+    // Use the shaded JerseyClientBuilder directly (com.codedx.shaded.jersey.*).
+    // Jersey 3.x classes are relocated away from org.glassfish.jersey.* so they
+    // are NOT subject to Atlassian OSGi's parent-first loading of org.glassfish.jersey.*,
+    // which would otherwise always resolve to Bamboo's Jersey 2.42 and cause a
+    // ClassCastException (WadlAutoDiscoverable cannot be cast to ForcedAutoDiscoverable).
+    JerseyClientBuilder clientBuilder = new JerseyClientBuilder();
+    clientBuilder.withConfig(clientConfig);
     customizeClientBuilder(clientBuilder);
     return clientBuilder.build();
   }
@@ -1185,7 +1191,6 @@ public class ApiClient extends JavaTimeFormatter {
     clientConfig.register(MultiPartFeature.class);
     clientConfig.register(json);
     clientConfig.register(JacksonFeature.class);
-    // Removed HttpUrlConnectorProvider.SET_METHOD_WORKAROUND as it uses internal Jersey API
     // turn off compliance validation to be able to send payloads with DELETE calls
     clientConfig.property(ClientProperties.SUPPRESS_HTTP_COMPLIANCE_VALIDATION, true);
     applyDebugSetting(clientConfig);
@@ -1194,13 +1199,11 @@ public class ApiClient extends JavaTimeFormatter {
 
   protected void applyDebugSetting(ClientConfig clientConfig) {
     if (debugging) {
-      // Simplified logging setup - removed internal Jersey constants
-      clientConfig.register(new LoggingFeature(java.util.logging.Logger.getLogger("org.glassfish.jersey.client"), java.util.logging.Level.INFO, LoggingFeature.Verbosity.PAYLOAD_ANY, 1024*50 /* Log payloads up to 50K */));
-      // Set logger to ALL
-      java.util.logging.Logger.getLogger("org.glassfish.jersey.client").setLevel(java.util.logging.Level.ALL);
+      clientConfig.register(new LoggingFeature(java.util.logging.Logger.getLogger("com.codedx.shaded.jersey.client"), java.util.logging.Level.INFO, LoggingFeature.Verbosity.PAYLOAD_ANY, 1024*50 /* Log payloads up to 50K */));
+      java.util.logging.Logger.getLogger("com.codedx.shaded.jersey.client").setLevel(java.util.logging.Level.ALL);
     } else {
       // suppress warnings for payloads with DELETE calls:
-      java.util.logging.Logger.getLogger("org.glassfish.jersey.client").setLevel(java.util.logging.Level.SEVERE);
+      java.util.logging.Logger.getLogger("com.codedx.shaded.jersey.client").setLevel(java.util.logging.Level.SEVERE);
     }
   }
 

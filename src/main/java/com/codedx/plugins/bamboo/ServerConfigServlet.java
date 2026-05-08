@@ -12,18 +12,9 @@ import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Servlet-based replacement for the XWork/WebWork ServerConfigAction.
- *
- * The original ServerConfigAction extended GlobalAdminAction (a Bamboo XWork action),
- * which transitively pulled in com.opensymphony.module.propertyset via the OSGi
- * uses: constraint chain. Bamboo's DmzResolverHook marks that package as internal,
- * causing the plugin bundle to fail to resolve.
- *
- * By using a plain HttpServlet instead, we avoid the entire OpenSymphony dependency
- * chain and the plugin loads correctly.
- *
- * GET  → loads serverConfig.ftl from classpath, substitutes current config values, renders HTML
- * POST → saves submitted values, redirects back (PRG pattern)
+ * Replaces the XWork-based ServerConfigAction. The original class extended GlobalAdminAction,
+ * which pulled in com.opensymphony.module.propertyset — a package blocked by Bamboo's
+ * DmzResolverHook, preventing the plugin from loading.
  */
 public class ServerConfigServlet extends HttpServlet {
 

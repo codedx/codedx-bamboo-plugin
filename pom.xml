@@ -19,8 +19,7 @@
     <packaging>atlassian-plugin</packaging>
 
     <properties>
-        <!-- note: change to 9.0.0 for local development with `atlas-run` etc., prior versions have a broken UI -->
-        <bamboo.version>12.1.3</bamboo.version>
+        <bamboo.version>12.0.0</bamboo.version>
         <bamboo.data.version>${bamboo.version}</bamboo.data.version>
         <amps.version>9.12.1</amps.version>
         <plugin.testrunner.version>2.0.2</plugin.testrunner.version>

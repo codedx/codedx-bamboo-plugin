@@ -168,6 +168,39 @@
                                         <exclude>META-INF/MANIFEST.MF</exclude>
                                     </excludes>
                                 </filter>
+                                <!-- Exclude jakarta.inject, jakarta.activation, and jakarta.xml.bind
+                                     from the shaded JAR. These are provided by Bamboo's webapp
+                                     classloader (parent-first). Including them in the shaded JAR
+                                     causes AMPS to extract them into the plugin bundle root, creating
+                                     a classloader split-brain with Bamboo's own copies and resulting
+                                     in ClassCastException at runtime. -->
+                                <filter>
+                                    <artifact>jakarta.inject:jakarta.inject-api</artifact>
+                                    <excludes>
+                                        <exclude>**</exclude>
+                                    </excludes>
+                                </filter>
+                                <filter>
+                                    <artifact>jakarta.activation:jakarta.activation-api</artifact>
+                                    <excludes>
+                                        <exclude>**</exclude>
+                                    </excludes>
+                                </filter>
+                                <filter>
+                                    <artifact>jakarta.xml.bind:jakarta.xml.bind-api</artifact>
+                                    <excludes>
+                                        <exclude>**</exclude>
+                                    </excludes>
+                                </filter>
+                                <!-- Exclude javassist — it is a transitive dep of HK2 but is
+                                     provided by Bamboo's webapp classloader. Excluding it prevents
+                                     AMPS from extracting javassist/ classes into the plugin bundle root. -->
+                                <filter>
+                                    <artifact>org.javassist:javassist</artifact>
+                                    <excludes>
+                                        <exclude>**</exclude>
+                                    </excludes>
+                                </filter>
                             </filters>
                             <!-- ServicesResourceTransformer rewrites META-INF/services entries
                                  to use the relocated class names -->

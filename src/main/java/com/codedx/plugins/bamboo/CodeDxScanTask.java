@@ -6,6 +6,7 @@ import com.atlassian.bamboo.task.*;
 import com.codedx.client.ApiClient;
 import com.codedx.client.ApiException;
 import com.codedx.client.api.*;
+import com.codedx.client.model.*;
 import com.codedx.plugins.bamboo.utils.Archiver;
 import com.codedx.plugins.bamboo.utils.CodeDxBuildStatistics;
 import org.apache.log4j.Logger;
@@ -50,9 +51,12 @@ public class CodeDxScanTask implements TaskType {
         JobsApi jobsApi;
 
         // Other
+        File sourceArchive;
+        List<File> toolOutputFilesList;
         List<File> filesToUpload;
         String analysisPrepId;
         String analysisJobId;
+        int expectedInputCount;
         CodeDxBuildStatistics buildStatistics;
         List<GroupedCount> groupedCounts;
     }
@@ -194,15 +198,15 @@ public class CodeDxScanTask implements TaskType {
     private static Boolean collectFilesToUpload(ScanTaskState state) {
         log(state, "Archiving source files to upload to Code Dx");
 
-        state.filesToUpload = new ArrayList<>();
+        state.toolOutputFilesList = new ArrayList<>();
         try {
-            state.filesToUpload.add(Archiver.archive(state.taskContext.getRootDirectory(), state.includePaths, state.excludePaths, "files_to_scan"));
+            state.sourceArchive = Archiver.archive(state.taskContext.getRootDirectory(), state.includePaths, state.excludePaths, "files_to_scan");
         } catch (IOException e) {
             logError(state, e, "An error occurred while trying to archive source files");
             return false;
         }
 
-        // Add tool output files
+        // Collect tool output files separately
         if (state.toolOutputFiles != null && !state.toolOutputFiles.isEmpty()) {
             log(state, "Collecting tool output files");
             for (String fileName : state.toolOutputFiles.split(",")) {
@@ -210,7 +214,7 @@ public class CodeDxScanTask implements TaskType {
                 Path path = Paths.get(fileName);
                 File file = path.isAbsolute() ? path.toFile() : new File(state.taskContext.getRootDirectory(), fileName);
                 if (file.exists()) {
-                    state.filesToUpload.add(file);
+                    state.toolOutputFilesList.add(file);
                 } else {
                     try {
                         log(state, "File: %s does not exist. Skipping...", file.getCanonicalPath());
@@ -227,12 +231,29 @@ public class CodeDxScanTask implements TaskType {
     private static Boolean uploadFiles(ScanTaskState state) {
         log(state, "Uploading files to Code Dx");
 
-        ProjectId project = new ProjectId();
-        project.setProjectId(state.projectId);
+        var request = new CreateAnalysisPrepRequest();
+        request.setProjectId(state.projectId);
 
         try {
-            AnalysisPrepResponse analysisPrep = state.analysisApi.createAnalysisPrep(project);
+            AnalysisPrepResponse analysisPrep = state.analysisApi.createAnalysisPrep(request);
             state.analysisPrepId = analysisPrep.getPrepId();
+
+            // If the project has Git/SCM configured, SRM automatically adds an SCM input (source) to the prep.
+            // In that case, do NOT upload the source archive — SRM would reject it as a duplicate source zip.
+            // Only upload tool output files alongside the SCM source.
+            boolean hasScmInput = analysisPrep.getScmSetup() != null;
+
+            state.filesToUpload = new ArrayList<>();
+            if (!hasScmInput) {
+                // No SCM: upload the source archive as usual
+                state.filesToUpload.add(state.sourceArchive);
+            } else {
+                log(state, "Project has SCM configured; skipping source archive upload (SCM input will provide source)");
+            }
+            state.filesToUpload.addAll(state.toolOutputFilesList);
+
+            // expectedInputCount = files we will upload + 1 for the SCM input (if present)
+            state.expectedInputCount = state.filesToUpload.size() + (hasScmInput ? 1 : 0);
 
             for (File file : state.filesToUpload) {
                 log(state, "Uploading file: %s", file.getCanonicalPath());
@@ -274,10 +295,14 @@ public class CodeDxScanTask implements TaskType {
             List<String> inputIds = response.getInputIds();
             List<String> verificationErrors = response.getVerificationErrors();
 
-            if(inputIds.size() != state.filesToUpload.size()) {
+            // inputIds and verificationErrors are @Nullable - guard against null before calling .size()/.isEmpty()
+            int inputIdCount = (inputIds != null) ? inputIds.size() : 0;
+            boolean hasVerificationErrors = (verificationErrors != null) && !verificationErrors.isEmpty();
+
+            if(inputIdCount != state.expectedInputCount) {
                 // Upload not done.  Probably don't want to log every second though.
 
-            } else if (!verificationErrors.isEmpty()) {
+            } else if (hasVerificationErrors) {
 
                 StringBuilder errorMessage = new StringBuilder();
                 errorMessage.append("Code Dx reported verification errors for attempted analysis: \n");
@@ -387,7 +412,7 @@ public class CodeDxScanTask implements TaskType {
         log(state, "Querying Code Dx for post-analysis statistics");
 
         Filter filter = new Filter();
-        filter.put("~status", "gone");
+        filter.putAdditionalProperty("~status", "gone");
 
         GroupedCountsRequest bySeverity = new GroupedCountsRequest();
         bySeverity.setFilter(filter);
@@ -399,8 +424,8 @@ public class CodeDxScanTask implements TaskType {
 
         CodeDxBuildStatistics stats = null;
         try {
-            List<GroupedCount> severityGroupedCounts = state.findingDataApi.getFindingsGroupCount(state.projectId, bySeverity);
-            List<GroupedCount> statusGroupedCounts = state.findingDataApi.getFindingsGroupCount(state.projectId, byStatus);
+            List<GroupedCount> severityGroupedCounts = state.findingDataApi.getFindingsGroupCount(String.valueOf(state.projectId), bySeverity);
+            List<GroupedCount> statusGroupedCounts = state.findingDataApi.getFindingsGroupCount(String.valueOf(state.projectId), byStatus);
             stats = new CodeDxBuildStatistics(severityGroupedCounts, statusGroupedCounts);
         } catch (ApiException e) {
             logApiException(state, e);
@@ -419,12 +444,12 @@ public class CodeDxScanTask implements TaskType {
             GroupedCountsRequest request = new GroupedCountsRequest();
             Filter filter = new Filter();
 
-            filter.put("status", "new");
+            filter.putAdditionalProperty("status", "new");
             request.setCountBy("severity");
             request.setFilter(filter);
 
             try {
-                state.groupedCounts = state.findingDataApi.getFindingsGroupCount(state.projectId, request);
+                state.groupedCounts = state.findingDataApi.getFindingsGroupCount(String.valueOf(state.projectId), request);
             } catch (ApiException e) {
                 logApiException(state, e);
                 return false;

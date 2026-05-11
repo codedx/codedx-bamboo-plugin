@@ -6,12 +6,11 @@ import com.atlassian.bamboo.task.TaskDefinition;
 import com.atlassian.bamboo.utils.error.ErrorCollection;
 import com.codedx.client.ApiClient;
 import com.codedx.client.ApiException;
-import com.codedx.client.api.Project;
 import com.codedx.client.api.ProjectsApi;
+import com.codedx.client.model.Project;
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
 
-import javax.ws.rs.ProcessingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -170,11 +169,11 @@ public class CodeDxScanTaskConfigurator extends AbstractTaskConfigurator {
         projectsApi.setApiClient(cdxApiClient);
 
         try {
-            return projectsApi.getProjects().getProjects();
+            return projectsApi.getProjects(false).getProjects();
 
         } catch (IllegalArgumentException | ApiException e) {
             _logger.error("Error while getting projects", e);
-        } catch (ProcessingException e) {
+        } catch (RuntimeException e) {
             context.put("reachabilityMessage", "Connection refused. Please confirm that the URL is correct and that the Code Dx server is running.");
             _logger.error("Error while getting projects", e);
         }

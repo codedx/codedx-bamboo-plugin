@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.codedx</groupId>
+    <artifactId>jersey-shaded</artifactId>
+    <version>2.0.1</version>
+    <packaging>jar</packaging>
+    <name>Jersey 3.x Shaded (relocated to com.codedx.shaded.*)</name>
+    <description>
+        Shades Jersey 3.x and HK2 into com.codedx.shaded.jersey.* and com.codedx.shaded.hk2.*
+        so they do not conflict with Bamboo's parent-first org.glassfish.jersey.* packages.
+    </description>
+
+    <properties>
+        <jersey-version>3.1.11</jersey-version>
+        <jakarta-annotation-version>2.1.1</jakarta-annotation-version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <!-- Jersey client and its transitive deps -->
+        <dependency>
+            <groupId>org.glassfish.jersey.core</groupId>
+            <artifactId>jersey-client</artifactId>
+            <version>${jersey-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.inject</groupId>
+            <artifactId>jersey-hk2</artifactId>
+            <version>${jersey-version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>jakarta.inject</groupId>
+                    <artifactId>jakarta.inject-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-multipart</artifactId>
+            <version>${jersey-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.media</groupId>
+            <artifactId>jersey-media-json-jackson</artifactId>
+            <version>${jersey-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jersey.connectors</groupId>
+            <artifactId>jersey-apache-connector</artifactId>
+            <version>${jersey-version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-codec</groupId>
+                    <artifactId>commons-codec</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpcore</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- jakarta.ws.rs-api: NOT relocated — keep original package name.
+             Excluded from shading so the plugin module can embed it separately. -->
+        <dependency>
+            <groupId>jakarta.ws.rs</groupId>
+            <artifactId>jakarta.ws.rs-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- jakarta.annotation-api: excluded from shading; plugin embeds it separately -->
+        <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+            <version>${jakarta-annotation-version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.5.3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <!-- The output JAR IS the main artifact (no classifier) -->
+                            <shadedArtifactAttached>false</shadedArtifactAttached>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <relocations>
+                                <!-- Relocate Jersey 3.x away from parent-first org.glassfish.jersey.* -->
+                                <relocation>
+                                    <pattern>org.glassfish.jersey</pattern>
+                                    <shadedPattern>com.codedx.shaded.jersey</shadedPattern>
+                                </relocation>
+                                <!-- Relocate HK2 away from parent-first org.glassfish.hk2.* -->
+                                <relocation>
+                                    <pattern>org.glassfish.hk2</pattern>
+                                    <shadedPattern>com.codedx.shaded.hk2</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.jvnet.hk2</pattern>
+                                    <shadedPattern>com.codedx.shaded.jvnet.hk2</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.jvnet.tiger_types</pattern>
+                                    <shadedPattern>com.codedx.shaded.jvnet.tiger_types</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.aopalliance</pattern>
+                                    <shadedPattern>com.codedx.shaded.aopalliance</shadedPattern>
+                                </relocation>
+                            </relocations>
+                            <filters>
+                                <!-- Exclude server-side Jersey JARs entirely if accidentally pulled in -->
+                                <filter>
+                                    <artifact>org.glassfish.jersey.core:jersey-server</artifact>
+                                    <excludes>
+                                        <exclude>**</exclude>
+                                    </excludes>
+                                </filter>
+                                <filter>
+                                    <artifact>org.glassfish.jersey.containers:*</artifact>
+                                    <excludes>
+                                        <exclude>**</exclude>
+                                    </excludes>
+                                </filter>
+                                <!-- Exclude Jackson from the shaded JAR — the plugin module
+                                     embeds Jackson separately. Including it here causes duplicate
+                                     class warnings and potential version conflicts. -->
+                                <filter>
+                                    <artifact>com.fasterxml.jackson.core:*</artifact>
+                                    <excludes>
+                                        <exclude>**</exclude>
+                                    </excludes>
+                                </filter>
+                                <filter>
+                                    <artifact>com.fasterxml.jackson.module:*</artifact>
+                                    <excludes>
+                                        <exclude>**</exclude>
+                                    </excludes>
+                                </filter>
+                                <!-- Remove ALL multi-release JAR entries (META-INF/versions/*).
+                                     The shade plugin does NOT relocate classes inside META-INF/versions/,
+                                     so they would still have org.glassfish.jersey.* paths. AMPS extracts
+                                     these entries and places them at the root, defeating the relocation.
+                                     We don't need virtual thread support for this OSGi plugin. -->
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/versions/**</exclude>
+                                        <exclude>module-info.class</exclude>
+                                        <exclude>META-INF/MANIFEST.MF</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <!-- ServicesResourceTransformer rewrites META-INF/services entries
+                                 to use the relocated class names -->
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                            </transformers>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

@@ -2,22 +2,23 @@ package com.codedx.client.api;
 
 import com.codedx.client.ApiException;
 import com.codedx.client.ApiClient;
+import com.codedx.client.ApiResponse;
 import com.codedx.client.Configuration;
 import com.codedx.client.Pair;
 
-import javax.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.GenericType;
 
-import com.codedx.client.api.DetectionMethod;
-import com.codedx.client.api.Error;
-import com.codedx.client.api.ManualResultRequest;
-import com.codedx.client.api.ManualResultResponse;
+import com.codedx.client.model.Error;
+import com.codedx.client.model.ManualResultRequest;
+import com.codedx.client.model.ManualResultResponse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-01-02T17:17:22.434-05:00")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-04-02T11:55:06.722228-04:00[America/New_York]", comments = "Generator version: 7.21.0")
 public class ResultsApi {
   private ApiClient apiClient;
 
@@ -29,382 +30,265 @@ public class ResultsApi {
     this.apiClient = apiClient;
   }
 
+  /**
+   * Get the API client
+   *
+   * @return API client
+   */
   public ApiClient getApiClient() {
     return apiClient;
   }
 
+  /**
+   * Set the API client
+   *
+   * @param apiClient an instance of API client
+   */
   public void setApiClient(ApiClient apiClient) {
     this.apiClient = apiClient;
   }
 
   /**
-   * Create Detection Method
-   * Create a new detection method with a name specified in the request body. 
-   * @param detectionMethod Only the name property needs to be provided. (required)
-   * @return DetectionMethod
-   * @throws ApiException if fails to make API call
-   */
-  public DetectionMethod createDetectionMethod(DetectionMethod detectionMethod) throws ApiException {
-    Object localVarPostBody = detectionMethod;
-    
-    // verify the required parameter 'detectionMethod' is set
-    if (detectionMethod == null) {
-      throw new ApiException(400, "Missing the required parameter 'detectionMethod' when calling createDetectionMethod");
-    }
-    
-    // create path and map variables
-    String localVarPath = "/api/detection-methods";
-
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      "application/json"
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      "application/json"
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
-    GenericType<DetectionMethod> localVarReturnType = new GenericType<DetectionMethod>() {};
-    return apiClient.invokeAPI(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
-      }
-  /**
    * Create Manual Result
-   * Allows creation of a manual result
+   * Allows creation of a manual result.  Requires the \&quot;manual-result:create\&quot; permission which is provided by the \&quot;Creator\&quot; role.
    * @param manualResultRequest  (required)
    * @return ManualResultResponse
    * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains an object representing the result and finding that are created </td><td>  -  </td></tr>
+       <tr><td> 400 </td><td> Bad Request - Contains an error response message </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
    */
-  public ManualResultResponse createManualResult(ManualResultRequest manualResultRequest) throws ApiException {
-    Object localVarPostBody = manualResultRequest;
-    
-    // verify the required parameter 'manualResultRequest' is set
+  public ManualResultResponse createManualResult(@jakarta.annotation.Nonnull ManualResultRequest manualResultRequest) throws ApiException {
+    return createManualResultWithHttpInfo(manualResultRequest).getData();
+  }
+
+  /**
+   * Create Manual Result
+   * Allows creation of a manual result.  Requires the \&quot;manual-result:create\&quot; permission which is provided by the \&quot;Creator\&quot; role.
+   * @param manualResultRequest  (required)
+   * @return ApiResponse&lt;ManualResultResponse&gt;
+   * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains an object representing the result and finding that are created </td><td>  -  </td></tr>
+       <tr><td> 400 </td><td> Bad Request - Contains an error response message </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
+   */
+  public ApiResponse<ManualResultResponse> createManualResultWithHttpInfo(@jakarta.annotation.Nonnull ManualResultRequest manualResultRequest) throws ApiException {
+    // Check required parameters
     if (manualResultRequest == null) {
       throw new ApiException(400, "Missing the required parameter 'manualResultRequest' when calling createManualResult");
     }
-    
-    // create path and map variables
-    String localVarPath = "/api/manual-results";
 
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      "application/json"
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
+    String localVarAccept = apiClient.selectHeaderAccept("application/json");
+    String localVarContentType = apiClient.selectHeaderContentType();
+    String[] localVarAuthNames = new String[] {"APIKeyHeader", "basicAuth", "bearerAuth"};
     GenericType<ManualResultResponse> localVarReturnType = new GenericType<ManualResultResponse>() {};
-    return apiClient.invokeAPI(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
-      }
-  /**
-   * Delete Detection Method.
-   * Delete a detection method. Use the replacement parameter to replace any references to the deleted method with a different method. 
-   * @param detectionMethodId  (required)
-   * @param replacement The ID of the replacment detection method. (optional)
-   * @throws ApiException if fails to make API call
-   */
-  public void deleteDetectionMethod(Integer detectionMethodId, Integer replacement) throws ApiException {
-    Object localVarPostBody = null;
-    
-    // verify the required parameter 'detectionMethodId' is set
-    if (detectionMethodId == null) {
-      throw new ApiException(400, "Missing the required parameter 'detectionMethodId' when calling deleteDetectionMethod");
-    }
-    
-    // create path and map variables
-    String localVarPath = "/api/detection-methods/{detection-method-id}"
-      .replaceAll("\\{" + "detection-method-id" + "\\}", apiClient.escapeString(detectionMethodId.toString()));
-
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-    localVarQueryParams.addAll(apiClient.parameterToPairs("", "replacement", replacement));
-
-    
-    
-    final String[] localVarAccepts = {
-      
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
-
-    apiClient.invokeAPI(localVarPath, "DELETE", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, null);
+    return apiClient.invokeAPI("ResultsApi.createManualResult", "/api/manual-results", "POST", new ArrayList<>(), manualResultRequest,
+                               new LinkedHashMap<>(), new LinkedHashMap<>(), new LinkedHashMap<>(), localVarAccept, localVarContentType,
+                               localVarAuthNames, localVarReturnType, false);
   }
   /**
    * Delete Manual Result
-   * Allows deletion of a manual result
+   * Allows deletion of a manual result.  Requires the \&quot;manual-result:delete\&quot; permission which is provided by the \&quot;Creator\&quot; role.
    * @param resultId  (required)
    * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Successfully deleted manual result </td><td>  -  </td></tr>
+       <tr><td> 404 </td><td> Not Found - No such result </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
    */
-  public void deleteManualResult(Integer resultId) throws ApiException {
-    Object localVarPostBody = null;
-    
-    // verify the required parameter 'resultId' is set
+  public void deleteManualResult(@jakarta.annotation.Nonnull Integer resultId) throws ApiException {
+    deleteManualResultWithHttpInfo(resultId);
+  }
+
+  /**
+   * Delete Manual Result
+   * Allows deletion of a manual result.  Requires the \&quot;manual-result:delete\&quot; permission which is provided by the \&quot;Creator\&quot; role.
+   * @param resultId  (required)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Successfully deleted manual result </td><td>  -  </td></tr>
+       <tr><td> 404 </td><td> Not Found - No such result </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
+   */
+  public ApiResponse<Void> deleteManualResultWithHttpInfo(@jakarta.annotation.Nonnull Integer resultId) throws ApiException {
+    // Check required parameters
     if (resultId == null) {
       throw new ApiException(400, "Missing the required parameter 'resultId' when calling deleteManualResult");
     }
-    
-    // create path and map variables
+
+    // Path parameters
     String localVarPath = "/api/manual-results/{result-id}"
-      .replaceAll("\\{" + "result-id" + "\\}", apiClient.escapeString(resultId.toString()));
+            .replaceAll("\\{result-id}", apiClient.escapeString(resultId.toString()));
 
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
-
-    apiClient.invokeAPI(localVarPath, "DELETE", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, null);
+    String localVarAccept = apiClient.selectHeaderAccept();
+    String localVarContentType = apiClient.selectHeaderContentType();
+    String[] localVarAuthNames = new String[] {"APIKeyHeader", "basicAuth", "bearerAuth"};
+    return apiClient.invokeAPI("ResultsApi.deleteManualResult", localVarPath, "DELETE", new ArrayList<>(), null,
+                               new LinkedHashMap<>(), new LinkedHashMap<>(), new LinkedHashMap<>(), localVarAccept, localVarContentType,
+                               localVarAuthNames, null, false);
   }
   /**
-   * List Detection Methods
-   * Returns a list of all detection methods. 
-   * @return List&lt;DetectionMethod&gt;
-   * @throws ApiException if fails to make API call
-   */
-  public List<DetectionMethod> getAllDetectionMethods() throws ApiException {
-    Object localVarPostBody = null;
-    
-    // create path and map variables
-    String localVarPath = "/api/detection-methods";
-
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      "application/json"
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
-    GenericType<List<DetectionMethod>> localVarReturnType = new GenericType<List<DetectionMethod>>() {};
-    return apiClient.invokeAPI(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
-      }
-  /**
-   * Get Allowed Manaul Result Tools
-   * Returns a set of allowed tool names for use when creating a manual result
+   * Get Allowed Manual Result Tools
+   * Returns a set of allowed tool names for use when creating a manual result.  Requires no role, all users have sufficient permissions by default.
    * @return List&lt;String&gt;
    * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains a list of tool names </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
    */
   public List<String> getManualResultAllowedTools() throws ApiException {
-    Object localVarPostBody = null;
-    
-    // create path and map variables
-    String localVarPath = "/api/manual-results/allowed-tools";
+    return getManualResultAllowedToolsWithHttpInfo().getData();
+  }
 
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
+  /**
+   * Get Allowed Manual Result Tools
+   * Returns a set of allowed tool names for use when creating a manual result.  Requires no role, all users have sufficient permissions by default.
+   * @return ApiResponse&lt;List&lt;String&gt;&gt;
+   * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains a list of tool names </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
+   */
+  public ApiResponse<List<String>> getManualResultAllowedToolsWithHttpInfo() throws ApiException {
+    String localVarAccept = apiClient.selectHeaderAccept("*/*");
+    String localVarContentType = apiClient.selectHeaderContentType();
+    String[] localVarAuthNames = new String[] {"APIKeyHeader", "basicAuth", "bearerAuth"};
     GenericType<List<String>> localVarReturnType = new GenericType<List<String>>() {};
-    return apiClient.invokeAPI(localVarPath, "GET", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
-      }
+    return apiClient.invokeAPI("ResultsApi.getManualResultAllowedTools", "/api/manual-results/allowed-tools", "GET", new ArrayList<>(), null,
+                               new LinkedHashMap<>(), new LinkedHashMap<>(), new LinkedHashMap<>(), localVarAccept, localVarContentType,
+                               localVarAuthNames, localVarReturnType, false);
+  }
   /**
    * Modify Allowed Manual Result Tool
-   * Allows user to enable/disabled allowed tools
+   * Allows user to enable/disabled allowed tools.  Requires the \&quot;manual-result:edit\&quot; permission which is provided by the \&quot;Creator\&quot; role.
    * @param tool The name of the tool to modify (optional)
    * @param allowed Boolean value representing tool state - enabled/disabled (true/false) (optional)
    * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 204 </td><td> No Content - Tool was successfully modified </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
    */
-  public void modifyManualResultAllowedTool(String tool, Boolean allowed) throws ApiException {
-    Object localVarPostBody = null;
-    
-    // create path and map variables
-    String localVarPath = "/api/manual-results/allowed-tools";
+  public void modifyManualResultAllowedTool(@jakarta.annotation.Nullable String tool, @jakarta.annotation.Nullable Boolean allowed) throws ApiException {
+    modifyManualResultAllowedToolWithHttpInfo(tool, allowed);
+  }
 
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-    localVarQueryParams.addAll(apiClient.parameterToPairs("", "tool", tool));
+  /**
+   * Modify Allowed Manual Result Tool
+   * Allows user to enable/disabled allowed tools.  Requires the \&quot;manual-result:edit\&quot; permission which is provided by the \&quot;Creator\&quot; role.
+   * @param tool The name of the tool to modify (optional)
+   * @param allowed Boolean value representing tool state - enabled/disabled (true/false) (optional)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 204 </td><td> No Content - Tool was successfully modified </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
+   */
+  public ApiResponse<Void> modifyManualResultAllowedToolWithHttpInfo(@jakarta.annotation.Nullable String tool, @jakarta.annotation.Nullable Boolean allowed) throws ApiException {
+    // Query parameters
+    List<Pair> localVarQueryParams = new ArrayList<>(
+            apiClient.parameterToPairs("", "tool", tool)
+    );
     localVarQueryParams.addAll(apiClient.parameterToPairs("", "allowed", allowed));
 
-    
-    
-    final String[] localVarAccepts = {
-      
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
-
-    apiClient.invokeAPI(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, null);
+    String localVarAccept = apiClient.selectHeaderAccept();
+    String localVarContentType = apiClient.selectHeaderContentType();
+    String[] localVarAuthNames = new String[] {"APIKeyHeader", "basicAuth", "bearerAuth"};
+    return apiClient.invokeAPI("ResultsApi.modifyManualResultAllowedTool", "/api/manual-results/allowed-tools", "POST", localVarQueryParams, null,
+                               new LinkedHashMap<>(), new LinkedHashMap<>(), new LinkedHashMap<>(), localVarAccept, localVarContentType,
+                               localVarAuthNames, null, false);
   }
   /**
-   * Rename Detection Method
-   * Rename an existing detection method with a new name specified in the request body. 
-   * @param detectionMethodId  (required)
-   * @param detectionMethod  (required)
-   * @return DetectionMethod
-   * @throws ApiException if fails to make API call
-   */
-  public DetectionMethod renameDetectionMethod(Integer detectionMethodId, DetectionMethod detectionMethod) throws ApiException {
-    Object localVarPostBody = detectionMethod;
-    
-    // verify the required parameter 'detectionMethodId' is set
-    if (detectionMethodId == null) {
-      throw new ApiException(400, "Missing the required parameter 'detectionMethodId' when calling renameDetectionMethod");
-    }
-    
-    // verify the required parameter 'detectionMethod' is set
-    if (detectionMethod == null) {
-      throw new ApiException(400, "Missing the required parameter 'detectionMethod' when calling renameDetectionMethod");
-    }
-    
-    // create path and map variables
-    String localVarPath = "/api/detection-methods/{detection-method-id}"
-      .replaceAll("\\{" + "detection-method-id" + "\\}", apiClient.escapeString(detectionMethodId.toString()));
-
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      "application/json"
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      "application/json"
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
-    GenericType<DetectionMethod> localVarReturnType = new GenericType<DetectionMethod>() {};
-    return apiClient.invokeAPI(localVarPath, "PUT", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
-      }
-  /**
    * Replace Manual Result
-   * Allows a manual result to be replaced with another
+   * Allows a manual result to be replaced with another.  Requires the \&quot;manual-result:create\&quot; permission which is provided by the \&quot;Creator\&quot; role.
    * @param resultId  (required)
    * @param manualResultRequest  (required)
    * @return ManualResultResponse
    * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains information about the new manual result </td><td>  -  </td></tr>
+       <tr><td> 400 </td><td> Bad Request - Contains an error response message </td><td>  -  </td></tr>
+       <tr><td> 404 </td><td> Not Found - No such result </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
    */
-  public ManualResultResponse replaceManualResult(Integer resultId, ManualResultRequest manualResultRequest) throws ApiException {
-    Object localVarPostBody = manualResultRequest;
-    
-    // verify the required parameter 'resultId' is set
+  public ManualResultResponse replaceManualResult(@jakarta.annotation.Nonnull Integer resultId, @jakarta.annotation.Nonnull ManualResultRequest manualResultRequest) throws ApiException {
+    return replaceManualResultWithHttpInfo(resultId, manualResultRequest).getData();
+  }
+
+  /**
+   * Replace Manual Result
+   * Allows a manual result to be replaced with another.  Requires the \&quot;manual-result:create\&quot; permission which is provided by the \&quot;Creator\&quot; role.
+   * @param resultId  (required)
+   * @param manualResultRequest  (required)
+   * @return ApiResponse&lt;ManualResultResponse&gt;
+   * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - Contains information about the new manual result </td><td>  -  </td></tr>
+       <tr><td> 400 </td><td> Bad Request - Contains an error response message </td><td>  -  </td></tr>
+       <tr><td> 404 </td><td> Not Found - No such result </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
+   */
+  public ApiResponse<ManualResultResponse> replaceManualResultWithHttpInfo(@jakarta.annotation.Nonnull Integer resultId, @jakarta.annotation.Nonnull ManualResultRequest manualResultRequest) throws ApiException {
+    // Check required parameters
     if (resultId == null) {
       throw new ApiException(400, "Missing the required parameter 'resultId' when calling replaceManualResult");
     }
-    
-    // verify the required parameter 'manualResultRequest' is set
     if (manualResultRequest == null) {
       throw new ApiException(400, "Missing the required parameter 'manualResultRequest' when calling replaceManualResult");
     }
-    
-    // create path and map variables
+
+    // Path parameters
     String localVarPath = "/api/manual-results/{result-id}/replace"
-      .replaceAll("\\{" + "result-id" + "\\}", apiClient.escapeString(resultId.toString()));
+            .replaceAll("\\{result-id}", apiClient.escapeString(resultId.toString()));
 
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
+    String localVarAccept = apiClient.selectHeaderAccept("*/*");
+    String localVarContentType = apiClient.selectHeaderContentType();
+    String[] localVarAuthNames = new String[] {"APIKeyHeader", "basicAuth", "bearerAuth"};
     GenericType<ManualResultResponse> localVarReturnType = new GenericType<ManualResultResponse>() {};
-    return apiClient.invokeAPI(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
-      }
+    return apiClient.invokeAPI("ResultsApi.replaceManualResult", localVarPath, "POST", new ArrayList<>(), manualResultRequest,
+                               new LinkedHashMap<>(), new LinkedHashMap<>(), new LinkedHashMap<>(), localVarAccept, localVarContentType,
+                               localVarAuthNames, localVarReturnType, false);
+  }
 }

@@ -2,23 +2,24 @@ package com.codedx.client.api;
 
 import com.codedx.client.ApiException;
 import com.codedx.client.ApiClient;
+import com.codedx.client.ApiResponse;
 import com.codedx.client.Configuration;
 import com.codedx.client.Pair;
 
-import javax.ws.rs.core.GenericType;
+import jakarta.ws.rs.core.GenericType;
 
-import com.codedx.client.api.Job;
-import com.codedx.client.api.PostComment;
-import com.codedx.client.api.SetStatus;
-import com.codedx.client.api.SetStatusBulk;
-import com.codedx.client.api.SeverityOverride;
+import com.codedx.client.model.BulkComment;
+import com.codedx.client.model.BulkDueDateOverride;
+import com.codedx.client.model.BulkSeverityOverride;
+import com.codedx.client.model.Job;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-@javax.annotation.Generated(value = "io.swagger.codegen.languages.JavaClientCodegen", date = "2019-01-02T17:17:22.434-05:00")
+@jakarta.annotation.Generated(value = "org.openapitools.codegen.languages.JavaClientCodegen", date = "2026-04-02T11:55:06.722228-04:00[America/New_York]", comments = "Generator version: 7.21.0")
 public class ActionsApi {
   private ApiClient apiClient;
 
@@ -30,232 +31,194 @@ public class ActionsApi {
     this.apiClient = apiClient;
   }
 
+  /**
+   * Get the API client
+   *
+   * @return API client
+   */
   public ApiClient getApiClient() {
     return apiClient;
   }
 
+  /**
+   * Set the API client
+   *
+   * @param apiClient an instance of API client
+   */
   public void setApiClient(ApiClient apiClient) {
     this.apiClient = apiClient;
   }
 
   /**
-   * Severity Override [Clear]
-   * Allows severity overrides for findings to be cleared. 
-   * @param findingId The finding ID. (required)
+   * Bulk Comment
+   * Allows bulk comments on multiple findings, controlled by a filter.  Requires the \&quot;finding:comment-bulk\&quot; permission which is provided by the \&quot;Updater\&quot; role.
+   * @param projectVersionContext A &#x60;ProjectContext&#x60; only capable of specifying a single project.  A project can be specified with its project id and, optionally, a branch id or branch name. If only the project id is used, then the project&#39;s default branch will be used. (required)
+   * @param bulkComment  (optional)
    * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 204 </td><td> No Content - Comment was accepted </td><td>  -  </td></tr>
+       <tr><td> 400 </td><td> Bad Request - Request body is missing or invalid </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User/key does not have permission to comment </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
    */
-  public void clearSeverityOverride(Integer findingId) throws ApiException {
-    Object localVarPostBody = null;
-    
-    // verify the required parameter 'findingId' is set
-    if (findingId == null) {
-      throw new ApiException(400, "Missing the required parameter 'findingId' when calling clearSeverityOverride");
+  public void bulkComment(@jakarta.annotation.Nonnull String projectVersionContext, @jakarta.annotation.Nullable BulkComment bulkComment) throws ApiException {
+    bulkCommentWithHttpInfo(projectVersionContext, bulkComment);
+  }
+
+  /**
+   * Bulk Comment
+   * Allows bulk comments on multiple findings, controlled by a filter.  Requires the \&quot;finding:comment-bulk\&quot; permission which is provided by the \&quot;Updater\&quot; role.
+   * @param projectVersionContext A &#x60;ProjectContext&#x60; only capable of specifying a single project.  A project can be specified with its project id and, optionally, a branch id or branch name. If only the project id is used, then the project&#39;s default branch will be used. (required)
+   * @param bulkComment  (optional)
+   * @return ApiResponse&lt;Void&gt;
+   * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 204 </td><td> No Content - Comment was accepted </td><td>  -  </td></tr>
+       <tr><td> 400 </td><td> Bad Request - Request body is missing or invalid </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User/key does not have permission to comment </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
+   */
+  public ApiResponse<Void> bulkCommentWithHttpInfo(@jakarta.annotation.Nonnull String projectVersionContext, @jakarta.annotation.Nullable BulkComment bulkComment) throws ApiException {
+    // Check required parameters
+    if (projectVersionContext == null) {
+      throw new ApiException(400, "Missing the required parameter 'projectVersionContext' when calling bulkComment");
     }
-    
-    // create path and map variables
-    String localVarPath = "/api/findings/{finding-id}/severity-override"
-      .replaceAll("\\{" + "finding-id" + "\\}", apiClient.escapeString(findingId.toString()));
 
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+    // Path parameters
+    String localVarPath = "/api/projects/{project-version-context}/bulk-comment"
+            .replaceAll("\\{project-version-context}", apiClient.escapeString(projectVersionContext.toString()));
 
-
-    
-    
-    final String[] localVarAccepts = {
-      
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
-
-    apiClient.invokeAPI(localVarPath, "DELETE", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, null);
+    String localVarAccept = apiClient.selectHeaderAccept();
+    String localVarContentType = apiClient.selectHeaderContentType("application/json");
+    String[] localVarAuthNames = new String[] {"APIKeyHeader", "basicAuth", "bearerAuth"};
+    return apiClient.invokeAPI("ActionsApi.bulkComment", localVarPath, "POST", new ArrayList<>(), bulkComment,
+                               new LinkedHashMap<>(), new LinkedHashMap<>(), new LinkedHashMap<>(), localVarAccept, localVarContentType,
+                               localVarAuthNames, null, false);
   }
   /**
-   * Severity Override [Set]
-   * Allows severities for findings to be overridden. 
-   * @param findingId The finding ID. (required)
-   * @param severity  (optional)
-   * @throws ApiException if fails to make API call
-   */
-  public void overrideSeverity(Integer findingId, SeverityOverride severity) throws ApiException {
-    Object localVarPostBody = severity;
-    
-    // verify the required parameter 'findingId' is set
-    if (findingId == null) {
-      throw new ApiException(400, "Missing the required parameter 'findingId' when calling overrideSeverity");
-    }
-    
-    // create path and map variables
-    String localVarPath = "/api/findings/{finding-id}/severity-override"
-      .replaceAll("\\{" + "finding-id" + "\\}", apiClient.escapeString(findingId.toString()));
-
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      "application/json"
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
-
-    apiClient.invokeAPI(localVarPath, "PUT", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, null);
-  }
-  /**
-   * Post Comment
-   * Post a new comment on a finding
-   * @param findingId The finding ID. (required)
-   * @param content &#x60;content&#x60; should be a string containing the raw markdown content of the new comment (required)
-   * @throws ApiException if fails to make API call
-   */
-  public void postComment(Integer findingId, PostComment content) throws ApiException {
-    Object localVarPostBody = content;
-    
-    // verify the required parameter 'findingId' is set
-    if (findingId == null) {
-      throw new ApiException(400, "Missing the required parameter 'findingId' when calling postComment");
-    }
-    
-    // verify the required parameter 'content' is set
-    if (content == null) {
-      throw new ApiException(400, "Missing the required parameter 'content' when calling postComment");
-    }
-    
-    // create path and map variables
-    String localVarPath = "/api/findings/{finding-id}/comment"
-      .replaceAll("\\{" + "finding-id" + "\\}", apiClient.escapeString(findingId.toString()));
-
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      "application/json"
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
-
-    apiClient.invokeAPI(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, null);
-  }
-  /**
-   * Bulk Status Update
-   * Allows bulk updating of triage statuses of multiple findings, controlled by a filter. Detailed information regarding statuses can be obtained from the [Project Statuses](#/Projects/getStatuses) endpoint. 
-   * @param projectId The ID of the project. (required)
-   * @param bulkStatusUpdate  (optional)
+   * Bulk Due Date Override
+   * Allows bulk due date override of multiple findings, controlled by a filter.  Requires the \&quot;finding:override-due-date-bulk\&quot; permission which is provided by the \&quot;Updater\&quot; role.
+   * @param projectVersionContext A &#x60;ProjectContext&#x60; only capable of specifying a single project.  A project can be specified with its project id and, optionally, a branch id or branch name. If only the project id is used, then the project&#39;s default branch will be used. (required)
+   * @param bulkDueDateOverride  (optional)
    * @return Job
    * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - A job was started for performing the bulk due date override </td><td>  -  </td></tr>
+       <tr><td> 400 </td><td> Bad Request - Request body is missing, or invalid </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User/key does not have update permission for the finding </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
    */
-  public Job setBulkStatus(Integer projectId, SetStatusBulk bulkStatusUpdate) throws ApiException {
-    Object localVarPostBody = bulkStatusUpdate;
-    
-    // verify the required parameter 'projectId' is set
-    if (projectId == null) {
-      throw new ApiException(400, "Missing the required parameter 'projectId' when calling setBulkStatus");
-    }
-    
-    // create path and map variables
-    String localVarPath = "/api/projects/{project-id}/bulk-status-update"
-      .replaceAll("\\{" + "project-id" + "\\}", apiClient.escapeString(projectId.toString()));
+  public Job overrideBulkDueDate(@jakarta.annotation.Nonnull String projectVersionContext, @jakarta.annotation.Nullable BulkDueDateOverride bulkDueDateOverride) throws ApiException {
+    return overrideBulkDueDateWithHttpInfo(projectVersionContext, bulkDueDateOverride).getData();
+  }
 
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      "application/json"
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      "application/json"
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
-    GenericType<Job> localVarReturnType = new GenericType<Job>() {};
-    return apiClient.invokeAPI(localVarPath, "POST", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
-      }
   /**
-   * Status Update
-   * Allows changing of the triage status of a single finding. Detailed information regarding statuses can be obtained from the [Project Statuses](#/Projects/getStatuses) endpoint. 
-   * @param findingId The finding ID. (required)
-   * @param status &#x60;status&#x60; should be a valid status ID  (required)
+   * Bulk Due Date Override
+   * Allows bulk due date override of multiple findings, controlled by a filter.  Requires the \&quot;finding:override-due-date-bulk\&quot; permission which is provided by the \&quot;Updater\&quot; role.
+   * @param projectVersionContext A &#x60;ProjectContext&#x60; only capable of specifying a single project.  A project can be specified with its project id and, optionally, a branch id or branch name. If only the project id is used, then the project&#39;s default branch will be used. (required)
+   * @param bulkDueDateOverride  (optional)
+   * @return ApiResponse&lt;Job&gt;
    * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - A job was started for performing the bulk due date override </td><td>  -  </td></tr>
+       <tr><td> 400 </td><td> Bad Request - Request body is missing, or invalid </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User/key does not have update permission for the finding </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
    */
-  public void setStatus(Integer findingId, SetStatus status) throws ApiException {
-    Object localVarPostBody = status;
-    
-    // verify the required parameter 'findingId' is set
-    if (findingId == null) {
-      throw new ApiException(400, "Missing the required parameter 'findingId' when calling setStatus");
+  public ApiResponse<Job> overrideBulkDueDateWithHttpInfo(@jakarta.annotation.Nonnull String projectVersionContext, @jakarta.annotation.Nullable BulkDueDateOverride bulkDueDateOverride) throws ApiException {
+    // Check required parameters
+    if (projectVersionContext == null) {
+      throw new ApiException(400, "Missing the required parameter 'projectVersionContext' when calling overrideBulkDueDate");
     }
-    
-    // verify the required parameter 'status' is set
-    if (status == null) {
-      throw new ApiException(400, "Missing the required parameter 'status' when calling setStatus");
+
+    // Path parameters
+    String localVarPath = "/x/projects/{project-version-context}/findings/bulk/due-date-override"
+            .replaceAll("\\{project-version-context}", apiClient.escapeString(projectVersionContext.toString()));
+
+    String localVarAccept = apiClient.selectHeaderAccept("application/json");
+    String localVarContentType = apiClient.selectHeaderContentType("application/json");
+    String[] localVarAuthNames = new String[] {"APIKeyHeader", "basicAuth", "bearerAuth"};
+    GenericType<Job> localVarReturnType = new GenericType<Job>() {};
+    return apiClient.invokeAPI("ActionsApi.overrideBulkDueDate", localVarPath, "POST", new ArrayList<>(), bulkDueDateOverride,
+                               new LinkedHashMap<>(), new LinkedHashMap<>(), new LinkedHashMap<>(), localVarAccept, localVarContentType,
+                               localVarAuthNames, localVarReturnType, false);
+  }
+  /**
+   * Bulk Severity Override
+   * Allows bulk severity override of multiple findings, controlled by a filter.  Requires the \&quot;finding:override-severity-bulk\&quot; permission which is provided by the \&quot;Updater\&quot; role.
+   * @param projectVersionContext A &#x60;ProjectContext&#x60; only capable of specifying a single project.  A project can be specified with its project id and, optionally, a branch id or branch name. If only the project id is used, then the project&#39;s default branch will be used. (required)
+   * @param bulkSeverityOverride  (optional)
+   * @return Job
+   * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - A job was started for performing the bulk severity override </td><td>  -  </td></tr>
+       <tr><td> 400 </td><td> Bad Request - Request body is missing, invalid or severity is invalid or unassignable </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User/key does not have update permission for the finding </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
+   */
+  public Job overrideBulkSeverities(@jakarta.annotation.Nonnull String projectVersionContext, @jakarta.annotation.Nullable BulkSeverityOverride bulkSeverityOverride) throws ApiException {
+    return overrideBulkSeveritiesWithHttpInfo(projectVersionContext, bulkSeverityOverride).getData();
+  }
+
+  /**
+   * Bulk Severity Override
+   * Allows bulk severity override of multiple findings, controlled by a filter.  Requires the \&quot;finding:override-severity-bulk\&quot; permission which is provided by the \&quot;Updater\&quot; role.
+   * @param projectVersionContext A &#x60;ProjectContext&#x60; only capable of specifying a single project.  A project can be specified with its project id and, optionally, a branch id or branch name. If only the project id is used, then the project&#39;s default branch will be used. (required)
+   * @param bulkSeverityOverride  (optional)
+   * @return ApiResponse&lt;Job&gt;
+   * @throws ApiException if fails to make API call
+   * @http.response.details
+     <table border="1">
+       <caption>Response Details</caption>
+       <tr><td> Status Code </td><td> Description </td><td> Response Headers </td></tr>
+       <tr><td> 200 </td><td> OK - A job was started for performing the bulk severity override </td><td>  -  </td></tr>
+       <tr><td> 400 </td><td> Bad Request - Request body is missing, invalid or severity is invalid or unassignable </td><td>  -  </td></tr>
+       <tr><td> 401 </td><td> Forbidden - User/key does not have read permission for the project </td><td>  -  </td></tr>
+       <tr><td> 403 </td><td> Forbidden - User/key does not have update permission for the finding </td><td>  -  </td></tr>
+       <tr><td> 500 </td><td> Internal Server Error - Unexpected failure </td><td>  -  </td></tr>
+     </table>
+   */
+  public ApiResponse<Job> overrideBulkSeveritiesWithHttpInfo(@jakarta.annotation.Nonnull String projectVersionContext, @jakarta.annotation.Nullable BulkSeverityOverride bulkSeverityOverride) throws ApiException {
+    // Check required parameters
+    if (projectVersionContext == null) {
+      throw new ApiException(400, "Missing the required parameter 'projectVersionContext' when calling overrideBulkSeverities");
     }
-    
-    // create path and map variables
-    String localVarPath = "/api/findings/{finding-id}/status"
-      .replaceAll("\\{" + "finding-id" + "\\}", apiClient.escapeString(findingId.toString()));
 
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+    // Path parameters
+    String localVarPath = "/api/projects/{project-version-context}/bulk-severity-override"
+            .replaceAll("\\{project-version-context}", apiClient.escapeString(projectVersionContext.toString()));
 
-
-    
-    
-    final String[] localVarAccepts = {
-      
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      "application/json"
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "APIKeyHeader", "basicAuth" };
-
-
-    apiClient.invokeAPI(localVarPath, "PUT", localVarQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, null);
+    String localVarAccept = apiClient.selectHeaderAccept("application/json");
+    String localVarContentType = apiClient.selectHeaderContentType("application/json");
+    String[] localVarAuthNames = new String[] {"APIKeyHeader", "basicAuth", "bearerAuth"};
+    GenericType<Job> localVarReturnType = new GenericType<Job>() {};
+    return apiClient.invokeAPI("ActionsApi.overrideBulkSeverities", localVarPath, "POST", new ArrayList<>(), bulkSeverityOverride,
+                               new LinkedHashMap<>(), new LinkedHashMap<>(), new LinkedHashMap<>(), localVarAccept, localVarContentType,
+                               localVarAuthNames, localVarReturnType, false);
   }
 }

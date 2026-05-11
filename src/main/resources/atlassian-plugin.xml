@@ -5,6 +5,7 @@
         <vendor name="${project.organization.name}" url="${project.organization.url}" />
         <param name="plugin-icon">images/pluginIcon.png</param>
         <param name="plugin-logo">images/pluginLogo.png</param>
+        <param name="atlassian-logging.level">DEBUG</param>
     </plugin-info>
 
     <component name="Code Dx Configuration Management Component" key="codeDxServerConfigManager"
@@ -12,20 +13,13 @@
 
     <web-item key="configureCodedxPlugin" name="Code Dx Plugin" section="system.admin/plugins">
         <label key="Code Dx Plugin"/>
-        <link linkId="configureCodeDxServer">/admin/codeDxServerConfig.action</link>
+        <link linkId="configureCodeDxServer">/plugins/servlet/codeDxServerConfig</link>
     </web-item>
 
-    <xwork key="codeDxConfigAdmin" name="Code Dx Plugin">
-        <package name="configureCodeDxServer" extends="admin">
-            <action name="codeDxServerConfig" class="com.codedx.plugins.bamboo.ServerConfigAction" method="edit">
-                <result name="success" type="freemarker">/admin/configureCodeDxServer.ftl</result>
-                <param name="mode">edit</param>
-            </action>
-            <action name="codeDxServerSave" class="com.codedx.plugins.bamboo.ServerConfigAction" method="save">
-                <result name="success" type="redirect">/admin/codeDxServerConfig.action</result>
-            </action>
-        </package>
-    </xwork>
+    <servlet name="Code Dx Server Config Servlet" key="codeDxServerConfigServlet"
+             class="com.codedx.plugins.bamboo.ServerConfigServlet">
+        <url-pattern>/codeDxServerConfig</url-pattern>
+    </servlet>
 
     <servlet name="Project Refresher Servlet" key="projectRefresherServlet"
              class="com.codedx.plugins.bamboo.ProjectRefresherServlet">
@@ -52,8 +46,8 @@
         <context>codedx-bamboo-plugin</context>
     </web-resource>
 
-    <component-import key="taskContextHelper" interface="com.atlassian.bamboo.task.TaskContextHelperService"/>
-    <component-import key="taskConfiguratorHelper" interface="com.atlassian.bamboo.task.TaskConfiguratorHelper"/>
-    <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties"/>
-    
+    <component-import key="taskContextHelper" interface="com.atlassian.bamboo.task.TaskContextHelperService" optional="true"/>
+    <component-import key="taskConfiguratorHelper" interface="com.atlassian.bamboo.task.TaskConfiguratorHelper" optional="true"/>
+    <component-import key="applicationProperties" interface="com.atlassian.sal.api.ApplicationProperties" optional="true"/>
+
 </atlassian-plugin>

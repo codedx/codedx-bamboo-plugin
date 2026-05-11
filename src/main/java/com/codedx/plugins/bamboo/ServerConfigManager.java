@@ -6,10 +6,8 @@ import com.atlassian.bandana.BandanaManager;
 import com.codedx.client.ApiClient;
 import com.codedx.plugins.bamboo.security.SSLContextFactory;
 import org.apache.log4j.Logger;
-import org.glassfish.jersey.client.JerseyClientBuilder;
+import com.codedx.shaded.jersey.client.JerseyClientBuilder;
 
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
 import java.io.Serializable;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -46,13 +44,13 @@ public class ServerConfigManager implements Serializable {
 
     public static String getApiKey() {
         String apiKey = getData().apiKey;
-        _logger.info("getApiKey: " + emptyIfNull(apiKey));
+        _logger.info("getApiKey called");
         return apiKey;
     }
 
     public static void setApiKey(String apiKey) {
 
-        _logger.info("setApiKey: " + emptyIfNull(apiKey));
+        _logger.info("setApiKey called");
 
         GlobalData data = getData();
         data.apiKey = apiKey;
@@ -89,7 +87,7 @@ public class ServerConfigManager implements Serializable {
 
         if(url.endsWith("/")) {
             url = url.substring(0, url.length() - 1);
-            _logger.info("Removing trailing foward slash in URL");
+            _logger.info("Removing trailing forward slash in URL");
         }
 
         ApiClient cdxApiClient = new ApiClient();
@@ -97,9 +95,11 @@ public class ServerConfigManager implements Serializable {
         cdxApiClient.setApiKey(apiKey);
 
         if (fingerprint != null && !fingerprint.isEmpty()) {
+            // Jersey is shaded under com.codedx.shaded.jersey.* so its ServiceLoader
+            // operates independently of Bamboo's classloader. No TCCL manipulation needed.
             try {
-                ClientBuilder clientBuilder = JerseyClientBuilder.newBuilder();
-                Client client = clientBuilder.withConfig(cdxApiClient.getHttpClient().getConfiguration())
+                var clientBuilder = new JerseyClientBuilder();
+                var client = clientBuilder.withConfig(cdxApiClient.getHttpClient().getConfiguration())
                         .sslContext(SSLContextFactory.getSSLContext(fingerprint))
                         .build();
                 cdxApiClient.setHttpClient(client);

@@ -1,6 +1,6 @@
 package com.codedx.plugins.bamboo.utils;
 
-import com.codedx.client.api.GroupedCount;
+import com.codedx.client.model.GroupedCount;
 import org.apache.log4j.Logger;
 
 import java.util.List;

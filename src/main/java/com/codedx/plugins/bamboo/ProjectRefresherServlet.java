@@ -2,8 +2,8 @@ package com.codedx.plugins.bamboo;
 
 import com.codedx.client.ApiClient;
 import com.codedx.client.ApiException;
-import com.codedx.client.api.Projects;
 import com.codedx.client.api.ProjectsApi;
+import com.codedx.client.model.Projects;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.log4j.Logger;
 
@@ -12,7 +12,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.ProcessingException;
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.UnknownHostException;
@@ -79,7 +78,7 @@ public class ProjectRefresherServlet extends HttpServlet {
         Projects projects = null;
 
         try {
-            projects = projectsApi.getProjects();
+            projects = projectsApi.getProjects(false);
         } catch (ApiException e) {
 
             _logger.error("Got an API error while listing projects", e);
@@ -108,7 +107,7 @@ public class ProjectRefresherServlet extends HttpServlet {
             resp.getOutputStream().print(message);
             _logger.error("Error message to send to client: " + message);
             return;
-        } catch (ProcessingException e) {
+        } catch (RuntimeException e) {
             _logger.error("Unexpected error while trying to fetch project list", e);
             resp.setStatus(404);
             resp.getOutputStream().print("Connection refused. Please confirm that the URL is correct and that the Code Dx server is running.");

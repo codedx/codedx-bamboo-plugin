@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.codedx</groupId>
     <artifactId>jersey-shaded</artifactId>
-    <version>2.0.1</version>
+    <version>3.0.0</version>
     <packaging>jar</packaging>
     <name>Jersey 3.x Shaded (relocated to com.codedx.shaded.*)</name>
     <description>

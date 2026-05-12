@@ -20,6 +20,8 @@ pipeline {
 						}
 					}
 
+					// Build the local shaded Jersey module first so the root plugin can resolve com.codedx:jersey-shaded
+					sh 'cd jersey-shaded && atlas-mvn install -DskipTests'
 					sh 'atlas-unit-test'
 					sh 'atlas-package'
 				}

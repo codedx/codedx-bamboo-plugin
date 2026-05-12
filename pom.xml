@@ -40,16 +40,6 @@
         <enforcer.skip>true</enforcer.skip>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>central</id>
-            <url>https://repo.maven.apache.org/maven2</url>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-
     <dependencies>
 
         <!--
@@ -219,6 +209,16 @@
                 <exclusion>
                     <groupId>org.glassfish.hk2</groupId>
                     <artifactId>osgi-resource-locator</artifactId>
+                </exclusion>
+                <!--
+                    net.sf.ehcache:ehcache:2.10.9.4.10 is an Atlassian-patched version that
+                    does not exist in Maven Central and is not reliably available in
+                    atlassian-public. Since atlassian-bamboo-web is 'provided', Bamboo
+                    supplies ehcache at runtime — we do not need to resolve it here.
+                -->
+                <exclusion>
+                    <groupId>net.sf.ehcache</groupId>
+                    <artifactId>ehcache</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>

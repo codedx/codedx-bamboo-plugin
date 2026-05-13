@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.codedx</groupId>
     <artifactId>jersey-shaded</artifactId>
-    <version>2.0.1</version>
+    <version>3.0.0</version>
     <packaging>jar</packaging>
     <name>Jersey 3.x Shaded (relocated to com.codedx.shaded.*)</name>
     <description>
@@ -91,7 +91,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.5.3</version>
+                <version>3.2.4</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -166,6 +166,39 @@
                                         <exclude>META-INF/versions/**</exclude>
                                         <exclude>module-info.class</exclude>
                                         <exclude>META-INF/MANIFEST.MF</exclude>
+                                    </excludes>
+                                </filter>
+                                <!-- Exclude jakarta.inject, jakarta.activation, and jakarta.xml.bind
+                                     from the shaded JAR. These are provided by Bamboo's webapp
+                                     classloader (parent-first). Including them in the shaded JAR
+                                     causes AMPS to extract them into the plugin bundle root, creating
+                                     a classloader split-brain with Bamboo's own copies and resulting
+                                     in ClassCastException at runtime. -->
+                                <filter>
+                                    <artifact>jakarta.inject:jakarta.inject-api</artifact>
+                                    <excludes>
+                                        <exclude>**</exclude>
+                                    </excludes>
+                                </filter>
+                                <filter>
+                                    <artifact>jakarta.activation:jakarta.activation-api</artifact>
+                                    <excludes>
+                                        <exclude>**</exclude>
+                                    </excludes>
+                                </filter>
+                                <filter>
+                                    <artifact>jakarta.xml.bind:jakarta.xml.bind-api</artifact>
+                                    <excludes>
+                                        <exclude>**</exclude>
+                                    </excludes>
+                                </filter>
+                                <!-- Exclude javassist — it is a transitive dep of HK2 but is
+                                     provided by Bamboo's webapp classloader. Excluding it prevents
+                                     AMPS from extracting javassist/ classes into the plugin bundle root. -->
+                                <filter>
+                                    <artifact>org.javassist:javassist</artifact>
+                                    <excludes>
+                                        <exclude>**</exclude>
                                     </excludes>
                                 </filter>
                             </filters>

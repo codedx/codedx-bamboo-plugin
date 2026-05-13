@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.codedx</groupId>
     <artifactId>codedx-bamboo-plugin</artifactId>
-    <version>2.0.1</version>
+    <version>3.0.0</version>
 
     <organization>
         <name>Code Dx</name>
@@ -19,10 +19,9 @@
     <packaging>atlassian-plugin</packaging>
 
     <properties>
-        <!-- note: change to 9.0.0 for local development with `atlas-run` etc., prior versions have a broken UI -->
-        <bamboo.version>10.2.0</bamboo.version>
+        <bamboo.version>12.0.0</bamboo.version>
         <bamboo.data.version>${bamboo.version}</bamboo.data.version>
-        <amps.version>9.11.6</amps.version>
+        <amps.version>9.12.1</amps.version>
         <plugin.testrunner.version>2.0.2</plugin.testrunner.version>
         <atlassian.spring.scanner.version>6.0.2</atlassian.spring.scanner.version>
         <jersey-version>3.1.11</jersey-version>
@@ -57,7 +56,7 @@
         <dependency>
             <groupId>com.codedx</groupId>
             <artifactId>jersey-shaded</artifactId>
-            <version>2.0.1</version>
+            <version>3.0.0</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.glassfish.jersey.core</groupId>
@@ -155,15 +154,16 @@
         </dependency>
 
         <!--
-            jakarta.ws.rs-api is provided by Bamboo (JAX-RS 2.x), but we need JAX-RS 3.1
-            (jakarta.* namespace). Include it as compile scope so it gets embedded.
-            The shaded JAR already contains it, but we also need it on the compile classpath
-            for our source code that uses jakarta.ws.rs.* directly.
+            jakarta.ws.rs-api: needed on the compile classpath (ApiClient.java uses jakarta.ws.rs.*).
+            Bamboo 12.x provides jakarta.ws.rs 3.1.0 parent-first via its webapp classloader,
+            so this must be 'provided' — embedding it causes AMPS to extract jakarta.ws.rs.*
+            classes into the plugin bundle root, creating a classloader split-brain.
         -->
         <dependency>
             <groupId>jakarta.ws.rs</groupId>
             <artifactId>jakarta.ws.rs-api</artifactId>
             <version>3.1.0</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -210,6 +210,16 @@
                     <groupId>org.glassfish.hk2</groupId>
                     <artifactId>osgi-resource-locator</artifactId>
                 </exclusion>
+                <!--
+                    net.sf.ehcache:ehcache:2.10.9.4.10 is an Atlassian-patched version that
+                    does not exist in Maven Central and is not reliably available in
+                    atlassian-public. Since atlassian-bamboo-web is 'provided', Bamboo
+                    supplies ehcache at runtime — we do not need to resolve it here.
+                -->
+                <exclusion>
+                    <groupId>net.sf.ehcache</groupId>
+                    <artifactId>ehcache</artifactId>
+                </exclusion>
             </exclusions>
         </dependency>
 
@@ -251,11 +261,47 @@
             <groupId>com.fasterxml.jackson.module</groupId>
             <artifactId>jackson-module-jakarta-xmlbind-annotations</artifactId>
             <version>${jackson-version}</version>
+            <exclusions>
+                <!--
+                    jakarta.xml.bind-api and jakarta.activation-api are transitive compile-scope
+                    deps of this module. Bamboo 12.x provides these parent-first, so we must
+                    exclude them here to prevent AMPS from copying their classes into the bundle root.
+                -->
+                <exclusion>
+                    <groupId>jakarta.xml.bind</groupId>
+                    <artifactId>jakarta.xml.bind-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>jakarta.activation</groupId>
+                    <artifactId>jakarta.activation-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.sun.activation</groupId>
+                    <artifactId>jakarta.activation</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.xml.bind</groupId>
+                    <artifactId>jaxb-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.sun.istack</groupId>
+                    <artifactId>istack-commons-runtime</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.sun.xml.fastinfoset</groupId>
+                    <artifactId>FastInfoset</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.glassfish.jaxb</groupId>
+                    <artifactId>jaxb-runtime</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>jakarta.annotation</groupId>
             <artifactId>jakarta.annotation-api</artifactId>
             <version>${jakarta-annotation-version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <!-- Note: Required by Swagger-generated API client impl. for Basic Auth, but basic auth is not used here -->
@@ -266,6 +312,69 @@
         </dependency>
 
     </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <!--
+                Override old org.glassfish.jaxb:jaxb-runtime versions that have broken POMs
+                referencing defunct http://maven.java.net/ repositories. These old versions
+                appear in dependency management of Bamboo's transitive deps and cause Maven
+                to fail POM resolution. Overriding with a modern version avoids the issue.
+            -->
+            <dependency>
+                <groupId>org.glassfish.jaxb</groupId>
+                <artifactId>jaxb-runtime</artifactId>
+                <version>4.0.5</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>javax.xml.bind</groupId>
+                <artifactId>jaxb-api</artifactId>
+                <version>2.3.1</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.istack</groupId>
+                <artifactId>istack-commons-runtime</artifactId>
+                <version>4.1.2</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.xml.fastinfoset</groupId>
+                <artifactId>FastInfoset</artifactId>
+                <version>2.1.1</version>
+                <scope>provided</scope>
+            </dependency>
+            <!--
+                Force jakarta.* packages that Bamboo 12.x provides parent-first to 'provided'
+                scope so AMPS never copies their classes into the plugin bundle root.
+            -->
+            <dependency>
+                <groupId>jakarta.xml.bind</groupId>
+                <artifactId>jakarta.xml.bind-api</artifactId>
+                <version>3.0.1</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.activation</groupId>
+                <artifactId>jakarta.activation-api</artifactId>
+                <version>2.1.0</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.sun.activation</groupId>
+                <artifactId>jakarta.activation</artifactId>
+                <version>2.0.1</version>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.inject</groupId>
+                <artifactId>jakarta.inject-api</artifactId>
+                <version>2.0.1</version>
+                <scope>provided</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <build>
         <plugins>
@@ -298,18 +407,14 @@
                             !jdk.internal*,
                             !sun.misc*,
                             !javassist*,
-                            !jakarta.inject*,
-                            !jakarta.annotation*,
                             !org.aopalliance*,
-                            !jakarta.validation*,
                             !com.opensymphony*,
+                            jakarta.*;resolution:=optional,
                             *;resolution:=optional
                         </Import-Package>
                         <DynamicImport-Package></DynamicImport-Package>
                         <Embed-Dependency>
                             jersey-shaded,
-                            jakarta.ws.rs-api,
-                            jakarta.annotation-api,
                             jackson-core,
                             jackson-annotations,
                             jackson-databind,

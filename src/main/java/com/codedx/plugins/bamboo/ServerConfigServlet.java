@@ -2,10 +2,10 @@ package com.codedx.plugins.bamboo;
 
 import org.apache.log4j.Logger;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
@@ -20,6 +20,13 @@ public class ServerConfigServlet extends HttpServlet {
 
     private static final Logger log = Logger.getLogger(ServerConfigServlet.class);
 
+    private static final String SAVED_BANNER_HTML =
+        "<div id=\"codedx-saved-banner\" class=\"codedx-success-banner\">" +
+        "  <i class=\"fas fa-check-circle\"></i>" +
+        "  <span>Configuration saved successfully.</span>" +
+        "  <button class=\"close-btn\" onclick=\"document.getElementById('codedx-saved-banner').style.display='none'\">&times;</button>" +
+        "</div>";
+
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
             throws ServletException, IOException {
@@ -33,11 +40,15 @@ public class ServerConfigServlet extends HttpServlet {
         String atlToken = req.getParameter("atl_token");
         if (atlToken == null) atlToken = "";
 
+        boolean saved = "true".equals(req.getParameter("saved"));
+        String savedBanner = saved ? SAVED_BANNER_HTML : "";
+
         String html = loadTemplate();
         html = html.replace("${url}", escapeHtml(url));
         html = html.replace("${apiKey}", escapeHtml(apiKey));
         html = html.replace("${fingerprint}", escapeHtml(fingerprint));
         html = html.replace("${atl_token}", escapeHtml(atlToken));
+        html = html.replace("${savedBanner}", savedBanner);
 
         resp.setContentType("text/html;charset=UTF-8");
         PrintWriter out = resp.getWriter();
@@ -60,8 +71,8 @@ public class ServerConfigServlet extends HttpServlet {
 
         log.info("Configuration saved successfully");
 
-        // Redirect back to GET to show the saved values (PRG pattern)
-        resp.sendRedirect(req.getRequestURI());
+        // PRG pattern: redirect back to GET with saved=true to show success banner
+        resp.sendRedirect(req.getRequestURI() + "?saved=true");
     }
 
     private String loadTemplate() throws IOException {

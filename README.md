@@ -12,6 +12,30 @@ codedx-bamboo-plugin
 
  3. If needed, update the Swagger client [following the instructions here](SwaggerSetup.md).  This shouldn't be needed but may be necessary if there is a version mismatch with the Code Dx server.
 
+## Building the Plugin
+
+### ⚠️ Important: Build `jersey-shaded` First
+
+This project depends on a local shaded JAR (`jersey-shaded`) that is **not published to any remote Maven repository**. It must be installed into your local Maven repository before building the main plugin.
+
+**Always follow this two-step build order:**
+
+**Step 1 — Install `jersey-shaded` into your local Maven repository:**
+
+```bash
+cd jersey-shaded
+atlas-mvn clean install
+cd ..
+```
+
+**Step 2 — Build the main plugin:**
+
+```bash
+atlas-mvn clean install
+```
+
+> **Why?** `jersey-shaded` relocates Jersey 3.x and HK2 classes into the `com.codedx.shaded.*` namespace to avoid classloader conflicts with Bamboo's own Jersey packages.
+
 ## Running the Plugin
 
  * It is recommended to run and debug the plugin from IntelliJ.  Alternatively, it can be done from the command line.
@@ -19,6 +43,8 @@ codedx-bamboo-plugin
 ### Running and Debugging from IntelliJ
 
  * First, open the Maven window on the right side of IntelliJ.  If the window doesn't show any commands, use the `Reimport all Maven Projects` button and the `Generate Source and Update Folders for All Projects` button to populate the list.
+
+ * **Before running any lifecycle command from IntelliJ**, ensure `jersey-shaded` is already installed in your local Maven repository (see [Building the Plugin](#building-the-plugin) above). If you run the `clean` lifecycle from IntelliJ without doing this first, subsequent builds will fail until you re-install `jersey-shaded`.
 
  * To clean the project, run the `codedx-bamboo-plugin/Lifecycle/clean` maven command.
 

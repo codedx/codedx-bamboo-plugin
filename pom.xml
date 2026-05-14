@@ -7,7 +7,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.codedx</groupId>
     <artifactId>codedx-bamboo-plugin</artifactId>
-    <version>3.0.0</version>
+    <version>3.0.1</version>
 
     <organization>
         <name>Code Dx</name>
@@ -49,14 +49,14 @@
             Build this module first: cd jersey-shaded && atlas-mvn install
 
             All original Jersey/HK2 JARs are excluded here because they are already shaded
-            (relocated) inside jersey-shaded-2.0.1.jar. Without these exclusions, Maven
+            (relocated) inside jersey-shaded-3.0.1.jar. Without these exclusions, Maven
             would resolve the transitive deps and AMPS would embed the original
             org.glassfish.jersey.* classes alongside the shaded ones.
         -->
         <dependency>
             <groupId>com.codedx</groupId>
             <artifactId>jersey-shaded</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.1</version>
             <exclusions>
                 <exclusion>
                     <groupId>org.glassfish.jersey.core</groupId>
